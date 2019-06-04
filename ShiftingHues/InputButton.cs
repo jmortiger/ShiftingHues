@@ -1,38 +1,37 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Runtime.Serialization;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 namespace ShiftingHues.Input
 {
+    [DataContract(Name = "InputDevice")]
     public enum InputDeviceType
     {
+        [EnumMember]
         None     = 0,
+        [EnumMember]
         Keyboard = 1,
+        [EnumMember]
         GamePad  = 2,
+        [EnumMember]
         Mouse    = 3,
+        [EnumMember]
         Other    = 4
     }
-    public enum MouseButtons
-    {
-        Left,
-        Middle,
-        Right,
-        ScrollUp,
-        ScrollDown/*,
-        ScrollLeft,
-        ScrollRight*//*,
-        L1,
-        L2,
-        R1,
-        R2*/
-    }
+
+    [DataContract(Name = "InputBttn")]
     public struct InputButton
     {
+        #region Properties
+        [DataMember]
         public InputDeviceType DeviceType { get; private set; }
-        public int Button { get; private set; }
+        [DataMember]
+        public object Button { get; private set; }
+        public float Deadzone { get; private set; }
         public Type ButtonType
         {
             get
@@ -41,37 +40,87 @@ namespace ShiftingHues.Input
                 {
                     case InputDeviceType.None:
                         return typeof(Buttons);
-                        break;
                     case InputDeviceType.Keyboard:
                         return typeof(Keys);
-                        break;
                     case InputDeviceType.GamePad:
                         return typeof(Buttons);
-                        break;
                     case InputDeviceType.Mouse:
                         return typeof(MouseButtons);
-                        break;
                     case InputDeviceType.Other:
                         return typeof(Buttons);
-                        break;
                     default:
                         return typeof(Buttons);
-                        break;
                 }
-                /*if (deviceType == InputDeviceType.Keyboard)
-                    return typeof(Keys);
-                else if (deviceType == InputDeviceType.GamePad)
-                    return typeof(Buttons);
-                else if (deviceType == InputDeviceType.Mouse)
-                    return typeof(MouseButtons);
-                else
-                    return typeof(Buttons);*/
             }
         }
-        public InputButton(InputDeviceType deviceType, int button)
+        #endregion
+
+        #region Constructors
+        #region With Deadzone
+
+        private InputButton(InputDeviceType deviceType, object button, float deadzone)
         {
             this.DeviceType = deviceType;
             this.Button = button;
+            this.Deadzone = deadzone;
+        }
+
+        //public InputButton(Keys key, float deadzone)
+        //    : this(InputDeviceType.Keyboard, key, deadzone) { }
+        public InputButton(Buttons bttn, float deadzone)
+            : this(InputDeviceType.GamePad, bttn, deadzone) { }
+        public InputButton(MouseButtons bttn, float deadzone)
+            : this(InputDeviceType.Mouse, bttn, deadzone) { }
+        #endregion
+        #region Without Deadzone
+
+        private InputButton(InputDeviceType deviceType, object button)
+            : this(deviceType, button, 0f)
+        {
+            this.DeviceType = deviceType;
+            this.Button = button;
+        }
+
+        public InputButton(Keys key)
+            : this(InputDeviceType.Keyboard, key) { }
+        public InputButton(Buttons bttn)
+            : this(InputDeviceType.GamePad, bttn, ((bttn & (Buttons.LeftTrigger | Buttons.RightTrigger)) == (Buttons.LeftTrigger | Buttons.RightTrigger)) ? .25f : 0f) { }
+        public InputButton(MouseButtons bttn)
+            : this(InputDeviceType.Mouse, bttn) { }
+        #endregion
+        #endregion
+
+        #region Is Same Button
+
+        public bool IsSameButton(Keys key) => (DeviceType == InputDeviceType.Keyboard) ? key == (Keys)Button : false;
+
+        public bool IsSameButton(Buttons bttn) => (DeviceType == InputDeviceType.GamePad) ? bttn == (Buttons)Button : false;
+
+        public bool IsSameButton(MouseButtons bttn) => (DeviceType == InputDeviceType.Mouse) ? bttn == (MouseButtons)Button : false;
+        #endregion
+
+        public string _ToString()
+        {
+            string buttonName = "";
+            switch (DeviceType)
+            {
+                case InputDeviceType.None:
+                    break;
+                case InputDeviceType.Keyboard:
+                    buttonName = Enum.GetName(typeof(Keys), (Keys)Button);
+                    break;
+                case InputDeviceType.GamePad:
+                    buttonName = Enum.GetName(typeof(Buttons), (Buttons)Button);
+                    break;
+                case InputDeviceType.Mouse:
+                    buttonName = Enum.GetName(typeof(MouseButtons), (MouseButtons)Button);
+                    break;
+                case InputDeviceType.Other:
+                    break;
+                default:
+                    break;
+            }
+            return $"{Enum.GetName(typeof(InputDeviceType), DeviceType)} {buttonName}";
         }
     }
 }

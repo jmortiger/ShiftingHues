@@ -3,14 +3,25 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using ShiftingHues.Input;
-
+using ShiftingHues.UI;
+// TODO: SceneManager
+// TODO: UI Buttons
+// TODO: Menus
 namespace ShiftingHues
 {
+    public enum GameState
+    {
+        Menu,
+        Playing,
+        Paused,
+        Loading
+    }
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
     public class Game1 : Game
     {
+        #region Fields & Props
         const float WORLD_WIDTH = 16f;
         const float WORLD_HEIGHT = 9f;
 
@@ -20,6 +31,16 @@ namespace ShiftingHues
         SpriteFont testFont1;
 
         public InputComponent InputComp { get; private set; }
+
+        private InputDebug iDbg;
+
+        private UI.UIObject testBttn;
+
+        private string bttnTestStr = "";
+
+        public GameState CurrentGameState { get; private set; } = GameState.Menu;
+        #endregion
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -27,6 +48,12 @@ namespace ShiftingHues
             
             InputComp = new InputComponent(this);
             Components.Add(InputComp);
+
+            ServiceLocator.RegisterService(InputComp);
+
+            // TODO: Might change mouse visibility
+            this.IsMouseVisible = true;
+            iDbg = new InputDebug(InputComp);
         }
 
         #region Non-Looped
@@ -54,6 +81,31 @@ namespace ShiftingHues
 
             // TODO: use this.Content to load your game content here
             testFont1 = this.Content.Load<SpriteFont>("TestFont1");
+            
+            Texture2D tex_start_up = this.Content.Load<Texture2D>("Raw_Files/UI/start_up");
+
+            // Creating Buttons
+            // I'm making a button, which can be activated and drawn
+            Rectangle outputRect = tex_start_up.Bounds;
+            outputRect.Location = new Point(200, 200);
+            UI.UISpriteComponent spriteComponent = new UISpriteComponent(tex_start_up, outputRect);
+
+            testBttn = new UI.UIObject(outputRect, spriteComponent/*, clickComponent*/);
+            UI.UIObjActiveComponent clickComponent = new UIObjActiveComponent(
+                (obj) =>
+                {
+                    for (int i = 0; i < obj?.drawableComponents?.Length; i++)
+                        obj.drawableComponents[i].ColorTint = new Color(Color.White, .5f);
+                },
+                (obj) => bttnTestStr += "Button Pressed\n",
+                (obj) =>
+                {
+                    for (int i = 0; i < obj?.drawableComponents?.Length; i++)
+                        obj.drawableComponents[i].ColorTint = Color.White;
+                },
+                testBttn
+                );
+            testBttn.updateableComponents = new IObjUpdateComponent[] { clickComponent };
         }
 
         /// <summary>
@@ -68,8 +120,9 @@ namespace ShiftingHues
         #endregion
 
         string keyDebug = "";
-        string mappingDebug = "";
-        bool mappingsBeenConverted = false;
+        //string mappingDebug = "";
+        //bool mappingsBeenConverted = false;
+
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -82,7 +135,7 @@ namespace ShiftingHues
 
             //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             //    Exit();
-            if (InputComp.IsActionActive(GameActions.ExitGame))
+            if (InputComp.IsActionActive(GameAction.ExitGame))
                 Exit();
 
             // TODO: Add your update logic here
@@ -100,11 +153,11 @@ namespace ShiftingHues
             {
                 for (int i = 0; i < InputComponent.NUM_GAME_ACTIONS; i++)
                 {
-                    if (InputComp.IsActionActive((GameActions)i))
-                        keyDebug += System.Enum.GetName(typeof(GameActions), i).ToUpper() + "; ";
+                    if (InputComp.IsActionActive((GameAction)i))
+                        keyDebug += System.Enum.GetName(typeof(GameAction), i).ToUpper() + "; ";
                 }
             }
-            mappingDebug = "";
+           /* mappingDebug = "";
             for (int i = 0; i < InputComp.setActions.Count; i++)
             {
                 mappingDebug += System.Enum.GetName(typeof(GameActions), InputComp.setActions[i]) + ": ";
@@ -127,10 +180,19 @@ namespace ShiftingHues
             {
                 InputComp.ConvertMappingsToBindInfo();
                 mappingsBeenConverted = true;
-            }
+            }*/
+
+            iDbg.Update(gameTime);
+
+            testBttn.Update(gameTime);
 
             //base.Update(gameTime);
         }
+
+        float maxRightTriggerVal = 0;
+        float avgRightTriggerVal = 0;
+        float totalRightTriggerVal = 0;
+        float numUpdates = 0;
 
         /// <summary>
         /// This is called when the game should draw itself.
@@ -143,8 +205,18 @@ namespace ShiftingHues
             // TODO: Add your drawing code here
             spriteBatch.Begin();
 
-            spriteBatch.DrawString(testFont1, keyDebug, new Vector2(), Color.Black);
-            spriteBatch.DrawString(testFont1, mappingDebug, new Vector2(0, 25), Color.Black);
+            testBttn.Draw(spriteBatch/*, gameTime*/);
+
+            spriteBatch.DrawString(testFont1, /*keyDebug*/$"{1 / gameTime.ElapsedGameTime.TotalSeconds} FPS", new Vector2(), Color.Black);
+            //spriteBatch.DrawString(testFont1, /*keyDebug*/$"{/*1 / */gameTime.ElapsedGameTime.Ticks} FPS", new Vector2(0, 25), Color.Black);
+            //spriteBatch.DrawString(testFont1, mappingDebug, new Vector2(0, 25), Color.Black);
+            spriteBatch.DrawString(testFont1, bttnTestStr, new Vector2(0, 100), Color.Black);
+            iDbg.Draw(gameTime, spriteBatch, testFont1, InputDebug.DebugPrints.CurrAction);
+            totalRightTriggerVal += InputComp.CurrPadState.Triggers.Right;
+            numUpdates++;
+            avgRightTriggerVal = totalRightTriggerVal / numUpdates;
+            maxRightTriggerVal = (InputComp.CurrPadState.Triggers.Right > maxRightTriggerVal) ? InputComp.CurrPadState.Triggers.Right : maxRightTriggerVal;
+            spriteBatch.DrawString(testFont1, "Max RT: " + maxRightTriggerVal + "; Avg RT: " + avgRightTriggerVal + "; RT: " + InputComp.CurrPadState.Triggers.Right, new Vector2(0, 50), Color.Black);
 
             spriteBatch.End();
 

@@ -5,6 +5,11 @@ VisualStudioVersion = 15.0.28307.271
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShiftingHues", "ShiftingHues\ShiftingHues.csproj", "{3747BAC6-D7CC-44C8-923F-546D6473BCC2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SHUnitTest1", "SHUnitTest1\SHUnitTest1.csproj", "{4A856198-AAD0-4F5E-9AC5-101C72A23AF2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3747BAC6-D7CC-44C8-923F-546D6473BCC2} = {3747BAC6-D7CC-44C8-923F-546D6473BCC2}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +20,10 @@ Global
 		{3747BAC6-D7CC-44C8-923F-546D6473BCC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3747BAC6-D7CC-44C8-923F-546D6473BCC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3747BAC6-D7CC-44C8-923F-546D6473BCC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A856198-AAD0-4F5E-9AC5-101C72A23AF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A856198-AAD0-4F5E-9AC5-101C72A23AF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A856198-AAD0-4F5E-9AC5-101C72A23AF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A856198-AAD0-4F5E-9AC5-101C72A23AF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
