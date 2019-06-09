@@ -15,11 +15,19 @@ namespace ShiftingHues.UI
 	}
 	public class UIObject
 	{
+        public event Input.MouseEvent MouseEntered;
+
 		#region Fields and Properties
 
 		public Rectangle Bounds { get; private set; }
 
-        public IObjDrawComponent[] drawableComponents;
+        private IObjDrawComponent[] drawableComponents;
+        public IObjDrawComponent[] DrawableComponents
+        {
+            get { return drawableComponents; }
+            //set { drawableComponents = value; }
+        }
+
 
         public IObjUpdateComponent[] updateableComponents;
         #endregion
@@ -31,12 +39,12 @@ namespace ShiftingHues.UI
 			//this.Bounds = bounds;
 		//}
 
-        public UIObject(Rectangle bounds, IObjDrawComponent[] drawableComponents = null, IObjUpdateComponent[] updateableComponents = null)
-        {
-            this.Bounds = bounds;
-            this.drawableComponents = drawableComponents;
-            this.updateableComponents = updateableComponents;
-        }
+        //public UIObject(Rectangle bounds, IObjDrawComponent[] drawableComponents = null, IObjUpdateComponent[] updateableComponents = null)
+        //{
+        //    this.Bounds = bounds;
+        //    this.drawableComponents = drawableComponents;
+        //    this.updateableComponents = updateableComponents;
+        //}
 
         public UIObject(Rectangle bounds, IObjDrawComponent drawableComponent = null, IObjUpdateComponent updateableComponent = null)
         {
@@ -47,12 +55,42 @@ namespace ShiftingHues.UI
         #endregion
 
         #region Methods
+
+        public void RegisterToMouseEnter(UI.ContainerComponent container) => container.MouseEntered += OnMouseEnter;
+
+        private void OnMouseEnter(Input.MouseEventArgs e)
+        {
+            if (Bounds.Contains(e.CurrState.Position) && !Bounds.Contains(e.PrevState.Position))
+                MouseEntered?.Invoke(e);
+        }
+
+        public void SetVisibility(bool isVisible)
+        {
+            for (int i = 0; i < drawableComponents.Length; i++)
+            {
+                drawableComponents[i].IsVisible = isVisible;
+            }
+        }
+
+
+        public void AddDrawableComponent(IObjDrawComponent comp)
+        {
+            IObjDrawComponent[] temp = new IObjDrawComponent[drawableComponents.Length + 1];
+            for (int i = 0; i < DrawableComponents.Length; i++)
+            {
+                if (DrawableComponents[i] == comp)
+                    return; // Temp *should* be deallocated
+                temp[i] = DrawableComponents[i];
+            }
+            temp[temp.Length - 1] = comp;
+        }
+
         /// <summary>
         /// TODO: Finish Doc
         /// </summary>
         /// <param name="time"></param>
         /// <remarks></remarks>
-        public void Update(GameTime time)
+        public virtual void Update(GameTime time)
         {
             for (int i = 0; i < updateableComponents?.Length; i++)
             {
@@ -83,7 +121,9 @@ namespace ShiftingHues.UI
 
 	public interface IObjDrawComponent
 	{
-        Color ColorTint { get; set; }
+        Color Tint { get; set; }
+
+        bool IsVisible { get; set; }
 
         void Draw(SpriteBatch batch, GameTime time = null);
 	}

@@ -31,6 +31,7 @@ namespace ShiftingHues
         SpriteFont testFont1;
 
         public InputComponent InputComp { get; private set; }
+        public UIManager UI { get; private set; }
 
         private InputDebug iDbg;
 
@@ -50,7 +51,7 @@ namespace ShiftingHues
             Components.Add(InputComp);
 
             ServiceLocator.RegisterService(InputComp);
-
+            
             // TODO: Might change mouse visibility
             this.IsMouseVisible = true;
             iDbg = new InputDebug(InputComp);
@@ -88,24 +89,26 @@ namespace ShiftingHues
             // I'm making a button, which can be activated and drawn
             Rectangle outputRect = tex_start_up.Bounds;
             outputRect.Location = new Point(200, 200);
-            UI.UISpriteComponent spriteComponent = new UISpriteComponent(tex_start_up, outputRect);
+            UI.SpriteComponent spriteComponent = new SpriteComponent(tex_start_up, outputRect);
 
             testBttn = new UI.UIObject(outputRect, spriteComponent/*, clickComponent*/);
-            UI.UIObjActiveComponent clickComponent = new UIObjActiveComponent(
+            UI.ActiveComponent clickComponent = new ActiveComponent(
                 (obj) =>
                 {
-                    for (int i = 0; i < obj?.drawableComponents?.Length; i++)
-                        obj.drawableComponents[i].ColorTint = new Color(Color.White, .5f);
+                    for (int i = 0; i < obj?.DrawableComponents?.Length; i++)
+                        obj.DrawableComponents[i].Tint = new Color(Color.White, .5f);
                 },
                 (obj) => bttnTestStr += "Button Pressed\n",
                 (obj) =>
                 {
-                    for (int i = 0; i < obj?.drawableComponents?.Length; i++)
-                        obj.drawableComponents[i].ColorTint = Color.White;
+                    for (int i = 0; i < obj?.DrawableComponents?.Length; i++)
+                        obj.DrawableComponents[i].Tint = Color.White;
                 },
                 testBttn
                 );
             testBttn.updateableComponents = new IObjUpdateComponent[] { clickComponent };
+
+            UI = new UIManager(this, new Texture2D[] { tex_start_up }, testFont1);
         }
 
         /// <summary>

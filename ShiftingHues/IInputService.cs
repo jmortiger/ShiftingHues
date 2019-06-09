@@ -1,11 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 namespace ShiftingHues.Input
 {
+    public delegate void MouseEvent(MouseEventArgs e);
+    public delegate void MenuEvent(MenuEventArgs e);
+
+    public class MenuEventArgs
+    {
+        public readonly GameAction menuAction;
+        //InputButton trigger;
+
+        public MenuEventArgs(GameAction menuAction)
+        {
+            this.menuAction = menuAction;
+        }
+    }
+
     public interface IInputService
     {
+        //public delegate void MouseClick(MouseEventArgs e);
+
+        event MouseEvent OnRelease;
+
+        event MouseEvent OnClick;
+
+        event MouseEvent OnMouseMove;
+
+        //event EventHandler<MouseEventArgs> OnClick;
+
         #region Input States
         KeyboardState CurrKeyboardState { get; }
         KeyboardState PrevKeyboardState { get; }
@@ -36,6 +61,9 @@ namespace ShiftingHues.Input
         bool GetInputUp(MouseButtons button);
         bool GetInputDown(MouseButtons button);
         #endregion
+        bool GetMouseBounds(Rectangle bounds);
+        bool GetMouseBoundsEnter(Rectangle bounds);
+        bool GetMouseBoundsExit(Rectangle bounds);
         bool IsActionActive(GameAction action);
         bool WasActionActive(GameAction action);
         void RegisterEvent(Action actionToFire, Func<bool> fireCondition);

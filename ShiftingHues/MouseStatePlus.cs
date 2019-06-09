@@ -186,4 +186,16 @@ namespace ShiftingHues.Input
         }
         #endregion
     }
+
+    public class MouseEventArgs
+    {
+        public readonly MouseStatePlus CurrState;
+        public readonly MouseStatePlus PrevState;
+
+        public MouseEventArgs(MouseStatePlus CurrState, MouseStatePlus PrevState)
+        {
+            this.CurrState = CurrState;
+            this.PrevState = PrevState;
+        }
+    }
 }

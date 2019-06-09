@@ -50,6 +50,30 @@ namespace ShiftingHues.Input
         #endregion
 
         private List<Tuple<Func<bool>, Action>> ObjsToFire = new List<Tuple<Func<bool>, Action>>(3);
+
+        //public delegate void MouseClick(MouseEventArgs e);
+
+        #region MouseEvents
+
+        public event MouseEvent OnMouseMove;
+
+        public event MouseEvent OnRelease;
+
+        public event MouseEvent OnClick;
+        #endregion
+
+        #region MenuEvents
+
+        public event MenuEvent OnLeft;
+
+        public event MenuEvent OnRight;
+
+        public event MenuEvent OnUp;
+
+        public event MenuEvent OnDown;
+        #endregion
+
+        //public event EventHandler<MouseEventArgs> OnClick;
         #endregion
 
         #region Constructors
@@ -116,6 +140,13 @@ namespace ShiftingHues.Input
                 if (ObjsToFire[i].Item1())
                     ObjsToFire[i].Item2();
             }
+
+            if (GetInputDown(MouseButtons.Left))
+                OnClick?.Invoke(new MouseEventArgs(CurrMouseState, PrevMouseState));
+            if (GetInputUp(MouseButtons.Left))
+                OnRelease?.Invoke(new MouseEventArgs(CurrMouseState, PrevMouseState));
+            if (CurrMouseState.PositDelta != Point.Zero)
+                OnMouseMove?.Invoke(new MouseEventArgs(CurrMouseState, PrevMouseState));
 
             base.Update(gameTime);
         }
@@ -265,6 +296,10 @@ namespace ShiftingHues.Input
         #endregion
         #endregion
 
+        public bool GetMouseBounds(Rectangle bounds) => bounds.Contains(CurrMouseState.Position);
+        public bool GetMouseBoundsEnter(Rectangle bounds) => bounds.Contains(CurrMouseState.Position) && !bounds.Contains(PrevMouseState.Position);
+        public bool GetMouseBoundsExit(Rectangle bounds) => !bounds.Contains(CurrMouseState.Position) && bounds.Contains(PrevMouseState.Position);
+
         #region StateChanged
 
         public bool KBStateChanged() => CurrKeyboardState != PrevKeyboardState;
@@ -323,6 +358,8 @@ namespace ShiftingHues.Input
 
             throw new NotImplementedException();
         }
+
+        //public void RegisterEvent(Func<bool> condit, )
 
         public void RegisterEvent(Action actionToFire, Func<bool> fireCondition)
         {

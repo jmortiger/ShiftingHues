@@ -11,7 +11,7 @@ namespace ShiftingHues.UI
 	/// <summary>
 	/// A component that can be activated, like a button.
 	/// </summary>
-	class UIObjActiveComponent : UI.IObjUpdateComponent
+	public class ActiveComponent : UI.IObjUpdateComponent
     {
         // TODO: Consider removing; this isn't a class, nor a component, it's just a setup for Inputmanager now.
         #region Fields and Properties
@@ -24,58 +24,50 @@ namespace ShiftingHues.UI
 
         public Action<UI.UIObject> activationAction;
 
+        private Func<bool> selectCondit;
+        
+        private Func<bool> deselectCondit;
+        
+        private Func<bool> activationCondit;
+
+        private UIObject uiObject;
+
+        public UIObject toLeft;
+
+        public UIObject toRight;
+
+        public UIObject toUp;
+
+        public UIObject toDown;
+
         public bool WasHovered { get; private set; } = false;
         #endregion
 
         #region Constructors
-        public UIObjActiveComponent(Action<UI.UIObject> selectAction, Action<UI.UIObject> activationAction, Action<UI.UIObject> deselectAction, UI.UIObject obj)
+        public ActiveComponent(
+            Action<UI.UIObject> selectAction, 
+            Action<UI.UIObject> activationAction, 
+            Action<UI.UIObject> deselectAction, 
+            UI.UIObject obj)
             : this(selectAction, 
                   activationAction, 
                   deselectAction,
                   () =>
                   {
-                      return obj.Bounds.Contains(ServiceLocator.GetInputService().CurrMouseState.Position) && !ServiceLocator.GetInputService().GetInputUp(Input.MouseButtons.Left);
+                      return ServiceLocator.GetInputService().GetMouseBoundsEnter(obj.Bounds) && !ServiceLocator.GetInputService().GetInputUp(Input.MouseButtons.Left);
                   },
                   () =>
                   {
-                      return obj.Bounds.Contains(ServiceLocator.GetInputService().CurrMouseState.Position) && ServiceLocator.GetInputService().GetInputUp(Input.MouseButtons.Left);
+                      return ServiceLocator.GetInputService().GetMouseBounds(obj.Bounds) && ServiceLocator.GetInputService().GetInputUp(Input.MouseButtons.Left);
                   },
                   () =>
                   {
-                      return !obj.Bounds.Contains(ServiceLocator.GetInputService().CurrMouseState.Position) && obj.Bounds.Contains(ServiceLocator.GetInputService().PrevMouseState.Position);
+                      return !ServiceLocator.GetInputService().GetMouseBounds(obj.Bounds) && obj.Bounds.Contains(ServiceLocator.GetInputService().PrevMouseState.Position);
                   },
                   obj
-                  )
-        {
-            //this.selectAction = selectAction;
-            //this.activationAction = activationAction;
-            //this.deselectAction = deselectAction;
+                  ) { }
 
-            //Input.IInputService input = ServiceLocator.GetInputService();
-            //input.RegisterEvent(
-            //    () => activationAction(obj),
-            //    () =>
-            //    {
-            //        return obj.Bounds.Contains(input.CurrMouseState.Position) && input.GetInputUp(Input.MouseButtons.Left);
-            //    }
-            //    );
-            //input.RegisterEvent(
-            //    () => deselectAction(obj),
-            //    () =>
-            //    {
-            //        return !obj.Bounds.Contains(input.CurrMouseState.Position) && obj.Bounds.Contains(input.PrevMouseState.Position);
-            //    }
-            //    );
-            //input.RegisterEvent(
-            //    () => selectAction(obj),
-            //    () =>
-            //    {
-            //        return obj.Bounds.Contains(input.CurrMouseState.Position) && !input.GetInputUp(Input.MouseButtons.Left);
-            //    }
-            //    );
-        }
-
-        public UIObjActiveComponent(
+        public ActiveComponent(
             Action<UI.UIObject> selectAction, 
             Action<UI.UIObject> activationAction, 
             Action<UI.UIObject> deselectAction, 
@@ -89,18 +81,37 @@ namespace ShiftingHues.UI
             this.deselectAction = deselectAction;
 
             Input.IInputService input = ServiceLocator.GetInputService();
-            input.RegisterEvent(
-                () => activationAction(obj),
-                activationCondit
-                );
-            input.RegisterEvent(
-                () => deselectAction(obj),
-                selectCondit
-                );
-            input.RegisterEvent(
-                () => selectAction(obj),
-                deselectCondit
-                );
+            //input.RegisterEvent(
+            //    () => activationAction(obj),
+            //    activationCondit
+            //    );
+            //input.RegisterEvent(
+            //    () => deselectAction(obj),
+            //    selectCondit
+            //    );
+            //input.RegisterEvent(
+            //    () => selectAction(obj),
+            //    deselectCondit
+            //    );
+
+            this.selectCondit = selectCondit;
+            this.activationCondit = activationCondit;
+            this.deselectCondit = deselectCondit;
+            this.uiObject = obj;
+            input.OnMouseMove += Input_OnMouseMove;
+            input.OnRelease += Input_OnRelease;
+        }
+
+        private void Input_OnRelease(Input.MouseEventArgs e)
+        {
+            if (activationCondit()) activationAction?.Invoke(uiObject);
+        }
+
+        private void Input_OnMouseMove(Input.MouseEventArgs e)
+        {
+            if (selectCondit()) selectAction?.Invoke(uiObject);
+            if (deselectCondit()) deselectAction?.Invoke(uiObject);
+            //throw new NotImplementedException();
         }
         #endregion
 
