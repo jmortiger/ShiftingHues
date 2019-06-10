@@ -30,6 +30,8 @@ namespace ShiftingHues.UI
 
 
         public IObjUpdateComponent[] updateableComponents;
+
+        private bool wasEnteredChecked = false;
         #endregion
 
         #region Constructors
@@ -56,12 +58,13 @@ namespace ShiftingHues.UI
 
         #region Methods
 
-        public void RegisterToMouseEnter(UI.ContainerComponent container) => container.MouseEntered += OnMouseEnter;
+        public void RegisterToMouseEnter(UI.ContainerComponent container) => container.MouseEntered += OnMouseEnterParentContainer;
 
-        private void OnMouseEnter(Input.MouseEventArgs e)
+        private void OnMouseEnterParentContainer(Input.MouseEventArgs e)
         {
             if (Bounds.Contains(e.CurrState.Position) && !Bounds.Contains(e.PrevState.Position))
                 MouseEntered?.Invoke(e);
+            wasEnteredChecked = true;
         }
 
         public void SetVisibility(bool isVisible)

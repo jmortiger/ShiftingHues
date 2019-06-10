@@ -64,13 +64,17 @@ namespace ShiftingHues.Input
 
         #region MenuEvents
 
-        public event MenuEvent OnLeft;
+        public event MenuEvent MenuLeft;
 
-        public event MenuEvent OnRight;
+        public event MenuEvent MenuRight;
 
-        public event MenuEvent OnUp;
+        public event MenuEvent MenuUp;
 
-        public event MenuEvent OnDown;
+        public event MenuEvent MenuDown;
+
+        public event MenuEvent MenuAccept;
+
+        public event MenuEvent MenuCancel;
         #endregion
 
         //public event EventHandler<MouseEventArgs> OnClick;
@@ -99,7 +103,6 @@ namespace ShiftingHues.Input
             var tPrev = PrevActions; // Reuse PrevActions to prevent unneed mem alloc
             PrevKeyboardState = CurrKeyboardState;
             PrevPadState = CurrPadState;
-            //SecPMouseState = PrevMouseState;
             PrevMouseState = CurrMouseState;
             PrevActions = CurrActions;
             // Get new states & actions
@@ -147,6 +150,22 @@ namespace ShiftingHues.Input
                 OnRelease?.Invoke(new MouseEventArgs(CurrMouseState, PrevMouseState));
             if (CurrMouseState.PositDelta != Point.Zero)
                 OnMouseMove?.Invoke(new MouseEventArgs(CurrMouseState, PrevMouseState));
+
+            if (AreActionsActive())
+            {
+                if (IsActionActive(GameAction.MenuUp))
+                    MenuUp?.Invoke(new MenuEventArgs(GameAction.MenuUp));
+                if (IsActionActive(GameAction.MenuDown))
+                    MenuDown?.Invoke(new MenuEventArgs(GameAction.MenuDown));
+                if (IsActionActive(GameAction.MenuLeft))
+                    MenuLeft?.Invoke(new MenuEventArgs(GameAction.MenuLeft));
+                if (IsActionActive(GameAction.MenuRight))
+                    MenuRight?.Invoke(new MenuEventArgs(GameAction.MenuRight));
+                if (IsActionActive(GameAction.MenuAccept))
+                    MenuAccept?.Invoke(new MenuEventArgs(GameAction.MenuAccept));
+                if (IsActionActive(GameAction.MenuCancel))
+                    MenuCancel?.Invoke(new MenuEventArgs(GameAction.MenuCancel));
+            }
 
             base.Update(gameTime);
         }

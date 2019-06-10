@@ -30,17 +30,64 @@ namespace ShiftingHues.UI
         
         private Func<bool> activationCondit;
 
-        private UIObject uiObject;
+        private readonly UIObject uiObject;
 
-        public UIObject toLeft;
+        private UIObject toLeft;
+        public UIObject ToLeft
+        {
+            get => toLeft;
+            set
+            {
+                toLeft = value;
+                ServiceLocator.GetInputService().MenuLeft += OnMenuLeft;
+            }
+        }
+        
+        private UIObject toRight;
+        public UIObject ToRight
+        {
+            get => toRight;
+            set
+            {
+                toRight = value;
+                ServiceLocator.GetInputService().MenuRight += OnMenuRight;
+            }
+        }
+        
+        private UIObject toUp;
+        public UIObject ToUp
+        {
+            get => toUp;
+            set
+            {
+                toUp = value;
+                ServiceLocator.GetInputService().MenuUp += OnMenuUp;
+            }
+        }
 
-        public UIObject toRight;
+        private UIObject toDown;
+        public UIObject ToDown
+        {
+            get => toDown;
+            set
+            {
+                toDown = value;
+                ServiceLocator.GetInputService().MenuDown += OnMenuDown;
+            }
+        }
 
-        public UIObject toUp;
+        private UIObject toAccept;
+        public UIObject ToAccept
+        {
+            get => toAccept;
+            set
+            {
+                toAccept = value;
+                ServiceLocator.GetInputService().MenuAccept += OnMenuAccept;
+            }
+        }
 
-        public UIObject toDown;
-
-        public bool WasHovered { get; private set; } = false;
+        public bool IsSelected { get; private set; } = false;
         #endregion
 
         #region Constructors
@@ -101,6 +148,9 @@ namespace ShiftingHues.UI
             input.OnMouseMove += Input_OnMouseMove;
             input.OnRelease += Input_OnRelease;
         }
+        #endregion
+
+        #region Methods
 
         private void Input_OnRelease(Input.MouseEventArgs e)
         {
@@ -109,13 +159,45 @@ namespace ShiftingHues.UI
 
         private void Input_OnMouseMove(Input.MouseEventArgs e)
         {
-            if (selectCondit()) selectAction?.Invoke(uiObject);
-            if (deselectCondit()) deselectAction?.Invoke(uiObject);
+            if (selectCondit())
+            {
+                selectAction?.Invoke(uiObject);
+                IsSelected = true;
+            }
+            if (deselectCondit())
+            {
+                deselectAction?.Invoke(uiObject);
+                IsSelected = false;
+            }
             //throw new NotImplementedException();
         }
-        #endregion
 
-        #region Methods
+        private void OnMenuLeft(Input.MenuEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void OnMenuRight(Input.MenuEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void OnMenuUp(Input.MenuEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void OnMenuDown(Input.MenuEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void OnMenuAccept(Input.MenuEventArgs e)
+        {
+
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// TODO: Finish Docs
         /// TODO: Change implementation to not directly require input checking

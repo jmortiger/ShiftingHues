@@ -21,7 +21,7 @@ namespace ShiftingHues.Input
 
     public interface IInputService
     {
-        //public delegate void MouseClick(MouseEventArgs e);
+        #region Events
 
         event MouseEvent OnRelease;
 
@@ -29,7 +29,18 @@ namespace ShiftingHues.Input
 
         event MouseEvent OnMouseMove;
 
-        //event EventHandler<MouseEventArgs> OnClick;
+        event MenuEvent MenuLeft;
+
+        event MenuEvent MenuRight;
+
+        event MenuEvent MenuUp;
+
+        event MenuEvent MenuDown;
+
+        event MenuEvent MenuAccept;
+
+        event MenuEvent MenuCancel;
+        #endregion
 
         #region Input States
         KeyboardState CurrKeyboardState { get; }
