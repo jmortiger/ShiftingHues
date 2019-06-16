@@ -42,8 +42,14 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ContainerComponent.cs" />
+    <Compile Include="Animation.cs" />
+    <Compile Include="AnimationInstance.cs" />
+    <Compile Include="ContainerComponent.cs">
+      <DependentUpon>UIManager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DrawEffects2D.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="GameObject.cs" />
     <Compile Include="GamePadValues.cs" />
     <Compile Include="GeonBitUIComponent.cs" />
     <Compile Include="IInputService.cs" />
@@ -52,16 +58,28 @@
     <Compile Include="InputDebug.cs" />
     <Compile Include="InputButton.cs" />
     <Compile Include="InputTypes.cs" />
-    <Compile Include="InteractComponent1.cs" />
+    <Compile Include="InteractComponent1.cs">
+      <DependentUpon>UIManager.cs</DependentUpon>
+    </Compile>
     <Compile Include="MouseStatePlus.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceLocator.cs" />
+    <Compile Include="Sprite.cs" />
+    <Compile Include="SpriteSheet.cs" />
     <Compile Include="UIManager.cs" />
-    <Compile Include="UIObjActiveComponent.cs" />
-    <Compile Include="UIObject.cs" />
-    <Compile Include="UISpriteComponent.cs" />
-    <Compile Include="UITextComponent.cs" />
+    <Compile Include="UIObjActiveComponent.cs">
+      <DependentUpon>UIManager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UIObject.cs">
+      <DependentUpon>UIManager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UISpriteComponent.cs">
+      <DependentUpon>UIManager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UITextComponent.cs">
+      <DependentUpon>UIManager.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="DataTypes, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">

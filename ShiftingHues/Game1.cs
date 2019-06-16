@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -137,27 +139,105 @@ namespace ShiftingHues
 		{
 			Panel mainPanel = new Panel(
 				size: new Vector2(GraphicsDevice.Viewport.Bounds.Width - 200, GraphicsDevice.Viewport.Bounds.Height), 
-				skin: PanelSkin.Simple);
+				skin: PanelSkin.None);
 			mainPanel.Padding = Vector2.Zero;
 			UserInterface.Active.AddEntity(mainPanel);
-			
-			Panel storyPanel = new Panel(
+
+			Panel storyParPanel = new Panel(
 				size: new Vector2(mainPanel.Size.X / 4, GraphicsDevice.Viewport.Bounds.Height),
-				anchor: Anchor.TopLeft);
+				anchor: Anchor.TopLeft,
+				offset: new Vector2(0, 0),
+				skin: PanelSkin.None);
+			storyParPanel.Padding = Vector2.Zero;
+
+			Panel storyPanel = new Panel(
+				size: new Vector2(mainPanel.Size.X / 4, GraphicsDevice.Viewport.Bounds.Height - (GraphicsDevice.Viewport.Bounds.Height * .175f)),
+				anchor: Anchor.TopLeft,
+				offset: new Vector2(0, (GraphicsDevice.Viewport.Bounds.Height * .175f)),
+				skin: PanelSkin.None);
 			storyPanel.Padding = Vector2.Zero;
-			mainPanel.AddChild(storyPanel);
+			storyPanel.Visible = false;
+			storyPanel.OnMouseLeave = (e) => { storyPanel.Visible = false; };
+			storyParPanel.AddChild(storyPanel);
+
+			storyParPanel.OnMouseLeave = (e) => { storyPanel.Visible = false; };
+			mainPanel.AddChild(storyParPanel);
 
 			Button storyButton = new Button(
-				size: new Vector2(0, .175f),
+				size: new Vector2(mainPanel.Size.X / 4, (GraphicsDevice.Viewport.Bounds.Height * .175f)),
+				anchor: Anchor.TopLeft,
+				offset: Vector2.Zero,
 				text: "Story");
 			storyButton.Padding = Vector2.Zero;
-			storyPanel.AddChild(storyButton);
+			storyButton.OnMouseEnter = (e) => { storyPanel.Visible = true; };
+			storyParPanel.AddChild(storyButton);
 
 			Button newGameButton = new Button(
 				size: new Vector2(0, .15f),
 				text: "New Game");
 			newGameButton.Padding = Vector2.Zero;
 			storyPanel.AddChild(newGameButton);
+
+			Panel raceParPanel = new Panel(
+				size: new Vector2(mainPanel.Size.X / 4, GraphicsDevice.Viewport.Bounds.Height),
+				anchor: Anchor.TopLeft,
+				offset: new Vector2(mainPanel.Size.X / 4, 0),
+				skin: PanelSkin.None);
+			raceParPanel.Padding = Vector2.Zero;
+
+			Panel racePanel = new Panel(
+				size: new Vector2(mainPanel.Size.X / 4, GraphicsDevice.Viewport.Bounds.Height - (GraphicsDevice.Viewport.Bounds.Height * .175f)),
+				anchor: Anchor.TopLeft,
+				offset: new Vector2(0, (GraphicsDevice.Viewport.Bounds.Height * .175f)),
+				skin: PanelSkin.None);
+			racePanel.Padding = Vector2.Zero;
+			racePanel.Visible = false;
+			racePanel.OnMouseLeave = (e) => { racePanel.Visible = false; };
+			raceParPanel.AddChild(racePanel);
+
+			raceParPanel.OnMouseLeave = (e) => { racePanel.Visible = false; };
+			mainPanel.AddChild(raceParPanel);
+
+			Button raceButton = new Button(
+				size: new Vector2(mainPanel.Size.X / 4, (GraphicsDevice.Viewport.Bounds.Height * .175f)),
+				anchor: Anchor.TopLeft,
+				offset: Vector2.Zero,
+				text: "Race");
+			raceButton.Padding = Vector2.Zero;
+			raceButton.OnMouseEnter = (e) => { racePanel.Visible = true; };
+			raceParPanel.AddChild(raceButton);
+
+			Button speedrunButton = new Button(
+				size: new Vector2(0, .15f),
+				text: "Speedrun");
+			speedrunButton.Padding = Vector2.Zero;
+			racePanel.AddChild(speedrunButton);
+
+			//Panel racePanel = new Panel(
+			//	size: new Vector2(mainPanel.Size.X / 4, GraphicsDevice.Viewport.Bounds.Height - (GraphicsDevice.Viewport.Bounds.Height * .175f)),
+			//	anchor: Anchor.TopLeft,
+			//	offset: new Vector2(mainPanel.Size.X / 4, (GraphicsDevice.Viewport.Bounds.Height * .175f)),
+			//	skin: PanelSkin.Simple);
+			//racePanel.Padding = Vector2.Zero;
+			//racePanel.Visible = false;
+			//racePanel.OnMouseLeave = (e) => { racePanel.Visible = false; };
+			//mainPanel.AddChild(racePanel);
+
+			//Button raceButton = new Button(
+			//	size: new Vector2(mainPanel.Size.X / 4, (GraphicsDevice.Viewport.Bounds.Height * .175f)),
+			//	anchor: Anchor.TopLeft,
+			//	offset: new Vector2(mainPanel.Size.X / 4, 0),
+			//	text: "Race");
+			//raceButton.Padding = Vector2.Zero;
+			////Action<Entity> action = (e) => { racePanel.; };
+			//raceButton.OnMouseEnter = (e) => { racePanel.Visible = true; };
+			//mainPanel.AddChild(raceButton);
+
+			//Button speedrunButton = new Button(
+			//	size: new Vector2(0, .15f),
+			//	text: "Speedrun");
+			//speedrunButton.Padding = Vector2.Zero;
+			//racePanel.AddChild(speedrunButton);
 
 			Button quitButton = new Button(
 				text: "Quit Game",

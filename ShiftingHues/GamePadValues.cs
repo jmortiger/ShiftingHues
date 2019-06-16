@@ -211,7 +211,7 @@ namespace ShiftingHues.Input
         }
     }
 
-    struct GamePadStatePlus
+    public struct GamePadStatePlus
     {
         public readonly GamePadState State;
 
