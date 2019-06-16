@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -15,6 +11,14 @@ namespace ShiftingHues.Graphics
 	public struct DrawEffects2D
 	{
 		#region Fields and Properties
+		/// <summary>
+		/// The top-left of the <see cref="DestinationRectangle"/>.
+		/// </summary>
+		public Point Position
+		{
+			get => DestinationRectangle.Location;
+			set => DestinationRectangle.Location = value;
+		}
 
 		public Rectangle DestinationRectangle/* { get; set; }*/;
 

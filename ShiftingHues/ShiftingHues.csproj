@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Animation.cs" />
     <Compile Include="AnimationInstance.cs" />
+    <Compile Include="AnimationOrig.cs" />
     <Compile Include="ContainerComponent.cs">
       <DependentUpon>UIManager.cs</DependentUpon>
     </Compile>
@@ -67,6 +68,7 @@
     <Compile Include="ServiceLocator.cs" />
     <Compile Include="Sprite.cs" />
     <Compile Include="SpriteSheet.cs" />
+    <Compile Include="SpriteSheetOrig.cs" />
     <Compile Include="UIManager.cs" />
     <Compile Include="UIObjActiveComponent.cs">
       <DependentUpon>UIManager.cs</DependentUpon>

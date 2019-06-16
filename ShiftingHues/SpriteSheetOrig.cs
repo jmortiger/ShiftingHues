@@ -1,99 +1,171 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace ShiftingHues.Graphics
 {
 	/// <summary>
-	/// Contains information about the sprites on a given <see cref="Texture2D"/>.
+	/// Handles the source rectangle of the current frame of the sprite & changing frames based on input. - J Mor
 	/// </summary>
-	public class SpriteSheet
+	public class SpriteSheetOrig
 	{
 		#region Fields & Properties
+		private Point[] imgPositList;
+
+		#region Properties
 		/// <summary>
 		/// The spritesheet. - J Mor
 		/// </summary>
-		public Texture2D Texture { get; }
-
-		public Rectangle[] SpriteSourceRects { get; private set; }
+		public Texture2D Sheet { get; }
 
 		/// <summary>
-		/// The total number of sprites on this <see cref="SpriteSheet"/>. - J Mor
+		/// The <see cref="Rectangle"/> that defines the location and size of the sprite. - J Mor
 		/// </summary>
-		public int SpritesInSheet { get => SpriteSourceRects.Length; }
+		public Rectangle CurrImgSourceRectangle { get; private set; }
 
+		/// <summary>
+		/// The number of rows on the <see cref="Sheet"/>. - J Mor
+		/// </summary>
+		public int Rows { get; }
+		/// <summary>
+		/// The number of columns on the <see cref="Sheet"/>. - J Mor
+		/// </summary>
+		public int Columns { get; }
+		/// <summary>
+		/// The width of each sprite on the <see cref="Sheet"/>. - J Mor
+		/// </summary>
+		public int GridNodeWidth { get; }
+		/// <summary>
+		/// The height of each sprite on the <see cref="Sheet"/>. - J Mor
+		/// </summary>
+		public int GridNodeHeight { get; }
+
+		/// <summary>
+		/// The total number of sprites on this <see cref="SpriteSheetOrig"/>. - J Mor
+		/// </summary>
+		public int SpritesInSheet { get; }
 		/// <summary>
 		/// The current animation frame based on a 0 index. - J Mor
 		/// </summary>
 		public int CurrentFrame { get; set; }
 
-		private Sprite[] sprites;
-		public Sprite[] Sprites
-		{
-			get
-			{
-				if (sprites == null)
-					InitializeSprites();
-				return sprites;
-			}
-		}
+		/// <summary>
+		/// The origin of rotation (relative to the texture, not the screen). - J Mor
+		/// </summary>
+		public Vector2 OriginOfRotation { get; set; }
+		/// <summary>
+		/// The angle of rotation (in radians). - J Mor
+		/// </summary>
+		public float Rotation { get; set; }
+		/// <summary>
+		/// The x and y scaling factor (greater than 1 for growth, 1.0 for no change, less than 1 to shrink). - J Mor
+		/// </summary>
+		public Vector2 Scale { get; set; }
+		/// <summary>
+		/// The color mask. - J Mor
+		/// </summary>
+		public Color ColorMask { get; set; }
+		/// <summary>
+		/// The SpriteEffect to apply (flip horizontally, vertically, or not at all). - J Mor
+		/// </summary>
+		public SpriteEffects SpriteEffect { get; set; }
 
-		public Sprite this[int index]
-		{
-			get {
-				if (sprites == null)
-					InitializeSprites();
-				return sprites[index];
-			}
-		}
+		public float LayerDepth { get; set; }
+		#endregion
 		#endregion
 
 		#region Constructors
-		public SpriteSheet(
-			Texture2D texture, 
-			int rows, int columns, 
-			int gridNodeWidth, int gridNodeHeight, 
-			int spritesInSheet)
+		private SpriteSheetOrig(
+			int currentFrame, 
+			Vector2 originOfRotation, 
+			float rotation, 
+			Vector2 scale, 
+			Color colorMask, 
+			SpriteEffects spriteEffect, 
+			float layerDepth)
 		{
-			this.Texture = texture;
-			
-			InitializeArray(spritesInSheet, rows, columns, gridNodeWidth, gridNodeHeight);
+			this.CurrentFrame = currentFrame;
+			this.OriginOfRotation = originOfRotation;
+			this.Rotation = rotation;
+			this.Scale = scale;
+			this.ColorMask = colorMask;
+			this.SpriteEffect = spriteEffect;
+			this.LayerDepth = layerDepth;
 		}
 
-		public SpriteSheet(Texture2D texture, Rectangle[] spriteSourceRects)
+		public SpriteSheetOrig(Texture2D sheet, int rows, int columns, int gridNodeWidth, int gridNodeHeight, int spritesInSheet)
+			: this(0, Vector2.Zero, 0f, Vector2.One, Color.White, SpriteEffects.None, 0f)
 		{
-			this.Texture = texture;
-			this.SpriteSourceRects = spriteSourceRects;
+			this.Sheet = sheet;
+			this.Rows = rows;
+			this.Columns = columns;
+			this.GridNodeWidth = gridNodeWidth;
+			this.GridNodeHeight = gridNodeHeight;
+			this.SpritesInSheet = spritesInSheet;
+
+			this.CurrImgSourceRectangle = new Rectangle(0, 0, GridNodeWidth, GridNodeHeight);
+			this.imgPositList = new Point[SpritesInSheet];
+			InitializeArray();
+		}
+		public SpriteSheetOrig(
+			Texture2D sheet, 
+			int rows, int columns, 
+			int gridNodeWidth, int gridNodeHeight, 
+			int spritesInSheet, 
+			Vector2 originOfRotation, 
+			float rotation, 
+			Vector2 scale, 
+			Color colorMask, 
+			SpriteEffects spriteEffect, 
+			float layerDepth)
+			: this(0, originOfRotation, rotation, scale, colorMask, spriteEffect, layerDepth)
+		{
+			this.Sheet = sheet;
+			this.Rows = rows;
+			this.Columns = columns;
+			this.GridNodeWidth = gridNodeWidth;
+			this.GridNodeHeight = gridNodeHeight;
+			this.SpritesInSheet = spritesInSheet;
+
+			this.CurrImgSourceRectangle = new Rectangle(0, 0, GridNodeWidth, GridNodeHeight);
+			this.imgPositList = new Point[SpritesInSheet];
+			InitializeArray();
 		}
 		#endregion
 
 		#region Methods
 		/// <summary>
-		/// Sets up an array with the bounds of each sprite in the sheet.
+		/// Sets up an array with the coordinates of each sprite in the sheet. - J Mor
 		/// </summary>
-		private void InitializeArray(int spritesInSheet, int rows, int columns, int gridNodeWidth, int gridNodeHeight)
+		private void InitializeArray()
 		{
-			this.SpriteSourceRects = new Rectangle[this.SpritesInSheet];
-			int i;
-			for (int x = 0; x < rows; x++)
+			for (int x = 0; x < Rows; x++)
 			{
-				for (int y = 0; y < columns; y++)
+				for (int y = 0; y < Columns; y++)
 				{
-					i = x + (y * columns);
-					if (i >= spritesInSheet)
-						break;
-					SpriteSourceRects[i] = new Rectangle(gridNodeWidth * x, gridNodeHeight * y, gridNodeWidth, gridNodeHeight);
+					imgPositList[x + (y * Columns)] = new Point(GridNodeWidth * x, GridNodeHeight * y);
 				}
 			}
 		}
-
+		
 		/// <summary>
-		/// Initializes the <see cref="Sprites"/>.
+		/// Updates the <see cref="CurrImgSourceRectangle"/> according to the new value of <see cref="CurrentFrame"/>. - J Mor
 		/// </summary>
-		private void InitializeSprites()
+		/// <exception cref="IndexOutOfRangeException">Thrown if the <see cref="CurrentFrame"/> is larger than the <see cref="SpritesInSheet"/>.</exception>
+		public void UpdateImgSourceRectangle()
 		{
-			sprites = new Sprite[SpritesInSheet];
-			for (int i = 0; i < SpritesInSheet; i++)
-				sprites[i] = new Sprite(this, i);
+			if (CurrentFrame >= imgPositList.Length) throw new IndexOutOfRangeException();
+			else CurrImgSourceRectangle = new Rectangle(imgPositList[CurrentFrame], new Point(GridNodeWidth, GridNodeHeight));
+		}
+		
+		/// <summary>
+		/// Updates the <see cref="CurrImgSourceRectangle"/> according to the new value of <see cref="CurrentFrame"/>. - J Mor
+		/// </summary>
+		/// <param name="frameNumber">The new value of <see cref="CurrentFrame"/>.</param>
+		public void UpdateImgSourceRectangle(int frameNumber)
+		{
+			CurrentFrame = frameNumber;
+			UpdateImgSourceRectangle();
 		}
 		#endregion
 	}
