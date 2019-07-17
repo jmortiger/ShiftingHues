@@ -2,21 +2,21 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+
+using GeonBit.UI;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace ShiftingHues
 {
-	public class PhysicsComponent : GameComponent
+	class EntityJSON
 	{
 		#region Fields and Properties
 
 		#endregion
 
 		#region Constructors
-		public PhysicsComponent(Game game) : base(game)
-		{
-		}
+
 		#endregion
 
 		#region Methods

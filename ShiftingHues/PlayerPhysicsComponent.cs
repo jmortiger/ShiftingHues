@@ -10,7 +10,7 @@ namespace ShiftingHues
 	// Current logic:
 	// 1. The player can't rotate
 	// 2. Friction is applied opposite the Forward vector
-	public class PlayerPhysicsComponent : PhysicsComponent
+	public class PlayerPhysicsComponent : PhysicsObjComponent
 	{
 		#region Fields and Properties
 
@@ -41,6 +41,11 @@ namespace ShiftingHues
 
 		#region Constructors
 
+		public PlayerPhysicsComponent(GameObject obj)
+			: base(obj)
+		{
+
+		}
 		#endregion
 
 		#region Methods
@@ -75,7 +80,7 @@ namespace ShiftingHues
 		private void CheckGrounded()
 		{
 			// TODO: Finish
-			if (Obj.tranform.Posit.Y >= 50)
+			if (Obj.Tranform.Posit.Y >= 50)
 				IsGrounded = true;
 			else
 				IsGrounded = false;
@@ -93,7 +98,7 @@ namespace ShiftingHues
 			{
 				normalForce.Y = CurrF.Y * -1;
 				currF += normalForce;
-				frictionalForce += (Obj.tranform.Forward * -1) * (normalForce.Length() * Coeff);
+				frictionalForce += (Obj.Tranform.Forward * -1) * (normalForce.Length() * Coeff);
 			}
 			Vector2 projF = (currV / (float)time.ElapsedGameTime.TotalSeconds) * Mass;
 			projF.Y = 0;

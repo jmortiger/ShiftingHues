@@ -11,8 +11,12 @@
 #-------------------------------- References --------------------------------#
 
 /reference:..\..\packages\GeonBit.UI.3.4.0.1\lib\geonbitui\DataTypes.dll
+/reference:..\..\PipelineExtention\bin\Release\PipelineExtention.dll
 
 #---------------------------------- Content ---------------------------------#
+
+#begin DiagnosticsFont.xnb
+/copy:DiagnosticsFont.xnb
 
 #begin GeonBit.UI/themes/editor/effects/disabled.fx
 /importer:EffectImporter
@@ -4780,6 +4784,59 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:GeonBit.UI/themes/lowres/ThemeData.xml
+
+#begin Raw_Files/PC-Idle NoBorder2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Raw_Files/PC-Idle NoBorder2.png
+
+#begin Raw_Files/PC-Idle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Raw_Files/PC-Idle.png
+
+#begin Raw_Files/Spritesheet - PC-Idle NoBorder2.json
+/importer:
+/processor:PassThroughProcessor
+/build:Raw_Files/Spritesheet - PC-Idle NoBorder2.json
+
+#begin Raw_Files/tex_Crosshair_Big.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Raw_Files/tex_Crosshair_Big.png
+
+#begin Raw_Files/tex_Crosshair_Small.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Raw_Files/tex_Crosshair_Small.png
 
 #begin Raw_Files/UI/back_ovr.png
 /importer:TextureImporter

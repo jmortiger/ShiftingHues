@@ -1,7 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ShiftingHues.Graphics;
 
-namespace ShiftingHues.Graphics
+namespace ShiftingHues.Obsolete.Graphics
 {
 	/// <summary>
 	/// TODO: Finish Docs

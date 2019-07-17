@@ -117,10 +117,20 @@ namespace ShiftingHues.Graphics
 
 			public void Draw(SpriteBatch batch)
 			{
-				if (animation.Animation.UseEachFramesDrawEffects)
-					animation.AnimationFrames[animation.CurrentFrame].DrawSprite(batch);
+				if (animation.Posit == null)
+				{
+					if (animation.Animation.UseEachFramesDrawEffects)
+						animation.AnimationFrames[animation.CurrentFrame].DrawSprite(batch);
+					else
+						animation.AnimationFrames[animation.CurrentFrame].DrawSprite(batch, animation.Animation.DrawEffects);
+				}
 				else
-					animation.AnimationFrames[animation.CurrentFrame].DrawSprite(batch, animation.Animation.DrawEffects);
+				{
+					if (animation.Animation.UseEachFramesDrawEffects)
+						animation.AnimationFrames[animation.CurrentFrame].DrawSprite(batch, null, animation.Posit.Value);
+					else
+						animation.AnimationFrames[animation.CurrentFrame].DrawSprite(batch, animation.Animation.DrawEffects, animation.Posit.Value);
+				}
 				//throw new NotImplementedException();
 			}
 		}
@@ -170,6 +180,8 @@ namespace ShiftingHues.Graphics
 
 		public bool IsPlaying { get; private set; } = false;
 
+		public Point? Posit = null;
+
 		private IAnimationState CurrState { get; set; }/* = new InactiveState(this);*/
 		#endregion
 
@@ -179,6 +191,15 @@ namespace ShiftingHues.Graphics
 		{
 			this.Animation = animation;
 			this.FPS = fps;
+			this.IsLooped = isLooped;
+
+			InitializeAnimation();
+		}
+
+		public AnimationInstance(Animation animation, bool isLooped = false)
+		{
+			this.Animation = animation;
+			this.FPS = animation.SuggestedFPS;
 			this.IsLooped = isLooped;
 
 			InitializeAnimation();
@@ -197,6 +218,19 @@ namespace ShiftingHues.Graphics
 			}
 
 			// Initialize state
+			CurrState = new InactiveState(this);
+		}
+
+		public void Play() => IsPlaying = true;
+
+		public void Pause() => IsPlaying = false;
+
+		public void Reset()
+		{
+			IsPlaying = false;
+			TimesLooped = 0;
+			timeSinceLastFrameChange = 0;
+			CurrentFrame = 0;
 			CurrState = new InactiveState(this);
 		}
 

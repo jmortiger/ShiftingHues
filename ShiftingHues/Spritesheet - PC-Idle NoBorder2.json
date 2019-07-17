@@ -1,0 +1,102 @@
+{
+  "resourceID": "sprsheet_PC-Idle",
+  "textureFilePath": "Raw_Files/PC-Idle NoBorder2",
+  "sprites": [
+    {
+      "resourceID": "spr_PC-Idle_00",
+      "animationsIncludedIn": [
+        "ani_PC-Idle"
+      ],
+      "sourceRect": {
+        "X": 0,
+        "Y": 0,
+        "Width": 256,
+        "Height": 256
+      }
+    },
+    {
+      "resourceID": "spr_PC-Idle_01",
+      "animationsIncludedIn": [
+        "ani_PC-Idle"
+      ],
+      "sourceRect": {
+        "X": 255,
+        "Y": 0,
+        "Width": 256,
+        "Height": 256
+      }
+    },
+    {
+      "resourceID": "spr_PC-Idle_02",
+      "animationsIncludedIn": [
+        "ani_PC-Idle"
+      ],
+      "sourceRect": {
+        "X": 511,
+        "Y": 0,
+        "Width": 256,
+        "Height": 256
+      }
+    },
+    {
+      "resourceID": "spr_PC-Idle_03",
+      "animationsIncludedIn": [
+        "ani_PC-Idle"
+      ],
+      "sourceRect": {
+        "X": 767,
+        "Y": 0,
+        "Width": 256,
+        "Height": 256
+      }
+    },
+    {
+      "resourceID": "spr_PC-Idle_04",
+      "animationsIncludedIn": [
+        "ani_PC-Idle"
+      ],
+      "sourceRect": {
+        "X": 0,
+        "Y": 255,
+        "Width": 256,
+        "Height": 256
+      }
+    },
+    {
+      "resourceID": "spr_PC-Idle_05",
+      "animationsIncludedIn": [
+        "ani_PC-Idle"
+      ],
+      "sourceRect": {
+        "X": 255,
+        "Y": 255,
+        "Width": 256,
+        "Height": 256
+      }
+    },
+    {
+      "resourceID": "spr_PC-Idle_06",
+      "animationsIncludedIn": [
+        "ani_PC-Idle"
+      ],
+      "sourceRect": {
+        "X": 512,
+        "Y": 255,
+        "Width": 256,
+        "Height": 256
+      }
+    },
+    {
+      "resourceID": "spr_PC-Idle_07",
+      "animationsIncludedIn": [
+        "ani_PC-Idle"
+      ],
+      "sourceRect": {
+        "X": 767,
+        "Y": 255,
+        "Width": 256,
+        "Height": 256
+      }
+    }
+  ]
+}

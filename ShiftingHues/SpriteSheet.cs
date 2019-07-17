@@ -20,12 +20,7 @@ namespace ShiftingHues.Graphics
 		/// The total number of sprites on this <see cref="SpriteSheet"/>. - J Mor
 		/// </summary>
 		public int SpritesInSheet { get => SpriteSourceRects.Length; }
-
-		/// <summary>
-		/// The current animation frame based on a 0 index. - J Mor
-		/// </summary>
-		public int CurrentFrame { get; set; }
-
+		
 		private Sprite[] sprites;
 		public Sprite[] Sprites
 		{
@@ -72,11 +67,14 @@ namespace ShiftingHues.Graphics
 		/// </summary>
 		private void InitializeArray(int spritesInSheet, int rows, int columns, int gridNodeWidth, int gridNodeHeight)
 		{
-			this.SpriteSourceRects = new Rectangle[this.SpritesInSheet];
+			this.SpriteSourceRects = new Rectangle[spritesInSheet];
 			int i;
-			for (int x = 0; x < rows; x++)
+			//for (int x = 0; x < columns; x++)
+			//{
+			//	for (int y = 0; y < rows; y++)
+			for (int y = 0; y < rows; y++)
 			{
-				for (int y = 0; y < columns; y++)
+				for (int x = 0; x < columns; x++)
 				{
 					i = x + (y * columns);
 					if (i >= spritesInSheet)

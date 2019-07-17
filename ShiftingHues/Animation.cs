@@ -21,34 +21,37 @@ namespace ShiftingHues.Graphics
 		public int NumFrames { get => Frames.Length; }
 		public bool UseEachFramesDrawEffects { get; set; } = false;
 		public DrawEffects2D DrawEffects { get; set; }
+		public float SuggestedFPS { get; }
 		#endregion
 
 		#region Constructors
-		private Animation(bool UseEachFramesDrawEffects, DrawEffects2D DrawEffects)
+		private Animation(bool UseEachFramesDrawEffects, DrawEffects2D DrawEffects, float fps)
 		{
 			this.UseEachFramesDrawEffects = UseEachFramesDrawEffects;
 			this.DrawEffects = DrawEffects;
+			this.SuggestedFPS = fps;
 		}
 
-		public Animation(Sprite[] frames, DrawEffects2D? drawEffects = null)
-			: this(false, drawEffects ?? new DrawEffects2D())
+		public Animation(Sprite[] frames, DrawEffects2D? drawEffects = null, float fps = 60)
+			: this(false, drawEffects ?? new DrawEffects2D(), fps)
 		{
 			this.Frames = frames;
+			this.SuggestedDrawEffects = new DrawEffects2D[frames.Length];
 			for (int i = 0; i < frames.Length; i++)
 			{
-				this.SuggestedDrawEffects[i] = new DrawEffects2D(frames[i].SourceRect);
+				this.SuggestedDrawEffects[i] = new DrawEffects2D(0);
 			}
 		}
 
-		public Animation(Sprite[] frames, DrawEffects2D[] spriteDrawEffects)
-			: this(true, new DrawEffects2D())
+		public Animation(Sprite[] frames, DrawEffects2D[] spriteDrawEffects, float fps = 60)
+			: this(true, new DrawEffects2D(), fps)
 		{
 			this.Frames = frames;
 			this.SuggestedDrawEffects = spriteDrawEffects;
 		}
 
-		public Animation(SpriteInstance[] frames)
-			: this(true, new DrawEffects2D())
+		public Animation(SpriteInstance[] frames, float fps = 60)
+			: this(true, new DrawEffects2D(), fps)
 		{
 			this.Frames = new Sprite[frames.Length];
 			this.SuggestedDrawEffects = new DrawEffects2D[frames.Length];

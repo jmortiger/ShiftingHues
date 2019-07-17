@@ -3,20 +3,18 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Audio;
 
 namespace ShiftingHues
 {
-	public class PhysicsComponent : GameComponent
+	public class AudioResource
 	{
 		#region Fields and Properties
 
 		#endregion
 
 		#region Constructors
-		public PhysicsComponent(Game game) : base(game)
-		{
-		}
+
 		#endregion
 
 		#region Methods

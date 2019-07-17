@@ -14,6 +14,8 @@
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>DesktopGL</MonoGamePlatform>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -45,36 +47,51 @@
     <Compile Include="Animation.cs" />
     <Compile Include="AnimationInstance.cs" />
     <Compile Include="AnimationOrig.cs" />
+    <Compile Include="AudioManagerComponent.cs" />
+    <Compile Include="AudioResource.cs" />
     <Compile Include="Circle.cs" />
     <Compile Include="ContainerComponent.cs">
       <DependentUpon>UIManager.cs</DependentUpon>
     </Compile>
     <Compile Include="DrawEffects2D.cs" />
+    <Compile Include="EntityJSON.cs" />
     <Compile Include="FPoint.cs" />
     <Compile Include="FRectangle.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="GamePadValues.cs" />
     <Compile Include="GeonBitUIComponent.cs" />
+    <Compile Include="GeonUIInputExtension.cs" />
+    <Compile Include="Graphics2DComponent.cs" />
+    <Compile Include="IDrawable2D.cs" />
     <Compile Include="IInputService.cs" />
+    <Compile Include="IKeyboardInput.cs" />
     <Compile Include="InputComponent.cs" />
     <Compile Include="BindInfo.cs" />
     <Compile Include="InputDebug.cs" />
     <Compile Include="InputButton.cs" />
     <Compile Include="InputTypes.cs" />
+    <Compile Include="IntegratedPhysicsComponent.cs" />
     <Compile Include="InteractComponent1.cs">
       <DependentUpon>UIManager.cs</DependentUpon>
     </Compile>
     <Compile Include="Misc.cs" />
     <Compile Include="MouseStatePlus.cs" />
+    <Compile Include="ObjManagerComponent.cs" />
     <Compile Include="PhysicsComponent.cs" />
+    <Compile Include="PhysicsObjComponent.cs" />
     <Compile Include="PlayerPhysicsComponent.cs" />
+    <Compile Include="PlayingWithJSON.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceLocator.cs" />
+    <Compile Include="SimplePhysicsComponent.cs" />
     <Compile Include="Sprite.cs" />
+    <Compile Include="SpriteInstance.cs" />
     <Compile Include="SpriteSheet.cs" />
     <Compile Include="SpriteSheetOrig.cs" />
+    <Compile Include="TextInputHandler.cs" />
+    <Compile Include="TextureManagerComponent.cs" />
     <Compile Include="TranformComponent.cs" />
     <Compile Include="UIManager.cs" />
     <Compile Include="UIObjActiveComponent.cs">
@@ -91,14 +108,26 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Aether.Physics2D, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Aether.Physics2D.1.4.0\lib\net40\Aether.Physics2D.dll</HintPath>
+    </Reference>
+    <Reference Include="Aether.Physics2D.Diagnostics, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Aether.Physics2D.Diagnostics.1.4.0\lib\net40\Aether.Physics2D.Diagnostics.dll</HintPath>
+    </Reference>
     <Reference Include="DataTypes, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\GeonBit.UI.3.4.0.1\lib\geonbitui\DataTypes.dll</HintPath>
     </Reference>
     <Reference Include="GeonBit.UI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\GeonBit.UI.3.4.0.1\lib\geonbitui\GeonBit.UI.dll</HintPath>
     </Reference>
-    <Reference Include="MonoGame.Framework">
-      <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\MonoGame.Framework.dll</HintPath>
+    <Reference Include="MonoGame.Framework, Version=3.7.1.189, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MonoGame.Framework.DesktopGL.3.7.1.189\lib\net45\MonoGame.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PipelineExtention">
+      <HintPath>..\PipelineExtention\bin\Release\PipelineExtention.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Runtime.Serialization" />
@@ -158,6 +187,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="app.manifest" />
+    <None Include="Content\DiagnosticsFont.xnb" />
     <None Include="Content\GeonBit.UI\themes\editor\fonts\Bold.spritefont" />
     <None Include="Content\GeonBit.UI\themes\editor\fonts\Italic.spritefont" />
     <None Include="Content\GeonBit.UI\themes\editor\fonts\Regular.spritefont" />
@@ -168,6 +198,7 @@
     <None Include="Content\GeonBit.UI\themes\lowres\fonts\Italic.spritefont" />
     <None Include="Content\GeonBit.UI\themes\lowres\fonts\Regular.spritefont" />
     <None Include="packages.config" />
+    <None Include="Spritesheet - PC-Idle NoBorder2.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\GeonBit.UI\themes\editor\effects\disabled.fx" />
@@ -750,6 +781,15 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
+  <Import Project="..\packages\MonoGame.Framework.DesktopGL.3.7.1.189\build\MonoGame.Framework.DesktopGL.targets" Condition="Exists('..\packages\MonoGame.Framework.DesktopGL.3.7.1.189\build\MonoGame.Framework.DesktopGL.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\MonoGame.Framework.DesktopGL.3.7.1.189\build\MonoGame.Framework.DesktopGL.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MonoGame.Framework.DesktopGL.3.7.1.189\build\MonoGame.Framework.DesktopGL.targets'))" />
+    <Error Condition="!Exists('..\packages\MonoGame.Content.Builder.3.7.0.9\build\MonoGame.Content.Builder.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MonoGame.Content.Builder.3.7.0.9\build\MonoGame.Content.Builder.targets'))" />
+  </Target>
+  <Import Project="..\packages\MonoGame.Content.Builder.3.7.0.9\build\MonoGame.Content.Builder.targets" Condition="Exists('..\packages\MonoGame.Content.Builder.3.7.0.9\build\MonoGame.Content.Builder.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

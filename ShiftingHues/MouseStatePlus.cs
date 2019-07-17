@@ -49,12 +49,17 @@ namespace ShiftingHues.Input
         /// Gets if the scroll wheel was rolled down.
         /// </summary>
         public ButtonState ScrollDown { get => (ScrollWheelDelta < 0) ? ButtonState.Pressed : ButtonState.Released; }
+		/// <summary>
+		/// Gets cursor position as a <see cref="Vector2"/>.
+		/// </summary>
+		/// <remarks>Creates a new <see cref="Vector2"/>.</remarks>
+		public Vector2 PositionAsVector2 { get => new Vector2(X, Y); }
 
-        #region MouseState Properties
-        /// <summary>
-        /// Returns the cumulative horizontal scroll wheel value since the game start.
-        /// </summary>
-        public int HorizontalScrollWheelValue { get => State.HorizontalScrollWheelValue; }
+		#region MouseState Properties
+		/// <summary>
+		/// Returns the cumulative horizontal scroll wheel value since the game start.
+		/// </summary>
+		public int HorizontalScrollWheelValue { get => State.HorizontalScrollWheelValue; }
         /// <summary>
         /// Gets state of the left mouse button.
         /// </summary>
@@ -67,10 +72,10 @@ namespace ShiftingHues.Input
         /// Gets cursor position.
         /// </summary>
         public Point Position { get => State.Position; }
-        /// <summary>
-        /// Gets horizontal position of the cursor in relation to the window.
-        /// </summary>
-        public int X { get => State.X; }
+		/// <summary>
+		/// Gets horizontal position of the cursor in relation to the window.
+		/// </summary>
+		public int X { get => State.X; }
         /// <summary>
         /// Gets vertical position of the cursor in relation to the window.
         /// </summary>
@@ -132,6 +137,21 @@ namespace ShiftingHues.Input
                     return false;
             }
         }
+
+		public bool AnyButtonPressed(bool countScroll = true)
+		{
+			return
+				LeftButton == ButtonState.Pressed ||
+				MiddleButton == ButtonState.Pressed ||
+				RightButton == ButtonState.Pressed ||
+				(countScroll && (
+					ScrollWheelDelta > 0 ||
+					ScrollWheelDelta < 0 ||
+					HorizontalScrollWheelDelta < 0 ||
+					HorizontalScrollWheelDelta > 0)) ||
+				XButton1 == ButtonState.Pressed ||
+				XButton2 == ButtonState.Pressed;
+		}
 
         public MouseButtons[] GetPressedButtons()
         {

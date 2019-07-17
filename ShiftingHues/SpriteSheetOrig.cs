@@ -1,8 +1,9 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ShiftingHues.Graphics;
 
-namespace ShiftingHues.Graphics
+namespace ShiftingHues.Obsolete.Graphics
 {
 	/// <summary>
 	/// Handles the source rectangle of the current frame of the sprite & changing frames based on input. - J Mor

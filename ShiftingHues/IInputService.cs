@@ -58,19 +58,91 @@ namespace ShiftingHues.Input
         List<InputButton> CurrButtons { get; }
         List<InputButton> PrevButtons { get; }
         #endregion
-        #region GetInput
-        bool GetInput(InputButton bttn);
-        bool GetInputUp(InputButton bttn);
-        bool GetInputDown(InputButton bttn);
-        bool GetInput(Keys key);
-        bool GetInputUp(Keys key);
-        bool GetInputDown(Keys key);
-        bool GetInput(Buttons button);
-        bool GetInputUp(Buttons button);
-        bool GetInputDown(Buttons button);
-        bool GetInput(MouseButtons button);
-        bool GetInputUp(MouseButtons button);
-        bool GetInputDown(MouseButtons button);
+		Vector2 NextMousePosit { get; }
+		#region GetInput
+		/// <summary>
+		/// Get the current state of the specified button.
+		/// </summary>
+		/// <param name="bttn">The button to check.</param>
+		/// <returns><c>true</c> if the button is currently down, <c>false</c> otherwise.</returns>
+		bool GetInput(InputButton bttn);
+
+		/// <summary>
+		/// Get if the specified input was released this frame.
+		/// </summary>
+		/// <param name="bttn">The input to check.</param>
+		/// <returns><c>true</c> if the input is currently up and was down last frame, <c>false</c> otherwise.</returns>
+		bool GetInputUp(InputButton bttn);
+
+		/// <summary>
+		/// Get if the specified input was pressed this frame.
+		/// </summary>
+		/// <param name="bttn">The input to check.</param>
+		/// <returns><c>true</c> if the input is currently down and was up last frame, <c>false</c> otherwise.</returns>
+		bool GetInputDown(InputButton bttn);
+
+		/// <summary>
+		/// Get the current state of the specified key.
+		/// </summary>
+		/// <param name="key">The key to check.</param>
+		/// <returns><c>true</c> if the key is currently down, <c>false</c> otherwise.</returns>
+		bool GetInput(Keys key);
+
+		/// <summary>
+		/// Get if the specified key was released this frame.
+		/// </summary>
+		/// <param name="key">The key to check.</param>
+		/// <returns><c>true</c> if the key is currently up and was down last frame, <c>false</c> otherwise.</returns>
+		bool GetInputUp(Keys key);
+
+		/// <summary>
+		/// Get if the specified key was pressed this frame.
+		/// </summary>
+		/// <param name="key">The key to check.</param>
+		/// <returns><c>true</c> if the key is currently down and was up last frame, <c>false</c> otherwise.</returns>
+		bool GetInputDown(Keys key);
+
+		/// <summary>
+		/// Get the current state of the specified <see cref="GamePad"/> button.
+		/// </summary>
+		/// <param name="button">The button to check.</param>
+		/// <returns><c>true</c> if the button is currently down, <c>false</c> otherwise.</returns>
+		bool GetInput(Buttons button);
+
+		/// <summary>
+		/// Get if the specified button was released this frame.
+		/// </summary>
+		/// <param name="button">The button to check.</param>
+		/// <returns><c>true</c> if <paramref name="button"/> is currently up and was down last frame, <c>false</c> otherwise.</returns>
+		bool GetInputUp(Buttons button);
+
+		/// <summary>
+		/// Get if the specified key was pressed this frame.
+		/// </summary>
+		/// <param name="button">The button to check.</param>
+		/// <returns><c>true</c> if <paramref name="button"/> is currently down and was up last frame, <c>false</c> otherwise.</returns>
+		bool GetInputDown(Buttons button);
+
+		/// <summary>
+		/// Get the current state of the specified <see cref="Mouse"/> button.
+		/// </summary>
+		/// <param name="button">The button to check.</param>
+		/// <returns><c>true</c> if the button is currently down, <c>false</c> otherwise.</returns>
+		bool GetInput(MouseButtons button);
+
+		/// <summary>
+		/// Get if the specified button was released this frame.
+		/// </summary>
+		/// <param name="button">The button to check.</param>
+		/// <returns><c>true</c> if the <paramref name="button"/> is currently up and was down last frame, <c>false</c> otherwise.</returns>
+		bool GetInputUp(MouseButtons button);
+
+		/// <summary>
+		/// Get if the specified key was pressed this frame.
+		/// </summary>
+		/// <param name="button">The button to check.</param>
+		/// <returns><c>true</c> if <paramref name="button"/> is currently down and was up last frame, <c>false</c> otherwise.</returns>
+		bool GetInputDown(MouseButtons button);
         #endregion
         bool GetMouseBounds(Rectangle bounds);
         bool GetMouseBoundsEnter(Rectangle bounds);
@@ -78,5 +150,6 @@ namespace ShiftingHues.Input
         bool IsActionActive(GameAction action);
         bool WasActionActive(GameAction action);
         void RegisterEvent(Action actionToFire, Func<bool> fireCondition);
+		void SetNextMousePosition(Vector2 newPos);
     }
 }

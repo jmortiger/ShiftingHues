@@ -24,6 +24,94 @@ namespace ShiftingHues.Input
         MenuCancel,
         ExitGame
     }
+	public enum TextInputs
+	{
+		A,
+		B,
+		C,
+		D,
+		E,
+		F,
+		G,
+		H,
+		I,
+		J,
+		K,
+		L,
+		M,
+		N,
+		O,
+		P,
+		Q,
+		R,
+		S,
+		T,
+		U,
+		V,
+		W,
+		X,
+		Y,
+		Z,
+		a,
+		b,
+		c,
+		d,
+		e,
+		f,
+		g,
+		h,
+		i,
+		j,
+		k,
+		l,
+		m,
+		n,
+		o,
+		p,
+		q,
+		r,
+		s,
+		t,
+		u,
+		v,
+		w,
+		x,
+		y,
+		z,
+		One,
+		Two,
+		Three,
+		Four,
+		Five,
+		Six,
+		Seven,
+		Eight,
+		Nine,
+		Zero,
+		Space,
+		Comma,
+		Period,
+		ForwardSlash,
+		BackSlash,
+		LessThan,
+		GreaterThan,
+		QuestionMark,
+		DoubleQuote,
+		SingleQuote,
+		ParentheseLeft,
+		ParentheseRight,
+		Plus,
+		Minus,
+		Equals,
+
+		Backspace,
+		Enter,
+		LeftArrow,
+		RightArrow,
+		UpArrow,
+		DownArrow,
+		Tab
+	}
     public class InputComponent : GameComponent, IInputService
     {
         #region Fields and Properties
@@ -47,7 +135,10 @@ namespace ShiftingHues.Input
 
         public List<InputButton> CurrButtons { get; private set; } = new List<InputButton>();
         public List<InputButton> PrevButtons { get; private set; } = new List<InputButton>();
-        #endregion
+		#endregion
+
+		private Vector2 nextMousePosit = new Vector2(float.NaN, float.NaN);
+		public Vector2 NextMousePosit { get => nextMousePosit; private set => nextMousePosit = value; }
 
         private List<Tuple<Func<bool>, Action>> ObjsToFire = new List<Tuple<Func<bool>, Action>>(3);
 
@@ -108,6 +199,12 @@ namespace ShiftingHues.Input
             // Get new states & actions
             CurrKeyboardState = Keyboard.GetState();
             CurrPadState = GamePad.GetState(PlayerIndex.One);
+			if (!float.IsNaN(NextMousePosit.X) || !float.IsNaN(NextMousePosit.Y))
+			{
+				Mouse.SetPosition((int)NextMousePosit.X, (int)NextMousePosit.Y);
+				nextMousePosit.X = float.NaN;
+				nextMousePosit.Y = float.NaN;
+			}
             CurrMouseState = new MouseStatePlus(Mouse.GetState(), PrevMouseState.State);
             CurrActions = tPrev; // Reuse PrevActions to prevent unneed mem alloc
             CurrActions.Clear();
@@ -315,6 +412,11 @@ namespace ShiftingHues.Input
         #endregion
         #endregion
 
+		/// <summary>
+		/// Get if the mouse is in the specified <see cref="Rectangle"/>.
+		/// </summary>
+		/// <param name="bounds">The <see cref="Rectangle"/> to check.</param>
+		/// <returns><c>true</c> if the mouse is inside, <c>false</c> otherwise.</returns>
         public bool GetMouseBounds(Rectangle bounds) => bounds.Contains(CurrMouseState.Position);
         public bool GetMouseBoundsEnter(Rectangle bounds) => bounds.Contains(CurrMouseState.Position) && !bounds.Contains(PrevMouseState.Position);
         public bool GetMouseBoundsExit(Rectangle bounds) => !bounds.Contains(CurrMouseState.Position) && bounds.Contains(PrevMouseState.Position);
@@ -383,9 +485,30 @@ namespace ShiftingHues.Input
         public void RegisterEvent(Action actionToFire, Func<bool> fireCondition)
         {
             ObjsToFire.Add(new Tuple<Func<bool>, Action>(fireCondition, actionToFire));
-        }
+		}
 
-        public void ConstructDefaultConfig()
+		public void SetNextMousePosition(Vector2 newPos)
+		{
+			NextMousePosit = newPos;
+		}
+
+		//public void UpdateMousePosit(Vector2 newPos)
+		//{
+		//	Mouse.SetPosition((int)newPos.X, (int)newPos.Y);
+		//	MouseState temp = new MouseState(
+		//		(int)newPos.X,
+		//		(int)newPos.Y,
+		//		CurrMouseState.State.ScrollWheelValue,
+		//		CurrMouseState.State.LeftButton,
+		//		CurrMouseState.State.MiddleButton,
+		//		CurrMouseState.State.RightButton,
+		//		CurrMouseState.State.XButton1,
+		//		CurrMouseState.State.XButton2,
+		//		CurrMouseState.State.HorizontalScrollWheelValue);
+		//	CurrMouseState = new MouseStatePlus(temp, PrevMouseState.State);
+		//}
+
+		public void ConstructDefaultConfig()
         {
             // ExitGame: Escape Key (Held)
             Dictionary<InputButton, InputTypes> bB = new Dictionary<InputButton, InputTypes>(2)
@@ -456,6 +579,639 @@ namespace ShiftingHues.Input
             };
             Binds.Add(new BindInfo(this, GameAction.Sprint, bB));
         }
-        #endregion
-    }
+		#endregion
+
+		#region Static Methods
+		public static bool IsCharacter(Keys key)
+		{
+			switch (key)
+			{
+				case Keys.None:
+					return false;
+				case Keys.Back:
+					return false; // May change
+				case Keys.Tab:
+					return true; // May change
+				case Keys.Enter:
+					return true; // May change
+				case Keys.CapsLock:
+					return false;
+				case Keys.Escape:
+					return false;
+				case Keys.Space:
+					return true; // May change
+				case Keys.PageUp:
+				case Keys.PageDown:
+					return false;
+				case Keys.End:
+				case Keys.Home:
+					return false;
+				case Keys.Left:
+				case Keys.Up:
+				case Keys.Right:
+				case Keys.Down:
+					return false;
+				case Keys.Select:
+					return false;
+				case Keys.Print:
+					return false;
+				case Keys.Execute:
+					return false;
+				case Keys.PrintScreen:
+					return false;
+				case Keys.Insert:
+					return false;
+				case Keys.Delete:
+					return false; // May change
+				case Keys.Help:
+					return false;
+				case Keys.D0:
+				case Keys.D1:
+				case Keys.D2:
+				case Keys.D3:
+				case Keys.D4:
+				case Keys.D5:
+				case Keys.D6:
+				case Keys.D7:
+				case Keys.D8:
+				case Keys.D9:
+					return false;
+				case Keys.A:
+				case Keys.B:
+				case Keys.C:
+				case Keys.D:
+				case Keys.E:
+				case Keys.F:
+				case Keys.G:
+				case Keys.H:
+				case Keys.I:
+				case Keys.J:
+				case Keys.K:
+				case Keys.L:
+				case Keys.M:
+				case Keys.N:
+				case Keys.O:
+				case Keys.P:
+				case Keys.Q:
+				case Keys.R:
+				case Keys.S:
+				case Keys.T:
+				case Keys.U:
+				case Keys.V:
+				case Keys.W:
+				case Keys.X:
+				case Keys.Y:
+				case Keys.Z:
+					return true;
+				case Keys.LeftWindows:
+				case Keys.RightWindows:
+					return false;
+				case Keys.Apps:
+					return false;
+				case Keys.Sleep:
+					return false;
+				case Keys.NumPad0:
+				case Keys.NumPad1:
+				case Keys.NumPad2:
+				case Keys.NumPad3:
+				case Keys.NumPad4:
+				case Keys.NumPad5:
+				case Keys.NumPad6:
+				case Keys.NumPad7:
+				case Keys.NumPad8:
+				case Keys.NumPad9:
+					return true; // May change
+				case Keys.Multiply:
+				case Keys.Add:
+					return true;
+				case Keys.Separator:
+					return false; // May change
+				case Keys.Subtract:
+					return true;
+				case Keys.Decimal:
+					return true;
+				case Keys.Divide:
+					return true; // May change
+				case Keys.F1:
+				case Keys.F2:
+				case Keys.F3:
+				case Keys.F4:
+				case Keys.F5:
+				case Keys.F6:
+				case Keys.F7:
+				case Keys.F8:
+				case Keys.F9:
+				case Keys.F10:
+				case Keys.F11:
+				case Keys.F12:
+				case Keys.F13:
+				case Keys.F14:
+				case Keys.F15:
+				case Keys.F16:
+				case Keys.F17:
+				case Keys.F18:
+				case Keys.F19:
+				case Keys.F20:
+				case Keys.F21:
+				case Keys.F22:
+				case Keys.F23:
+				case Keys.F24:
+					return false;
+				case Keys.NumLock:
+					return false;
+				case Keys.Scroll:
+					return false;
+				case Keys.LeftShift:
+				case Keys.RightShift:
+					return false; // May change
+				case Keys.LeftControl:
+				case Keys.RightControl:
+				case Keys.LeftAlt:
+				case Keys.RightAlt:
+					return false; // May change
+								  //case Keys.BrowserBack:
+								  //	break;
+								  //case Keys.BrowserForward:
+								  //	break;
+								  //case Keys.BrowserRefresh:
+								  //	break;
+								  //case Keys.BrowserStop:
+								  //	break;
+								  //case Keys.BrowserSearch:
+								  //	break;
+								  //case Keys.BrowserFavorites:
+								  //	break;
+								  //case Keys.BrowserHome:
+								  //	break;
+								  //case Keys.VolumeMute:
+								  //	break;
+								  //case Keys.VolumeDown:
+								  //	break;
+								  //case Keys.VolumeUp:
+								  //	break;
+								  //case Keys.MediaNextTrack:
+								  //	break;
+								  //case Keys.MediaPreviousTrack:
+								  //	break;
+								  //case Keys.MediaStop:
+								  //	break;
+								  //case Keys.MediaPlayPause:
+								  //	break;
+								  //case Keys.LaunchMail:
+								  //	break;
+								  //case Keys.SelectMedia:
+								  //	break;
+								  //case Keys.LaunchApplication1:
+								  //	break;
+								  //case Keys.LaunchApplication2:
+								  //	break;
+				case Keys.OemSemicolon:
+				case Keys.OemPlus:
+				case Keys.OemComma:
+				case Keys.OemMinus:
+				case Keys.OemPeriod:
+				case Keys.OemQuestion:
+				case Keys.OemTilde:
+				case Keys.OemOpenBrackets:
+				case Keys.OemPipe:
+				case Keys.OemCloseBrackets:
+				case Keys.OemQuotes:
+					return true; // May change
+				case Keys.Oem8:
+					return false; // IDFK what this is
+				case Keys.OemBackslash:
+					return true; // May change
+				case Keys.ProcessKey:
+				case Keys.Attn:
+				case Keys.Crsel:
+				case Keys.Exsel:
+				case Keys.EraseEof:
+				case Keys.Play:
+				case Keys.Zoom:
+				case Keys.Pa1:
+				case Keys.OemClear:
+				case Keys.ChatPadGreen:
+				case Keys.ChatPadOrange:
+				case Keys.Pause:
+				case Keys.ImeConvert:
+				case Keys.ImeNoConvert:
+				case Keys.Kana:
+				case Keys.Kanji:
+				case Keys.OemAuto:
+				case Keys.OemCopy:
+				case Keys.OemEnlW:
+					return false;
+				default:
+					return false;
+			}
+			return false;
+		}
+
+		public static string GetCurrentCharacterAsString(KeyboardState? state = null, bool acceptEnter = false, bool acceptBackspace = false)
+		{
+			KeyboardState keyboardState;
+			try
+			{
+				keyboardState = state ?? ServiceLocator.GetInputService().CurrKeyboardState;
+			}
+			catch (NullReferenceException e) // TODO: Rework once error handling w/ soft noncritical errors can pass
+			{
+				Console.WriteLine(e);
+				return String.Empty;
+				//throw;
+			}
+			//KeyboardState keyboardState = state ?? ServiceLocator.GetInputService().CurrKeyboardState;
+			string returnString = "";
+			var keys = keyboardState.GetPressedKeys();
+			for (int i = 0; i < keys.Length; i++)
+			{
+				switch (keys[i])
+				{
+					//case Keys.None:
+					//	break;
+					case Keys.Back:
+						returnString = ((acceptBackspace) ? "\b" : "") + returnString;
+						break;
+					case Keys.Tab:
+						returnString += "\t";
+						break;
+					case Keys.Enter:
+						returnString += (acceptEnter) ? "\n" : "";
+						break;
+					//case Keys.CapsLock:
+					//	break;
+					//case Keys.Escape:
+					//	break;
+					case Keys.Space:
+						returnString += " ";
+						break;
+					//case Keys.PageUp:
+					//	break;
+					//case Keys.PageDown:
+					//	break;
+					//case Keys.End:
+					//	break;
+					//case Keys.Home:
+					//	break;
+					//case Keys.Left:
+					//	break;
+					//case Keys.Up:
+					//	break;
+					//case Keys.Right:
+					//	break;
+					//case Keys.Down:
+					//	break;
+					//case Keys.Select:
+					//	break;
+					//case Keys.Print:
+					//	break;
+					//case Keys.Execute:
+					//	break;
+					//case Keys.PrintScreen:
+					//	break;
+					//case Keys.Insert:
+					//	break;
+					//case Keys.Delete:
+					//	break;
+					//case Keys.Help:
+					//	break;
+					//case Keys.D0:
+					//	break;
+					//case Keys.D1:
+					//	break;
+					//case Keys.D2:
+					//	break;
+					//case Keys.D3:
+					//	break;
+					//case Keys.D4:
+					//	break;
+					//case Keys.D5:
+					//	break;
+					//case Keys.D6:
+					//	break;
+					//case Keys.D7:
+					//	break;
+					//case Keys.D8:
+					//	break;
+					//case Keys.D9:
+					//	break;
+					case Keys.A:
+						returnString += (ShouldCapitalize(keyboardState)) ? "A" : "a";
+						break;
+					case Keys.B:
+						returnString += (ShouldCapitalize(keyboardState)) ? "B" : "b";
+						break;
+					case Keys.C:
+						returnString += (ShouldCapitalize(keyboardState)) ? "C" : "c";
+						break;
+					case Keys.D:
+						returnString += (ShouldCapitalize(keyboardState)) ? "D" : "d";
+						break;
+					case Keys.E:
+						returnString += (ShouldCapitalize(keyboardState)) ? "E" : "e";
+						break;
+					case Keys.F:
+						returnString += (ShouldCapitalize(keyboardState)) ? "F" : "f";
+						break;
+					case Keys.G:
+						returnString += (ShouldCapitalize(keyboardState)) ? "G" : "g";
+						break;
+					case Keys.H:
+						returnString += (ShouldCapitalize(keyboardState)) ? "H" : "h";
+						break;
+					case Keys.I:
+						returnString += (ShouldCapitalize(keyboardState)) ? "I" : "i";
+						break;
+					case Keys.J:
+						returnString += (ShouldCapitalize(keyboardState)) ? "J" : "j";
+						break;
+					case Keys.K:
+						returnString += (ShouldCapitalize(keyboardState)) ? "K" : "k";
+						break;
+					case Keys.L:
+						returnString += (ShouldCapitalize(keyboardState)) ? "L" : "l";
+						break;
+					case Keys.M:
+						returnString += (ShouldCapitalize(keyboardState)) ? "M" : "m";
+						break;
+					case Keys.N:
+						returnString += (ShouldCapitalize(keyboardState)) ? "N" : "n";
+						break;
+					case Keys.O:
+						returnString += (ShouldCapitalize(keyboardState)) ? "O" : "o";
+						break;
+					case Keys.P:
+						returnString += (ShouldCapitalize(keyboardState)) ? "P" : "p";
+						break;
+					case Keys.Q:
+						returnString += (ShouldCapitalize(keyboardState)) ? "Q" : "q";
+						break;
+					case Keys.R:
+						returnString += (ShouldCapitalize(keyboardState)) ? "R" : "r";
+						break;
+					case Keys.S:
+						returnString += (ShouldCapitalize(keyboardState)) ? "S" : "s";
+						break;
+					case Keys.T:
+						returnString += (ShouldCapitalize(keyboardState)) ? "T" : "t";
+						break;
+					case Keys.U:
+						returnString += (ShouldCapitalize(keyboardState)) ? "U" : "u";
+						break;
+					case Keys.V:
+						returnString += (ShouldCapitalize(keyboardState)) ? "V" : "v";
+						break;
+					case Keys.W:
+						returnString += (ShouldCapitalize(keyboardState)) ? "W" : "w";
+						break;
+					case Keys.X:
+						returnString += (ShouldCapitalize(keyboardState)) ? "X" : "x";
+						break;
+					case Keys.Y:
+						returnString += (ShouldCapitalize(keyboardState)) ? "Y" : "y";
+						break;
+					case Keys.Z:
+						returnString += (ShouldCapitalize(keyboardState)) ? "Z" : "z";
+						break;
+					//case Keys.LeftWindows:
+					//	break;
+					//case Keys.RightWindows:
+					//	break;
+					//case Keys.Apps:
+					//	break;
+					//case Keys.Sleep:
+					//	break;
+					case Keys.NumPad0:
+						returnString += (keyboardState.NumLock) ? "0" : "";
+						break;
+					case Keys.NumPad1:
+						returnString += (keyboardState.NumLock) ? "1" : "";
+						break;
+					case Keys.NumPad2:
+						returnString += (keyboardState.NumLock) ? "2" : "";
+						break;
+					case Keys.NumPad3:
+						returnString += (keyboardState.NumLock) ? "3" : "";
+						break;
+					case Keys.NumPad4:
+						returnString += (keyboardState.NumLock) ? "4" : "";
+						break;
+					case Keys.NumPad5:
+						returnString += (keyboardState.NumLock) ? "5" : "";
+						break;
+					case Keys.NumPad6:
+						returnString += (keyboardState.NumLock) ? "6" : "";
+						break;
+					case Keys.NumPad7:
+						returnString += (keyboardState.NumLock) ? "7" : "";
+						break;
+					case Keys.NumPad8:
+						returnString += (keyboardState.NumLock) ? "8" : "";
+						break;
+					case Keys.NumPad9:
+						returnString += (keyboardState.NumLock) ? "9" : "";
+						break;
+					case Keys.Multiply:
+						returnString += "*";
+						break;
+					case Keys.Add:
+						returnString += "+";
+						break;
+					//case Keys.Separator:
+					//	break;
+					case Keys.Subtract:
+						returnString += "-";
+						break;
+					case Keys.Decimal:
+						returnString += ".";
+						break;
+					case Keys.Divide:
+						returnString += "/";
+						break;
+					//case Keys.F1:
+					//	break;
+					//case Keys.F2:
+					//	break;
+					//case Keys.F3:
+					//	break;
+					//case Keys.F4:
+					//	break;
+					//case Keys.F5:
+					//	break;
+					//case Keys.F6:
+					//	break;
+					//case Keys.F7:
+					//	break;
+					//case Keys.F8:
+					//	break;
+					//case Keys.F9:
+					//	break;
+					//case Keys.F10:
+					//	break;
+					//case Keys.F11:
+					//	break;
+					//case Keys.F12:
+					//	break;
+					//case Keys.F13:
+					//	break;
+					//case Keys.F14:
+					//	break;
+					//case Keys.F15:
+					//	break;
+					//case Keys.F16:
+					//	break;
+					//case Keys.F17:
+					//	break;
+					//case Keys.F18:
+					//	break;
+					//case Keys.F19:
+					//	break;
+					//case Keys.F20:
+					//	break;
+					//case Keys.F21:
+					//	break;
+					//case Keys.F22:
+					//	break;
+					//case Keys.F23:
+					//	break;
+					//case Keys.F24:
+					//	break;
+					//case Keys.NumLock:
+					//	break;
+					//case Keys.Scroll:
+					//	break;
+					//case Keys.LeftShift:
+					//	break;
+					//case Keys.RightShift:
+					//	break;
+					//case Keys.LeftControl:
+					//	break;
+					//case Keys.RightControl:
+					//	break;
+					//case Keys.LeftAlt:
+					//	break;
+					//case Keys.RightAlt:
+					//	break;
+					//case Keys.BrowserBack:
+					//	break;
+					//case Keys.BrowserForward:
+					//	break;
+					//case Keys.BrowserRefresh:
+					//	break;
+					//case Keys.BrowserStop:
+					//	break;
+					//case Keys.BrowserSearch:
+					//	break;
+					//case Keys.BrowserFavorites:
+					//	break;
+					//case Keys.BrowserHome:
+					//	break;
+					//case Keys.VolumeMute:
+					//	break;
+					//case Keys.VolumeDown:
+					//	break;
+					//case Keys.VolumeUp:
+					//	break;
+					//case Keys.MediaNextTrack:
+					//	break;
+					//case Keys.MediaPreviousTrack:
+					//	break;
+					//case Keys.MediaStop:
+					//	break;
+					//case Keys.MediaPlayPause:
+					//	break;
+					//case Keys.LaunchMail:
+					//	break;
+					//case Keys.SelectMedia:
+					//	break;
+					//case Keys.LaunchApplication1:
+					//	break;
+					//case Keys.LaunchApplication2:
+					//	break;
+					case Keys.OemSemicolon:
+						returnString += ";";
+						break;
+					case Keys.OemPlus:
+						returnString += "+";
+						break;
+					case Keys.OemComma:
+						returnString += ",";
+						break;
+					case Keys.OemMinus:
+						returnString += "-";
+						break;
+					case Keys.OemPeriod:
+						returnString += ".";
+						break;
+					case Keys.OemQuestion:
+						returnString += "?";
+						break;
+					case Keys.OemTilde:
+						returnString += "~";
+						break;
+					case Keys.OemOpenBrackets:
+						returnString += "(";
+						break;
+					case Keys.OemPipe:
+						returnString += "|";
+						break;
+					case Keys.OemCloseBrackets:
+						returnString += ")";
+						break;
+					case Keys.OemQuotes:
+						returnString += "\"";
+						break;
+					//case Keys.Oem8:
+					//	break;
+					case Keys.OemBackslash:
+						returnString += "\\";
+						break;
+					//case Keys.ProcessKey:
+					//	break;
+					//case Keys.Attn:
+					//	break;
+					//case Keys.Crsel:
+					//	break;
+					//case Keys.Exsel:
+					//	break;
+					//case Keys.EraseEof:
+					//	break;
+					//case Keys.Play:
+					//	break;
+					//case Keys.Zoom:
+					//	break;
+					//case Keys.Pa1:
+					//	break;
+					//case Keys.OemClear:
+					//	break;
+					//case Keys.ChatPadGreen:
+					//	break;
+					//case Keys.ChatPadOrange:
+					//	break;
+					//case Keys.Pause:
+					//	break;
+					//case Keys.ImeConvert:
+					//	break;
+					//case Keys.ImeNoConvert:
+					//	break;
+					//case Keys.Kana:
+					//	break;
+					//case Keys.Kanji:
+					//	break;
+					//case Keys.OemAuto:
+					//	break;
+					//case Keys.OemCopy:
+					//	break;
+					//case Keys.OemEnlW:
+					//	break;
+					default:
+						break;
+				}
+			}
+			return returnString;
+		}
+
+		public static bool ShouldCapitalize(KeyboardState state) => (state.CapsLock ^/*!=*/ (state.IsKeyDown(Keys.LeftShift) || state.IsKeyDown(Keys.RightShift)));
+		#endregion
+	}
 }
