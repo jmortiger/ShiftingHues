@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
+using JMMGExt.Input;
+
 namespace JMMGExt.Input
 {
 	// My current thinking is to allow for maximal player remaping by having most player actions bound to an "Action". Each action wil be associated with whatever input triggers it. So remapping controls can be done with anything; even finer inputs like left and right joystick movements can be simplified to varing levels of intentsity and what values trigger them, which would allow for button-only inputs to achive similar effects with modifier keys. Additionally, if an input is bound to something more accurately suited to it (i.e camera movement to mouse movement), I can have more advanced functionality baked in for that specific case.

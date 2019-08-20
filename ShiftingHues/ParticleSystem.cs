@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 using ShiftingHues;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ShiftingHues.Library.Graphics;
+using JMMGExt;
+using JMMGExt.Graphics;
 
 namespace ShiftingHues.Library.Objects.Components
 {
