@@ -4,7 +4,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
-namespace ShiftingHues
+using JMMGExt;
+//using JMMGExt.Input;
+using ShiftingHues.Library.Input;
+
+namespace ShiftingHues.Library.Objects
 {
 	public class SimplePlayerPhysicsComponent : PhysicsObjComponent
 	{
@@ -50,11 +54,11 @@ namespace ShiftingHues
 		{
 			var input = ServiceLocator.GetInputService();
 			currV.X = 0;
-			if (input.IsActionActive(Input.GameAction.MoveLeft))
+			if (input.IsActionActive(/*Input.*/GameAction.MoveLeft))
 				currV.X = -PlayerVx * (Obj.Bounds.Width / 50);
-			if (input.IsActionActive(Input.GameAction.MoveRight))
+			if (input.IsActionActive(/*Input.*/GameAction.MoveRight))
 				currV.X = PlayerVx * (Obj.Bounds.Width / 50);
-			if (input.IsActionActive(Input.GameAction.Jump) && IsGrounded)
+			if (input.IsActionActive(/*Input.*/GameAction.Jump) && IsGrounded)
 			{
 				IsGrounded = false;
 				currV.Y -= PlayerVy * (Obj.Bounds.Height / 50)/*Fy * time.ElapsedGameTime.TotalSeconds*/;

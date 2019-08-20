@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using JMMGExt;
 
-namespace ShiftingHues
+namespace ShiftingHues.Library.Objects
 {
 	public class TranformComponent : IGameObjComponent, IUpdateable
 	{

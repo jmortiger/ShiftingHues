@@ -1,7 +1,8 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using JMMGExt;
 
-namespace ShiftingHues
+namespace ShiftingHues.Library
 {
 	/// <summary>
 	/// Describes a 2D-rectangle using floating point numbers.

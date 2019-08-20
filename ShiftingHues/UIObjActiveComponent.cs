@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
+using JMMGExt;
+using JMMGExt.Input;
+
 namespace ShiftingHues.UI
 {
 	/// <summary>
@@ -101,11 +104,11 @@ namespace ShiftingHues.UI
                   deselectAction,
                   () =>
                   {
-                      return ServiceLocator.GetInputService().GetMouseBoundsEnter(obj.Bounds) && !ServiceLocator.GetInputService().GetInputUp(Input.MouseButtons.Left);
+                      return ServiceLocator.GetInputService().GetMouseBoundsEnter(obj.Bounds) && !ServiceLocator.GetInputService().GetInputUp(/*Input.*/MouseButtons.Left);
                   },
                   () =>
                   {
-                      return ServiceLocator.GetInputService().GetMouseBounds(obj.Bounds) && ServiceLocator.GetInputService().GetInputUp(Input.MouseButtons.Left);
+                      return ServiceLocator.GetInputService().GetMouseBounds(obj.Bounds) && ServiceLocator.GetInputService().GetInputUp(/*Input.*/MouseButtons.Left);
                   },
                   () =>
                   {
@@ -127,7 +130,7 @@ namespace ShiftingHues.UI
             this.activationAction = activationAction;
             this.deselectAction = deselectAction;
 
-            Input.IInputService input = ServiceLocator.GetInputService();
+            /*Input.*/IInputService input = ServiceLocator.GetInputService();
             //input.RegisterEvent(
             //    () => activationAction(obj),
             //    activationCondit
@@ -152,12 +155,12 @@ namespace ShiftingHues.UI
 
         #region Methods
 
-        private void Input_OnRelease(Input.MouseEventArgs e)
+        private void Input_OnRelease(/*Input.*/MouseEventArgs e)
         {
             if (activationCondit()) activationAction?.Invoke(uiObject);
         }
 
-        private void Input_OnMouseMove(Input.MouseEventArgs e)
+        private void Input_OnMouseMove(/*Input.*/MouseEventArgs e)
         {
             if (selectCondit())
             {
@@ -172,27 +175,27 @@ namespace ShiftingHues.UI
             //throw new NotImplementedException();
         }
 
-        private void OnMenuLeft(Input.MenuEventArgs e)
+        private void OnMenuLeft(/*Input.*/MenuEventArgs e)
         {
             throw new NotImplementedException();
         }
 
-        private void OnMenuRight(Input.MenuEventArgs e)
+        private void OnMenuRight(/*Input.*/MenuEventArgs e)
         {
             throw new NotImplementedException();
         }
 
-        private void OnMenuUp(Input.MenuEventArgs e)
+        private void OnMenuUp(/*Input.*/MenuEventArgs e)
         {
             throw new NotImplementedException();
         }
 
-        private void OnMenuDown(Input.MenuEventArgs e)
+        private void OnMenuDown(/*Input.*/MenuEventArgs e)
         {
             throw new NotImplementedException();
         }
 
-        private void OnMenuAccept(Input.MenuEventArgs e)
+        private void OnMenuAccept(/*Input.*/MenuEventArgs e)
         {
 
             throw new NotImplementedException();

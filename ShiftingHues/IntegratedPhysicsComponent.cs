@@ -6,7 +6,11 @@ using Microsoft.Xna.Framework;
 using tainicom.Aether.Physics2D;
 using tainicom.Aether.Physics2D.Dynamics;
 
-namespace ShiftingHues
+using JMMGExt;
+//using JMMGExt.Input;
+using ShiftingHues.Library.Input;
+
+namespace ShiftingHues.Library.Objects
 {
 	public abstract class IntegratedPhysicsComponent : IGameObjComponent, IUpdateable
 	{
@@ -115,19 +119,22 @@ namespace ShiftingHues
 		{
 			var input = ServiceLocator.GetInputService();
 
-			if (input.IsActionActive(Input.GameAction.MoveLeft))
-				PlayerBody.ApplyLinearImpulse(new Vector2(-100, 0));
-			if (input.IsActionActive(Input.GameAction.MoveRight))
-				PlayerBody.ApplyLinearImpulse(new Vector2(100, 0));
-			if (input.IsActionActive(Input.GameAction.Jump) && IsGrounded)
+			Vector2 linearImpluseToApply = Vector2.Zero;
+
+			if (input.IsActionActive(/*Input.*/GameAction.MoveLeft))
+				linearImpluseToApply.X -= 100;
+			if (input.IsActionActive(/*Input.*/GameAction.MoveRight))
+				linearImpluseToApply.X += 100;
+			if (input.IsActionActive(/*Input.*/GameAction.Jump) && IsGrounded)
 			{
 				IsGrounded = false;
-				PlayerBody.ApplyLinearImpulse(new Vector2(0, -200));
+				linearImpluseToApply.Y -= 500;
 			}
-			else
-			{
-				
-			}
+			//else
+			//{
+
+			//}
+			PlayerBody.ApplyLinearImpulse(linearImpluseToApply);
 			//throw new NotImplementedException();
 		}
 		#endregion

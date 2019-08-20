@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace ShiftingHues.Input
+using JMMGExt.Input;
+
+namespace ShiftingHues.Library.Input
 {
     // My current thinking is to allow for maximal player remaping by having most player actions bound to an "Action". Each action wil be associated with whatever input triggers it. So remapping controls can be done with anything; even finer inputs like left and right joystick movements can be simplified to varing levels of intentsity and what values trigger them, which would allow for button-only inputs to achive similar effects with modifier keys. Additionally, if an input is bound to something more accurately suited to it (i.e camera movement to mouse movement), I can have more advanced functionality baked in for that specific case.
     public enum GameAction
@@ -22,7 +24,9 @@ namespace ShiftingHues.Input
         MenuDown,
         MenuAccept,
         MenuCancel,
-        ExitGame
+        ExitGame,
+		ToggleConsole,
+		ToggleDebugMenu
     }
 	public enum TextInputs
 	{
@@ -115,7 +119,6 @@ namespace ShiftingHues.Input
     public class InputComponent : GameComponent, IInputService
     {
         #region Fields and Properties
-        public const int NUM_GAME_ACTIONS = 12;
         public static int NumGameActions { get => Enum.GetNames(typeof(GameAction)).Length; }
 
         public List<BindInfo> Binds { get; private set; }
@@ -166,19 +169,21 @@ namespace ShiftingHues.Input
         public event MenuEvent MenuAccept;
 
         public event MenuEvent MenuCancel;
+
+		public event MenuEvent AnyMenuInput;
         #endregion
 
         //public event EventHandler<MouseEventArgs> OnClick;
         #endregion
-
+		
         #region Constructors
         public InputComponent(Game game,
                               List<BindInfo> binds = null)
             : base(game)
         {
-            this.Binds = binds ?? new List<BindInfo>(NUM_GAME_ACTIONS);
-            this.CurrActions = new List<GameAction>(NUM_GAME_ACTIONS);
-            this.PrevActions = new List<GameAction>(NUM_GAME_ACTIONS);
+            this.Binds = binds ?? new List<BindInfo>(NumGameActions);
+            this.CurrActions = new List<GameAction>(NumGameActions);
+            this.PrevActions = new List<GameAction>(NumGameActions);
 
             // Handle input first
             UpdateOrder = 1;
@@ -492,6 +497,10 @@ namespace ShiftingHues.Input
 			NextMousePosit = newPos;
 		}
 
+		//public void SetNextMousePosition(Point newPos) => SetNextMousePosition(newPos.ToVector2());
+
+		//public void SetNextMousePosition(FPoint newPos) => SetNextMousePosition(newPos.ToVector2());
+
 		//public void UpdateMousePosit(Vector2 newPos)
 		//{
 		//	Mouse.SetPosition((int)newPos.X, (int)newPos.Y);
@@ -578,7 +587,21 @@ namespace ShiftingHues.Input
                 { new InputButton(Keys.RightShift), InputTypes.PushAndHold }
             };
             Binds.Add(new BindInfo(this, GameAction.Sprint, bB));
-        }
+
+			// Console
+			bB = new Dictionary<InputButton, InputTypes>(1)
+			{
+				{new InputButton(Keys.OemTilde), InputTypes.OnPress }
+			};
+			Binds.Add(new BindInfo(this, GameAction.ToggleConsole, bB));
+
+			//// Debug
+			//bB = new Dictionary<InputButton, InputTypes>(1)
+			//{
+			//	{new InputButton(Keys.OemTilde), InputTypes.Toggle }
+			//};
+			//Binds.Add(new BindInfo(this, GameAction.ToggleConsole, bB));
+		}
 		#endregion
 
 		#region Static Methods

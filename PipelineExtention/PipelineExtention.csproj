@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PipelineExtention</RootNamespace>
     <AssemblyName>PipelineExtention</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -58,9 +59,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ShiftingHues\ShiftingHues.csproj">
-      <Project>{3747bac6-d7cc-44c8-923f-546d6473bcc2}</Project>
-      <Name>ShiftingHues</Name>
+    <ProjectReference Include="..\PipelineClasses\PipelineClasses.csproj">
+      <Project>{604880d2-0e3d-41f4-aa7a-dc58cedd1277}</Project>
+      <Name>PipelineClasses</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

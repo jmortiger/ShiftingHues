@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace ShiftingHues.Graphics
+namespace ShiftingHues.Library.Graphics
 {
 	public class Sprite
 	{

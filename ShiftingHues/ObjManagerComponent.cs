@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+//using ShiftingHues.Objects;
+using JMMGExt.Objects;
+
 namespace ShiftingHues
 {
 	public class ObjManagerComponent : DrawableGameComponent

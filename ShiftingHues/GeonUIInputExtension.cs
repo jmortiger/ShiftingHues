@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using ShiftingHues;
 
-namespace ShiftingHues.Input
+namespace ShiftingHues.Library.Input
 {
 	class GeonUIInputExtension
 	{

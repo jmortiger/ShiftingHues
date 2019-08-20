@@ -1,20 +1,27 @@
-﻿using System.Collections.Generic;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
+using IInputService = ShiftingHues.Library.Input.IInputService;
 
-namespace ShiftingHues
+namespace ShiftingHues.Library
 {
     public static class ServiceLocator
     {
         #region Fields and Properties
-        private static Input.IInputService InputService;
-        #endregion
-        
-        #region Methods
+        private static IInputService InputService;
+		private static ILogService LogService;
+		#endregion
 
-        public static void RegisterService(Input.IInputService inputService) => InputService = inputService;
+		#region Methods
+		#region RegisterSerivce
 
-        public static Input.IInputService GetInputService() => InputService;
-        #endregion
-    }
+		public static void RegisterService(IInputService inputService) => InputService = inputService;
+
+		public static void RegisterService(ILogService logService) => LogService = logService;
+		#endregion
+
+		public static IInputService GetInputService() => InputService;
+
+		public static ILogService GetLogService() => LogService;
+		#endregion
+	}
 }

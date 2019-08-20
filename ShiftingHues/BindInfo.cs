@@ -1,8 +1,9 @@
 ﻿using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using JMMGExt.Input;
 
-namespace ShiftingHues.Input
+namespace ShiftingHues.Library.Input
 {
 	/// <summary>
 	/// Stores information about the inputs bound to a specific <see cref="GameAction"/>.
@@ -13,7 +14,7 @@ namespace ShiftingHues.Input
 		/// <summary>
 		/// Reference to the <see cref="InputComponent"/>.
 		/// </summary>
-		private InputComponent inputManager;
+		private IInputService inputManager;
 
 		/// <summary>
 		/// The action triggered by this binding.
@@ -40,7 +41,7 @@ namespace ShiftingHues.Input
 
 		#region Constructors
 
-		public BindInfo(InputComponent inputManager,
+		public BindInfo(IInputService inputManager,
 						GameAction boundAction,
 						Dictionary<InputButton, InputTypes> inputBttnBindings = null,
 						Dictionary<Keys, InputTypes> keyBindings = null,
@@ -53,7 +54,7 @@ namespace ShiftingHues.Input
 			this.InputBttnBindings = inputBttnBindings;
 		}
 
-		public BindInfo(InputComponent inputManager,
+		public BindInfo(IInputService inputManager,
 						GameAction boundAction,
 						Dictionary<Keys, InputTypes> keyBindings = null,
 						Dictionary<Buttons, InputTypes> buttonBindings = null)

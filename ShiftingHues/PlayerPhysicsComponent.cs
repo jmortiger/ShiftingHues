@@ -5,7 +5,11 @@ using System.Threading.Tasks;
 
 using Microsoft.Xna.Framework;
 
-namespace ShiftingHues
+using JMMGExt;
+//using JMMGExt.Input;
+using ShiftingHues.Library.Input;
+
+namespace ShiftingHues.Library.Objects
 {
 	// Current logic:
 	// 1. The player can't rotate
@@ -54,15 +58,15 @@ namespace ShiftingHues
 		{
 			CheckGrounded();
 			var input = ServiceLocator.GetInputService();
-			if (input.IsActionActive(Input.GameAction.MoveLeft))
+			if (input.IsActionActive(/*Input.*/GameAction.MoveLeft))
 			{
 				currF.X -= playerForceX;
 			}
-			if (input.IsActionActive(Input.GameAction.MoveRight))
+			if (input.IsActionActive(/*Input.*/GameAction.MoveRight))
 			{
 				currF.X += playerForceX;
 			}
-			if (IsGrounded && input.IsActionActive(Input.GameAction.Jump))
+			if (IsGrounded && input.IsActionActive(/*Input.*/GameAction.Jump))
 			{
 				currF.Y -= playerForceY;
 			}

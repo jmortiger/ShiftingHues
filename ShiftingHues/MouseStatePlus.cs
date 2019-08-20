@@ -7,7 +7,7 @@ using System.Runtime.Serialization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace ShiftingHues.Input
+namespace ShiftingHues.Library.Input
 {
 
     public enum MouseButtons

@@ -14,8 +14,9 @@ namespace ShiftingHues
         static void Main()
         {
 			//PlayingWithJSON playingWithJSON = new PlayingWithJSON(@"C:\Users\jmort\source\repos\ShiftingHues\ShiftingHues\Spritesheet - PC-Idle NoBorder2.json");
-            using (var game = new Game1())
-                game.Run();
-        }
+			//MidiPlayground.Test1();
+			using (var game = new Game1())
+				game.Run();
+		}
     }
 }

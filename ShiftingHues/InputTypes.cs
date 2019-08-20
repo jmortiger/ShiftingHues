@@ -1,4 +1,4 @@
-﻿namespace ShiftingHues.Input
+﻿namespace ShiftingHues.Library.Input
 {
 	/// <summary>
 	/// The different ways an input (i.e. a button press) can trigger an action.

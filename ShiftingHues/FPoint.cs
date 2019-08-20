@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
-namespace ShiftingHues
+namespace ShiftingHues.Library
 {
 	/// <summary>
 	/// Describes a 2D-point using float values. - J Mor
@@ -179,12 +179,18 @@ namespace ShiftingHues
 		#endregion
 		#region Casts
 		/// <summary>
-		/// Casts the <see cref="FPoint"/> as a <see cref="Vector2"/>. - J Mor
+		/// Casts the <see cref="FPoint"/> as a <see cref="Vector2"/>.
 		/// </summary>
 		/// <param name="p">The <see cref="FPoint"/> to cast.</param>
 		public static implicit operator Vector2(FPoint p) { return new Vector2(p.X, p.Y); }
 		/// <summary>
-		/// Cast the <see cref="FPoint"/> as a <see cref="Point"/>. - J Mor
+		/// Casts the <see cref="Vector2"/> as a <see cref="FPoint"/>.
+		/// </summary>
+		/// <param name="p">The <see cref="Vector2"/> to cast.</param>
+		/// <remarks>Currently implict due to <see cref="FPoint"/>s and <see cref="Vector2"/>s being different interpertations of the same data (2 float values representing an x and y value) with no loss of precision.</remarks>
+		public static implicit operator FPoint(Vector2 p) { return new FPoint(p.X, p.Y); }
+		/// <summary>
+		/// Cast the <see cref="FPoint"/> as a <see cref="Point"/>.
 		/// </summary>
 		/// <param name="p">The <see cref="FPoint"/> to cast.</param>
 		public static explicit operator Point(FPoint p) { return new Point((int)Math.Round(p.X), (int)Math.Round(p.Y)); }

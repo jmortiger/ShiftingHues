@@ -4,9 +4,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ShiftingHues.Graphics;
+//using ShiftingHues.Graphics;
+using JMMGExt.Graphics;
+using JMMGExt;
 
-namespace ShiftingHues
+namespace ShiftingHues.Library.Objects
 {
 	public class Graphics2DComponent : IGameObjComponent, IDrawable2D, IUpdateable
 	{

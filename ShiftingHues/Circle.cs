@@ -1,7 +1,8 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using JMMGExt;
 
-namespace ShiftingHues
+namespace ShiftingHues.Library
 {
 	/// <summary>
 	/// Describes a 2D-circle. - J Mor
@@ -297,7 +298,7 @@ namespace ShiftingHues
 		/// </summary>
 		/// <param name="point">The point to check</param>
 		/// <returns>The distance of the point from the center.</returns>
-		public float DistanceFromCenter(Vector2 point) => Math.Abs(((point - Center).Length()));
+		public float DistanceFromCenter(Vector2 point) => Math.Abs(((new Vector2(point.X - Center.X, point.Y - Center.Y)/*point - Center*/).Length()));
 		/// <summary>
 		/// Returns the distance of the specified point from the center of the circle
 		/// </summary>
@@ -316,14 +317,14 @@ namespace ShiftingHues
 		/// <param name="x">The x value of the point to check.</param>
 		/// <param name="y">The y value of the point to check.</param>
 		/// <returns>The distance of the point from the center.</returns>
-		public float DistanceFromCenter(float x, float y) => Math.Abs(((new Vector2(x, y) - Center).Length()));
+		public float DistanceFromCenter(float x, float y) => Math.Abs(((new Vector2(x - Center.X, y - Center.Y)/*new Vector2(x, y) - Center*/).Length()));
 		/// <summary>
 		/// Returns the distance of the specified point from the center of the circle
 		/// </summary>
 		/// <param name="x">The x value of the point to check.</param>
 		/// <param name="y">The y value of the point to check.</param>
 		/// <returns>The distance of the point from the center.</returns>
-		public float DistanceFromCenter(int x, int y) => Math.Abs(((new Vector2(x, y) - Center).Length()));
+		public float DistanceFromCenter(int x, int y) => Math.Abs(((new Vector2(x - Center.X, y - Center.Y)/*new Vector2(x, y) - Center*/).Length()));
 		#endregion
 		#region Line Segment of 2 Points
 		/// <summary>

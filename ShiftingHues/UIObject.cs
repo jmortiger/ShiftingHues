@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ShiftingHues.Library.Input;
+
 namespace ShiftingHues.UI
 {
 	public class UIObjEventArgs
@@ -15,7 +17,7 @@ namespace ShiftingHues.UI
 	}
 	public class UIObject
 	{
-        public event Input.MouseEvent MouseEntered;
+        public event /*Input.*/MouseEvent MouseEntered;
 
 		#region Fields and Properties
 
@@ -54,13 +56,13 @@ namespace ShiftingHues.UI
             this.drawableComponents = new IObjDrawComponent[]{ drawableComponent };
             this.updateableComponents = new IObjUpdateComponent[] { updateableComponent };
         }
-        #endregion
+		#endregion
 
-        #region Methods
+		#region Methods
 
-        public void RegisterToMouseEnter(UI.ContainerComponent container) => container.MouseEntered += OnMouseEnterParentContainer;
+		public void RegisterToMouseEnter(UI.ContainerComponent container) => container.MouseEntered += OnMouseEnterParentContainer;
 
-        private void OnMouseEnterParentContainer(Input.MouseEventArgs e)
+		private void OnMouseEnterParentContainer(/*Input.*/MouseEventArgs e)
         {
             if (Bounds.Contains(e.CurrState.Position) && !Bounds.Contains(e.PrevState.Position))
                 MouseEntered?.Invoke(e);

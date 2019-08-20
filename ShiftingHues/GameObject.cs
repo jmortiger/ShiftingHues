@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using JMMGExt;
 
-namespace ShiftingHues
+namespace ShiftingHues.Library.Objects
 {
 	public interface IGameObjComponent
 	{
@@ -122,6 +123,10 @@ namespace ShiftingHues
 		#region Non-Static
 		#region Add Components
 
+		/// <summary>
+		/// Adds the given <see cref="IGameObjComponent"/> to the component list.
+		/// </summary>
+		/// <param name="gameObjComponent">The <see cref="IGameObjComponent"/> to add.</param>
 		public void AddComponent(IGameObjComponent gameObjComponent)
 		{
 			if (components == null)
@@ -138,6 +143,11 @@ namespace ShiftingHues
 			components[temp.Length] = gameObjComponent;
 		}
 
+		/// <summary>
+		/// Adds the given <see cref="IUpdateable"/> component to the list of updateable components.
+		/// <see cref="AddComponent(IGameObjComponent)"/> must be called separately.
+		/// </summary>
+		/// <param name="gameObjComponent">The <see cref="IUpdateable"/> component to add.</param>
 		public void AddUpdateableComponent(IUpdateable gameObjComponent)
 		{
 			if (updateableComponents == null)
@@ -155,6 +165,12 @@ namespace ShiftingHues
 			//AddComponent(gameObjComponent);
 		}
 
+
+		/// <summary>
+		/// Adds the given <see cref="IDrawable2D"/> component to the list of drawable components.
+		/// <see cref="AddComponent(IGameObjComponent)"/> must be called separately.
+		/// </summary>
+		/// <param name="gameObjComponent">The <see cref="IDrawable2D"/> component to add.</param>
 		public void AddDrawableComponent(IDrawable2D gameObjComponent)
 		{
 			if (drawableComponents == null)

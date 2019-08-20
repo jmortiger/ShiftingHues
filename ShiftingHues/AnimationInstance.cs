@@ -1,8 +1,9 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using JMMGExt.Graphics;
 
-namespace ShiftingHues.Graphics
+namespace ShiftingHues.Library.Graphics
 {
 	/// <summary>
 	/// A specfic instance of an <see cref="Animation"/>.

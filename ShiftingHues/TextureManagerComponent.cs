@@ -4,9 +4,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ShiftingHues.Graphics;
+//using ShiftingHues.Graphics;
+using JMMGExt;
+using JMMGExt.Graphics;
 
-namespace ShiftingHues
+namespace ShiftingHues.Library
 {
 	public class TextureManagerComponent : GameComponent
 	{
@@ -107,7 +109,7 @@ namespace ShiftingHues
 			}
 		}
 
-		public SpriteInstance GetSpriteInstance(string resourceID, FPoint position, DrawEffects2D? drawEffects = null)
+		public SpriteInstance GetSpriteInstance(string resourceID, JMMGExt.FPoint position, DrawEffects2D? drawEffects = null)
 		{
 			try
 			{

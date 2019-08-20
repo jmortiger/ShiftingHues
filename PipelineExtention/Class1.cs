@@ -1,21 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
-using Newtonsoft;
 using Newtonsoft.Json.Linq;
 
-using ShiftingHues;
+using PipelineClasses;
+using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization;
 using Microsoft.Xna.Framework.Content.Pipeline.Processors;
-using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content;
 
 namespace PipelineExtention

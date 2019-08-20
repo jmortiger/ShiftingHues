@@ -1,8 +1,9 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using JMMGExt;
 
-namespace ShiftingHues.Graphics
+namespace ShiftingHues.Library.Graphics
 {
 	/// <summary>
 	/// A container for advanced information about how to draw a <see cref="Texture2D"/>. 

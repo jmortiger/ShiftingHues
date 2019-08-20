@@ -1,7 +1,9 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using JMMGExt;
+using JMMGExt.Graphics;
 
-namespace ShiftingHues.Graphics
+namespace ShiftingHues.Library.Graphics
 {
 	public enum AnimationState
 	{

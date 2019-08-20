@@ -1,7 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using JMMGExt.Graphics;
 
-namespace ShiftingHues.Graphics
+namespace ShiftingHues.Library.Graphics
 {
 	/// <summary>
 	/// Contains information about the sprites on a given <see cref="Texture2D"/>.
@@ -90,8 +91,8 @@ namespace ShiftingHues.Graphics
 		private void InitializeSprites()
 		{
 			sprites = new Sprite[SpritesInSheet];
-			for (int i = 0; i < SpritesInSheet; i++)
-				sprites[i] = new Sprite(this, i);
+			//for (int i = 0; i < SpritesInSheet; i++)
+			//	sprites[i] = new Sprite(this, i);
 		}
 		#endregion
 	}

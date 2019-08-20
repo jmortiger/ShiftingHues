@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ShiftingHues.Graphics;
+//using ShiftingHues.Graphics;
+using JMMGExt.Graphics;
 
 namespace ShiftingHues.Obsolete.Graphics
 {

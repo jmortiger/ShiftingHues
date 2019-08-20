@@ -1,7 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using JMMGExt;
+using JMMGExt.Graphics;
 
-namespace ShiftingHues.Graphics
+namespace ShiftingHues.Library.Graphics
 {
 	public class SpriteInstance
 	{
@@ -9,8 +11,8 @@ namespace ShiftingHues.Graphics
 
 		public Sprite Sprite { get; }
 
-		private DrawEffects2D drawEffects;
-		public DrawEffects2D DrawEffects { get => drawEffects; private set => drawEffects = value; }
+		public DrawEffects2D DrawEffects;
+		//public DrawEffects2D DrawEffects { get => drawEffects; private set => drawEffects = value; }
 
 		public Rectangle SourceRect { get => Sprite.SourceRect; }
 		
@@ -49,9 +51,10 @@ namespace ShiftingHues.Graphics
 		/// <param name="orig"><see cref="SpriteInstance"/> to copy.</param>
 		/// <remarks>I want the <see cref="Sprite"/> to be a reference, and since <see cref="DrawEffects2D"/> and <see cref="Rectangle"/> are structs, it will copy the values.</remarks>
 		public SpriteInstance(SpriteInstance orig)
-			: this(orig.Sprite, orig.drawEffects, orig.DestinationRectangle) { }
+			: this(orig.Sprite, orig.DrawEffects, orig.DestinationRectangle) { }
 
 		#region Methods
+		#region DrawSprite
 
 		public void DrawSprite(SpriteBatch batch, DrawEffects2D? drawEffects, Rectangle destinationRectangle)
 		{
@@ -87,22 +90,22 @@ namespace ShiftingHues.Graphics
 					Sprite.Sheet.Texture,
 					this.DestinationRectangle,
 					Sprite.SourceRect,
-					drawEffects?.Tint						?? this.DrawEffects.Tint,
-					drawEffects?.Rotation					?? this.DrawEffects.Rotation,
-					drawEffects?.Origin						?? this.DrawEffects.Origin,
-					drawEffects?.SpriteEffectOrientation	?? this.DrawEffects.SpriteEffectOrientation,
-					drawEffects?.LayerDepth					?? this.DrawEffects.LayerDepth);
+					drawEffects?.Tint ?? this.DrawEffects.Tint,
+					drawEffects?.Rotation ?? this.DrawEffects.Rotation,
+					drawEffects?.Origin ?? this.DrawEffects.Origin,
+					drawEffects?.SpriteEffectOrientation ?? this.DrawEffects.SpriteEffectOrientation,
+					drawEffects?.LayerDepth ?? this.DrawEffects.LayerDepth);
 			else
 				batch.Draw(
 					Sprite.Sheet.Texture,
 					Position.ToVector2(),
 					Sprite.SourceRect,
-					drawEffects?.Tint						?? this.DrawEffects.Tint,
-					drawEffects?.Rotation					?? this.DrawEffects.Rotation,
-					drawEffects?.Origin						?? this.DrawEffects.Origin,
-					drawEffects?.Scale						?? Vector2.One,
-					drawEffects?.SpriteEffectOrientation	?? this.DrawEffects.SpriteEffectOrientation,
-					drawEffects?.LayerDepth					?? this.DrawEffects.LayerDepth);
+					drawEffects?.Tint ?? this.DrawEffects.Tint,
+					drawEffects?.Rotation ?? this.DrawEffects.Rotation,
+					drawEffects?.Origin ?? this.DrawEffects.Origin,
+					drawEffects?.Scale ?? Vector2.One,
+					drawEffects?.SpriteEffectOrientation ?? this.DrawEffects.SpriteEffectOrientation,
+					drawEffects?.LayerDepth ?? this.DrawEffects.LayerDepth);
 		}
 
 		public void DrawSprite(SpriteBatch batch, bool usePosit = true)
@@ -129,7 +132,9 @@ namespace ShiftingHues.Graphics
 					DrawEffects.SpriteEffectOrientation,
 					DrawEffects.LayerDepth);
 		}
+		#endregion
 
+		#region DrawSpriteBasic
 		public void DrawSpriteBasic(SpriteBatch batch)
 		{
 			batch.Draw(
@@ -156,6 +161,7 @@ namespace ShiftingHues.Graphics
 				Sprite.SourceRect,
 				tint ?? DrawEffects.Tint);
 		}
+		#endregion
 		#endregion
 	}
 }

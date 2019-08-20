@@ -11,7 +11,7 @@ namespace ShiftingHues.UI
 {
     public class ContainerComponent : UI.IObjDrawComponent
     {
-        public Input.MouseEvent MouseEntered;
+        public Library.Input.MouseEvent MouseEntered;
 
         #region Fields and Properties
 
@@ -56,7 +56,7 @@ namespace ShiftingHues.UI
 
         #region Methods
 
-        private void OnObjEntered(Input.MouseEventArgs e) => MouseEntered?.Invoke(e);
+        private void OnObjEntered(Library.Input.MouseEventArgs e) => MouseEntered?.Invoke(e);
 
         public void SetVisibility(bool isVisible)
         {

@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using JMMGExt.Input;
 
-namespace ShiftingHues.Input
+namespace ShiftingHues.Library.Input
 {
     public delegate void MouseEvent(MouseEventArgs e);
     public delegate void MenuEvent(MenuEventArgs e);
@@ -40,6 +41,8 @@ namespace ShiftingHues.Input
         event MenuEvent MenuAccept;
 
         event MenuEvent MenuCancel;
+
+		event MenuEvent AnyMenuInput;
         #endregion
 
         #region Input States
@@ -149,7 +152,9 @@ namespace ShiftingHues.Input
         bool GetMouseBoundsExit(Rectangle bounds);
         bool IsActionActive(GameAction action);
         bool WasActionActive(GameAction action);
-        void RegisterEvent(Action actionToFire, Func<bool> fireCondition);
+        //void RegisterEvent(Action actionToFire, Func<bool> fireCondition);
 		void SetNextMousePosition(Vector2 newPos);
-    }
+		//void SetNextMousePosition(Point newPos);
+		//void SetNextMousePosition(FPoint newPos);
+	}
 }
