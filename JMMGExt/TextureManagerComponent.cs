@@ -1,19 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using JMMGExt.Graphics;
 
 namespace JMMGExt
 {
-	public class TextureManagerComponent : GameComponent
+	public interface ITextureService
+	{
+		#region Register
+
+		void RegisterSprite(string resourceID, SpriteSheet spriteSheet, int index);
+
+		void RegisterSpritesFromSheet(string[] resourceIDs, SpriteSheet spriteSheet);
+
+		void RegisterAnimation(string resourceID, string[] spriteIds, DrawEffects2D[] suggestedDrawEffects, float fps);
+
+		void RegisterAnimation(string resourceID, string[] spriteIds, DrawEffects2D suggestedDrawEffect, float fps);
+		#endregion
+		#region GetInstance
+
+		SpriteInstance GetSpriteInstance(string resourceID, DrawEffects2D? drawEffects = null, Rectangle? destinationRectangle = null);
+
+		SpriteInstance GetSpriteInstance(string resourceID, FPoint position, DrawEffects2D? drawEffects = null);
+
+		AnimationInstance GetAnimationInstance(string resourceID, float fps, bool isLooped = false);
+		#endregion
+	}
+
+	public class TextureManagerComponent : GameComponent, ITextureService
 	{
 		#region Fields and Properties
 		private Dictionary<string, Sprite> sprites;
 		private Dictionary<string, Animation> animations;
-		private SpriteSheet[] spriteSheets;
+		//private SpriteSheet[] spriteSheets;
 		#endregion
 
 		#region Constructors
@@ -26,14 +45,14 @@ namespace JMMGExt
 
 		public TextureManagerComponent(
 			Game game,
-			Dictionary<string, Sprite> sprites,
-			Dictionary<string, Animation> animations,
-			SpriteSheet[] spriteSheets)
+			Dictionary<string, Sprite> sprites = null,
+			Dictionary<string, Animation> animations = null/*,
+			SpriteSheet[] spriteSheets*/)
 			: base(game)
 		{
 			this.sprites = sprites ?? new Dictionary<string, Sprite>();
 			this.animations = animations ?? new Dictionary<string, Animation>();
-			this.spriteSheets = spriteSheets;
+			//this.spriteSheets = spriteSheets;
 		}
 		#endregion
 
@@ -112,6 +131,18 @@ namespace JMMGExt
 			try
 			{
 				return new SpriteInstance(sprites[resourceID], drawEffects, position);
+			}
+			catch (KeyNotFoundException e)
+			{
+				throw new KeyNotFoundException("The provided key (" + resourceID + ") was not found in the dictionary.", e);
+			}
+		}
+
+		public AnimationInstance GetAnimationInstance(string resourceID, float fps, bool isLooped = false)
+		{
+			try
+			{
+				return new AnimationInstance(animations[resourceID], fps, isLooped);
 			}
 			catch (KeyNotFoundException e)
 			{

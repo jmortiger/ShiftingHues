@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -10,150 +11,249 @@ namespace JMMGExt.Graphics
 	public class AnimationInstance
 	{
 		#region State Classes
-		interface IAnimationState
+		private interface IAnimationState
 		{
 			//AnimationInstance Instance { get; }
 
-			IAnimationState Update(GameTime time);
+			Func<GameTime, IAnimationState> Update { get; }
 
-			void Draw(SpriteBatch batch);
+			Action<SpriteBatch> Draw { get; }
+
+			//IAnimationState Update(GameTime time);
+
+			//void Draw(SpriteBatch batch);
 		}
 
-		class InactiveState : IAnimationState
+		private class InactiveState : IAnimationState
 		{
-			AnimationInstance animation;
+			//private AnimationInstance animation;
+
+			public Func<GameTime, IAnimationState> Update { get; }
+
+			public Action<SpriteBatch> Draw { get; }
 
 			internal InactiveState(AnimationInstance animation)
 			{
-				this.animation = animation;
+				//this.animation = animation;
+				Update = (GameTime time) =>
+				{
+					if (animation.IsPlaying)
+						return new ActiveState(animation);
+					return this;
+				};
+				Draw = null;
 			}
 
-			public IAnimationState Update(GameTime time)
-			{
-				if (animation.IsPlaying)
-					return new ActiveState(animation);
-				return this;
-			}
+			//public IAnimationState Update(GameTime time)
+			//{
+			//	if (animation.IsPlaying)
+			//		return new ActiveState(animation);
+			//	return this;
+			//}
 
-			public void Draw(SpriteBatch batch)
-			{
-				//throw new NotImplementedException();
-			}
+			//public void Draw(SpriteBatch batch)
+			//{
+			//	//throw new NotImplementedException();
+			//}
 		}
 
-		class PausedState : IAnimationState
+		private class PausedState : IAnimationState
 		{
-			AnimationInstance animation;
+			//private AnimationInstance animation;
+
+			public Func<GameTime, IAnimationState> Update { get; }
+
+			public Action<SpriteBatch> Draw { get; }
 
 			internal PausedState(AnimationInstance animation)
 			{
-				this.animation = animation;
-			}
-
-			public IAnimationState Update(GameTime time)
-			{
-				if (animation.IsPlaying)
-					return new ActiveState(animation);
-				return this;
-			}
-
-			public void Draw(SpriteBatch batch)
-			{
-				if (animation.Animation.UseEachFramesDrawEffects)
-					animation.AnimationFrames[animation.CurrentFrame].DrawSprite(batch);
-				else
-					animation.AnimationFrames[animation.CurrentFrame].DrawSprite(batch, animation.Animation.DrawEffects);
-				//throw new NotImplementedException();
-			}
-		}
-
-		class ActiveState : IAnimationState
-		{
-			AnimationInstance animation;
-
-			internal ActiveState(AnimationInstance animation)
-			{
-				this.animation = animation;
-			}
-
-			public IAnimationState Update(GameTime gameTime)
-			{
-				IAnimationState toReturn = this;
-				if (animation.IsPlaying)
+				//this.animation = animation;
+				Update = (GameTime time) =>
 				{
-					// Add to the time counter. - J Mor
-					animation.timeSinceLastFrameChange += (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-					// If enough time has gone by to actually flip frames... - J Mor
-					if (animation.timeSinceLastFrameChange >= animation.SecondsPerFrame)
-					{
-						// ...then update the frame, and... - J Mor
-						animation.CurrentFrame++;
-						// ...if the current frame is the last, ... - J Mor
-						if (animation.CurrentFrame >= animation.Animation.NumFrames)
-						{
-							if (animation.IsLooped) // ...and the animation is set to wrap... - J Mor
-							{
-								// ...then update the frame # & the times looped. - J Mor
-								animation.CurrentFrame = 0;
-								animation.TimesLooped++;
-							}
-							else // if not, the animation is done, and should be removed soon. - J Mor
-							{
-								toReturn = new CompletedState(animation);
-								animation.CurrentFrame--; // To avoid IndexOutOfBounds error. - J Mor
-							}
-						}
-						//SpriteSheet.UpdateImgSourceRectangle();
-						// Remove one "frame" worth of time
-						animation.timeSinceLastFrameChange -= animation.SecondsPerFrame;
-					}
-				}
-				else
-					toReturn = new PausedState(animation);
-
-				return toReturn;
-			}
-
-			public void Draw(SpriteBatch batch)
-			{
-				if (animation.Posit == null)
+					if (animation.IsPlaying)
+						return new ActiveState(animation);
+					return this;
+				};
+				Draw = (SpriteBatch batch) =>
 				{
 					if (animation.Animation.UseEachFramesDrawEffects)
 						animation.AnimationFrames[animation.CurrentFrame].DrawSprite(batch);
 					else
 						animation.AnimationFrames[animation.CurrentFrame].DrawSprite(batch, animation.Animation.DrawEffects);
-				}
-				else
-				{
-					if (animation.Animation.UseEachFramesDrawEffects)
-						animation.AnimationFrames[animation.CurrentFrame].DrawSprite(batch, null, animation.Posit.Value);
-					else
-						animation.AnimationFrames[animation.CurrentFrame].DrawSprite(batch, animation.Animation.DrawEffects, animation.Posit.Value);
-				}
-				//throw new NotImplementedException();
+					//throw new NotImplementedException();
+				};
 			}
+
+			//public IAnimationState Update(GameTime time)
+			//{
+			//	if (animation.IsPlaying)
+			//		return new ActiveState(animation);
+			//	return this;
+			//}
+
+			//public void Draw(SpriteBatch batch)
+			//{
+			//	if (animation.Animation.UseEachFramesDrawEffects)
+			//		animation.AnimationFrames[animation.CurrentFrame].DrawSprite(batch);
+			//	else
+			//		animation.AnimationFrames[animation.CurrentFrame].DrawSprite(batch, animation.Animation.DrawEffects);
+			//	//throw new NotImplementedException();
+			//}
 		}
 
-		class CompletedState : IAnimationState
+		private class ActiveState : IAnimationState
 		{
-			AnimationInstance animation;
+			//private AnimationInstance animation;
+
+			public Func<GameTime, IAnimationState> Update { get; }
+
+			public Action<SpriteBatch> Draw { get; }
+
+			internal ActiveState(AnimationInstance animation)
+			{
+				//this.animation = animation;
+				Update = (GameTime gameTime) =>
+				{
+					IAnimationState toReturn = this;
+					if (animation.IsPlaying)
+					{
+						// Add to the time counter. - J Mor
+						animation.timeSinceLastFrameChange += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+						// If enough time has gone by to actually flip frames... - J Mor
+						if (animation.timeSinceLastFrameChange >= animation.SecondsPerFrame)
+						{
+							// ...then update the frame, and... - J Mor
+							animation.CurrentFrame++;
+							// ...if the current frame is the last, ... - J Mor
+							if (animation.CurrentFrame >= animation.Animation.NumFrames)
+							{
+								if (animation.IsLooped) // ...and the animation is set to wrap... - J Mor
+								{
+									// ...then update the frame # & the times looped. - J Mor
+									animation.CurrentFrame = 0;
+									animation.TimesLooped++;
+								}
+								else // if not, the animation is done, and should be removed soon. - J Mor
+								{
+									toReturn = new CompletedState(animation);
+									animation.CurrentFrame--; // To avoid IndexOutOfBounds error. - J Mor
+								}
+							}
+							//SpriteSheet.UpdateImgSourceRectangle();
+							// Remove one "frame" worth of time
+							animation.timeSinceLastFrameChange -= animation.SecondsPerFrame;
+						}
+					}
+					else
+						toReturn = new PausedState(animation);
+
+					return toReturn;
+				};
+				Draw = (SpriteBatch batch) =>
+				{
+					if (animation.Posit == null)
+					{
+						if (animation.Animation.UseEachFramesDrawEffects)
+							animation.AnimationFrames[animation.CurrentFrame].DrawSprite(batch);
+						else
+							animation.AnimationFrames[animation.CurrentFrame].DrawSprite(batch, animation.Animation.DrawEffects);
+					}
+					else
+					{
+						if (animation.Animation.UseEachFramesDrawEffects)
+							animation.AnimationFrames[animation.CurrentFrame].DrawSprite(batch, null, animation.Posit.Value);
+						else
+							animation.AnimationFrames[animation.CurrentFrame].DrawSprite(batch, animation.Animation.DrawEffects, animation.Posit.Value);
+					}
+					//throw new NotImplementedException();
+				};
+			}
+
+			//public IAnimationState Update(GameTime gameTime)
+			//{
+			//	IAnimationState toReturn = this;
+			//	if (animation.IsPlaying)
+			//	{
+			//		// Add to the time counter. - J Mor
+			//		animation.timeSinceLastFrameChange += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+			//		// If enough time has gone by to actually flip frames... - J Mor
+			//		if (animation.timeSinceLastFrameChange >= animation.SecondsPerFrame)
+			//		{
+			//			// ...then update the frame, and... - J Mor
+			//			animation.CurrentFrame++;
+			//			// ...if the current frame is the last, ... - J Mor
+			//			if (animation.CurrentFrame >= animation.Animation.NumFrames)
+			//			{
+			//				if (animation.IsLooped) // ...and the animation is set to wrap... - J Mor
+			//				{
+			//					// ...then update the frame # & the times looped. - J Mor
+			//					animation.CurrentFrame = 0;
+			//					animation.TimesLooped++;
+			//				}
+			//				else // if not, the animation is done, and should be removed soon. - J Mor
+			//				{
+			//					toReturn = new CompletedState(animation);
+			//					animation.CurrentFrame--; // To avoid IndexOutOfBounds error. - J Mor
+			//				}
+			//			}
+			//			//SpriteSheet.UpdateImgSourceRectangle();
+			//			// Remove one "frame" worth of time
+			//			animation.timeSinceLastFrameChange -= animation.SecondsPerFrame;
+			//		}
+			//	}
+			//	else
+			//		toReturn = new PausedState(animation);
+
+			//	return toReturn;
+			//}
+
+			//public void Draw(SpriteBatch batch)
+			//{
+			//	if (animation.Posit == null)
+			//	{
+			//		if (animation.Animation.UseEachFramesDrawEffects)
+			//			animation.AnimationFrames[animation.CurrentFrame].DrawSprite(batch);
+			//		else
+			//			animation.AnimationFrames[animation.CurrentFrame].DrawSprite(batch, animation.Animation.DrawEffects);
+			//	}
+			//	else
+			//	{
+			//		if (animation.Animation.UseEachFramesDrawEffects)
+			//			animation.AnimationFrames[animation.CurrentFrame].DrawSprite(batch, null, animation.Posit.Value);
+			//		else
+			//			animation.AnimationFrames[animation.CurrentFrame].DrawSprite(batch, animation.Animation.DrawEffects, animation.Posit.Value);
+			//	}
+			//	//throw new NotImplementedException();
+			//}
+		}
+
+		private class CompletedState : IAnimationState
+		{
+			//private AnimationInstance animation;
+
+			public Func<GameTime, IAnimationState> Update { get; }
+
+			public Action<SpriteBatch> Draw { get; }
 
 			internal CompletedState(AnimationInstance animation)
 			{
-				this.animation = animation;
+				//this.animation = animation;
+				Update = (GameTime time) => { return this; };
+				Draw = null;
 			}
 
-			public IAnimationState Update(GameTime time)
-			{
-				return this;
-				//throw new NotImplementedException();
-			}
+			//public IAnimationState Update(GameTime time)
+			//{
+			//	return this;
+			//	//throw new NotImplementedException();
+			//}
 
-			public void Draw(SpriteBatch batch)
-			{
-				//throw new NotImplementedException();
-			}
+			//public void Draw(SpriteBatch batch)
+			//{
+			//	//throw new NotImplementedException();
+			//}
 		}
 		#endregion
 
@@ -234,9 +334,9 @@ namespace JMMGExt.Graphics
 			CurrState = new InactiveState(this);
 		}
 
-		public void Update(GameTime time) => CurrState = CurrState.Update(time);
+		public void Update(GameTime time) => CurrState = CurrState.Update?.Invoke(time);//CurrState = CurrState.Update(time);
 
-		public void Draw(SpriteBatch batch) => CurrState.Draw(batch);
+		public void Draw(SpriteBatch batch) => CurrState.Draw?.Invoke(batch);//CurrState.Draw(batch);
 		#endregion
 	}
 }

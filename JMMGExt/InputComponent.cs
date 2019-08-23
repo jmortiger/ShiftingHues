@@ -1,12 +1,9 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-
-using JMMGExt.Input;
 
 namespace JMMGExt.Input
 {
@@ -750,44 +747,44 @@ namespace JMMGExt.Input
 				case Keys.LeftControl:
 				case Keys.RightControl:
 				case Keys.LeftAlt:
-				case Keys.RightAlt:
-					return false; // May change
-								  //case Keys.BrowserBack:
-								  //	break;
-								  //case Keys.BrowserForward:
-								  //	break;
-								  //case Keys.BrowserRefresh:
-								  //	break;
-								  //case Keys.BrowserStop:
-								  //	break;
-								  //case Keys.BrowserSearch:
-								  //	break;
-								  //case Keys.BrowserFavorites:
-								  //	break;
-								  //case Keys.BrowserHome:
-								  //	break;
-								  //case Keys.VolumeMute:
-								  //	break;
-								  //case Keys.VolumeDown:
-								  //	break;
-								  //case Keys.VolumeUp:
-								  //	break;
-								  //case Keys.MediaNextTrack:
-								  //	break;
-								  //case Keys.MediaPreviousTrack:
-								  //	break;
-								  //case Keys.MediaStop:
-								  //	break;
-								  //case Keys.MediaPlayPause:
-								  //	break;
-								  //case Keys.LaunchMail:
-								  //	break;
-								  //case Keys.SelectMedia:
-								  //	break;
-								  //case Keys.LaunchApplication1:
-								  //	break;
-								  //case Keys.LaunchApplication2:
-								  //	break;
+				case Keys.RightAlt: // May change
+					return false;
+				//case Keys.BrowserBack:
+				//	break;
+				//case Keys.BrowserForward:
+				//	break;
+				//case Keys.BrowserRefresh:
+				//	break;
+				//case Keys.BrowserStop:
+				//	break;
+				//case Keys.BrowserSearch:
+				//	break;
+				//case Keys.BrowserFavorites:
+				//	break;
+				//case Keys.BrowserHome:
+				//	break;
+				//case Keys.VolumeMute:
+				//	break;
+				//case Keys.VolumeDown:
+				//	break;
+				//case Keys.VolumeUp:
+				//	break;
+				//case Keys.MediaNextTrack:
+				//	break;
+				//case Keys.MediaPreviousTrack:
+				//	break;
+				//case Keys.MediaStop:
+				//	break;
+				//case Keys.MediaPlayPause:
+				//	break;
+				//case Keys.LaunchMail:
+				//	break;
+				//case Keys.SelectMedia:
+				//	break;
+				//case Keys.LaunchApplication1:
+				//	break;
+				//case Keys.LaunchApplication2:
+				//	break;
 				case Keys.OemSemicolon:
 				case Keys.OemPlus:
 				case Keys.OemComma:
@@ -827,7 +824,7 @@ namespace JMMGExt.Input
 				default:
 					return false;
 			}
-			return false;
+			//return false;
 		}
 
 		public static string GetCurrentCharacterAsString(KeyboardState? state = null, bool acceptEnter = false, bool acceptBackspace = false)

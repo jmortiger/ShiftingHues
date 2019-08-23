@@ -88,6 +88,7 @@
     <Compile Include="SpriteSheet.cs" />
     <Compile Include="TextureManagerComponent.cs" />
     <Compile Include="TransformComponent.cs" />
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\GeonBit.UI\themes\editor\fonts\Bold.spritefont" />

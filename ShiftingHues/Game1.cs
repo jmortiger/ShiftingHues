@@ -1,57 +1,49 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-
-//using ShiftingHues.Input;
-//using ShiftingHues.UI;
-//using ShiftingHues.Graphics;
-//using ShiftingHues.Objects;
-
-using GeonBit.UI;
+﻿using GeonBit.UI;
 using GeonBit.UI.Entities;
-
-using tainicom.Aether.Physics2D.Collision;
-using tainicom.Aether.Physics2D.Dynamics;
-using tainicom.Aether.Physics2D.Diagnostics;
-
-using PipelineClasses;
 
 using JMMGExt;
 using JMMGExt.Graphics;
 using JMMGExt.Input;
 using JMMGExt.Objects;
-using JMMGExt.Objects.Components;
+
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+
+using PipelineClasses;
+
+using System;
+using System.Collections.Generic;
+
+using tainicom.Aether.Physics2D.Dynamics;
 
 // TODO: SceneManager
 // TODO: Menus
 namespace ShiftingHues
 {
-    public enum GameState
-    {
-        Menu,
-        Playing,
-        Paused,
-        Loading
-    }
+	public enum GameState
+	{
+		Menu,
+		Playing,
+		Paused,
+		Loading
+	}
 
-    /// <summary>
-    /// This is the main type for your game.
-    /// </summary>
-    public class Game1 : Game
-    {
-        #region Fields & Props
-        const float WORLD_WIDTH = 16f;
-        const float WORLD_HEIGHT = 9f;
+	/// <summary>
+	/// This is the main type for your game.
+	/// </summary>
+	public class Game1 : Game
+	{
+		#region Fields & Props
+		private const float SCREEN_WIDTH_RATIO = 16f;
+		private const float SCREEN_HEIGHT_RATIO = 9f;
+		private GraphicsDeviceManager graphics;
+		private SpriteBatch spriteBatch;
+		private SpriteFont testFont1;
 
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-
-        SpriteFont testFont1;
-
-        public InputComponent InputComp { get; private set; }
+		public InputComponent InputComp { get; private set; }
+		public TextureManagerComponent TextureComp { get; private set; }
+		public SimpleLoggerService SimpleLogger { get; private set; }
 		//public UIManager UI { get; private set; }
 
 		public Point ViewportCenter { get => GraphicsDevice.Viewport.Bounds.Center; }
@@ -62,11 +54,11 @@ namespace ShiftingHues
 
 		private InputDebug iDbg;
 
-        //private UI.UIObject testBttn;
+		//private UI.UIObject testBttn;
 
-        private string bttnTestStr = "";
+		private string bttnTestStr = "";
 
-        public GameState CurrentGameState { get; private set; } = GameState.Menu;
+		public GameState CurrentGameState { get; private set; } = GameState.Menu;
 
 		private GameObject playerTest;
 
@@ -87,31 +79,36 @@ namespace ShiftingHues
 		#endregion
 
 		public Game1()
-        {
+		{
 			// Before ANYTHING ELSE, get the logger up and running.
+			//SimpleLogger = new SimpleLoggerService();
 
 
+			graphics = new GraphicsDeviceManager(this);
+			Content.RootDirectory = "Content";
 
-            graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
-            
-            InputComp = new InputComponent(this);
-            Components.Add(InputComp);
+			InputComp = new InputComponent(this);
+			Components.Add(InputComp);
 
-            ServiceLocator.RegisterService(InputComp);
-            
-            iDbg = new InputDebug(InputComp);
-        }
+			ServiceLocator.RegisterService(InputComp);
 
-        #region Non-Looped
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
-        protected override void Initialize()
-        {
+			TextureComp = new TextureManagerComponent(this);
+			Components.Add(TextureComp);
+
+			ServiceLocator.RegisterService(TextureComp);
+
+			iDbg = new InputDebug(InputComp);
+		}
+
+		#region Non-Looped
+		/// <summary>
+		/// Allows the game to perform any initialization it needs to before starting to run.
+		/// This is where it can query for any required services and load any non-graphic
+		/// related content.  Calling base.Initialize will enumerate through any components
+		/// and initialize them as well.
+		/// </summary>
+		protected override void Initialize()
+		{
 			// Init the GeonBit.UI UI Manager.
 			UserInterface.Initialize(Content, BuiltinThemes.editor);
 
@@ -127,9 +124,10 @@ namespace ShiftingHues
 			ContructMenu();
 
 			// Create world
-			_world = new World();
-
-			_world.Gravity = new Vector2(0, 500);
+			_world = new World
+			{
+				Gravity = new Vector2(0, 500)
+			};
 
 			// Create player fixture
 			_playerBody = _world.CreateRectangle(256, 256, 1 / 65536, ViewportCenterV2, 0, BodyType.Dynamic);
@@ -157,13 +155,14 @@ namespace ShiftingHues
 			//_playerBody.OnCollision += _playerBody_OnCollision;
 			//_playerBody.OnSeparation += _playerBody_OnSeparation;
 
-			
+
 			base.Initialize();
-        }
+		}
 
 		private void InputComp_OnMouseMove(MouseEventArgs e)
 		{
-			if (!UserInterface.Active.ShowCursor) UserInterface.Active.ShowCursor = true;
+			if (!UserInterface.Active.ShowCursor)
+				UserInterface.Active.ShowCursor = true;
 		}
 
 		//private void _playerBody_OnSeparation(Fixture sender, Fixture other, tainicom.Aether.Physics2D.Dynamics.Contacts.Contact contact)
@@ -208,391 +207,391 @@ namespace ShiftingHues
 			graphics2D.drawAnim = true;
 			idleAnimInst.Play();
 		}// Comment this } and uncomment the next to include code comment again
-            // Creating Buttons
-            // I'm making a button, which can be activated and drawn
-            //Rectangle outputRect = tex_start_up.Bounds;
-            //outputRect.Location = new Point(200, 200);
-            //UI.SpriteComponent spriteComponent = new SpriteComponent(tex_start_up, outputRect);
+		 // Creating Buttons
+		 // I'm making a button, which can be activated and drawn
+		 //Rectangle outputRect = tex_start_up.Bounds;
+		 //outputRect.Location = new Point(200, 200);
+		 //UI.SpriteComponent spriteComponent = new SpriteComponent(tex_start_up, outputRect);
 
-            //testBttn = new UI.UIObject(outputRect, spriteComponent/*, clickComponent*/);
-            //UI.ActiveComponent clickComponent = new ActiveComponent(
-            //    (obj) =>
-            //    {
-            //        for (int i = 0; i < obj?.DrawableComponents?.Length; i++)
-            //            obj.DrawableComponents[i].Tint = new Color(Color.White, .5f);
-            //    },
-            //    (obj) => bttnTestStr += "Button Pressed\n",
-            //    (obj) =>
-            //    {
-            //        for (int i = 0; i < obj?.DrawableComponents?.Length; i++)
-            //            obj.DrawableComponents[i].Tint = Color.White;
-            //    },
-            //    testBttn
-            //    );
-            //testBttn.updateableComponents = new IObjUpdateComponent[] { clickComponent };
+		//testBttn = new UI.UIObject(outputRect, spriteComponent/*, clickComponent*/);
+		//UI.ActiveComponent clickComponent = new ActiveComponent(
+		//    (obj) =>
+		//    {
+		//        for (int i = 0; i < obj?.DrawableComponents?.Length; i++)
+		//            obj.DrawableComponents[i].Tint = new Color(Color.White, .5f);
+		//    },
+		//    (obj) => bttnTestStr += "Button Pressed\n",
+		//    (obj) =>
+		//    {
+		//        for (int i = 0; i < obj?.DrawableComponents?.Length; i++)
+		//            obj.DrawableComponents[i].Tint = Color.White;
+		//    },
+		//    testBttn
+		//    );
+		//testBttn.updateableComponents = new IObjUpdateComponent[] { clickComponent };
 
-            //UI = new UIManager(this, new Texture2D[] { tex_start_up }, testFont1);
-        //}
+		//UI = new UIManager(this, new Texture2D[] { tex_start_up }, testFont1);
+		//}
 
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// game-specific content.
-        /// </summary>
-        protected override void UnloadContent()
-        {
-            // TODO: Unload any non ContentManager content here
-        }
+		/// <summary>
+		/// UnloadContent will be called once per game and is the place to unload
+		/// game-specific content.
+		/// </summary>
+		protected override void UnloadContent()
+		{
+			// TODO: Unload any non ContentManager content here
+		}
 
 		private void ConstructMenu(string menuID)
 		{
 			switch (menuID)
 			{
 				case "ME":
-					{
-						Panel mainPanel = new Panel(
+				{
+					Panel mainPanel = new Panel(
 						   size: new Vector2(GraphicsDevice.Viewport.Bounds.Width - 200, GraphicsDevice.Viewport.Bounds.Height),
 						   skin: PanelSkin.None)
-						{
-							Padding = Vector2.Zero,
-							Identifier = "MainPanel"
-						};
-						UserInterface.Active.AddEntity(mainPanel);
+					{
+						Padding = Vector2.Zero,
+						Identifier = "MainPanel"
+					};
+					UserInterface.Active.AddEntity(mainPanel);
 
-						Panel storyParentPanel = new Panel(
+					Panel storyParentPanel = new Panel(
 							size: new Vector2(mainPanel.Size.X / 4, GraphicsDevice.Viewport.Bounds.Height),
 							anchor: Anchor.TopLeft,
 							offset: new Vector2(0, 0),
 							skin: PanelSkin.None)
-						{
-							Identifier = "storyParentPanel",
-							Padding = Vector2.Zero
-						};
+					{
+						Identifier = "storyParentPanel",
+						Padding = Vector2.Zero
+					};
 
-						Panel storyPanel = new Panel(
+					Panel storyPanel = new Panel(
 							size: new Vector2(mainPanel.Size.X / 4, GraphicsDevice.Viewport.Bounds.Height - (GraphicsDevice.Viewport.Bounds.Height * .175f)),
 							anchor: Anchor.TopLeft,
 							offset: new Vector2(0, (GraphicsDevice.Viewport.Bounds.Height * .175f)),
 							skin: PanelSkin.None)
-						{
-							Padding = Vector2.Zero,
-							Visible = false
-						};
-						storyPanel.OnMouseLeave = (e) => { storyPanel.Visible = false; };
-						storyPanel.Identifier = "storyPanel";
-						storyParentPanel.AddChild(storyPanel);
+					{
+						Padding = Vector2.Zero,
+						Visible = false
+					};
+					storyPanel.OnMouseLeave = (e) => { storyPanel.Visible = false; };
+					storyPanel.Identifier = "storyPanel";
+					storyParentPanel.AddChild(storyPanel);
 
-						storyParentPanel.OnMouseLeave = (e) => { storyPanel.Visible = false; };
-						mainPanel.AddChild(storyParentPanel);
+					storyParentPanel.OnMouseLeave = (e) => { storyPanel.Visible = false; };
+					mainPanel.AddChild(storyParentPanel);
 
-						Button storyButton = new Button(
+					Button storyButton = new Button(
 							size: new Vector2(mainPanel.Size.X / 4, (GraphicsDevice.Viewport.Bounds.Height * .175f)),
 							anchor: Anchor.TopLeft,
 							offset: Vector2.Zero,
 							text: "Story")
-						{
-							Padding = Vector2.Zero,
-							OnMouseEnter = (e) => { storyPanel.Visible = true; }
-						};
-						storyParentPanel.AddChild(storyButton);
+					{
+						Padding = Vector2.Zero,
+						OnMouseEnter = (e) => { storyPanel.Visible = true; }
+					};
+					storyParentPanel.AddChild(storyButton);
 
-						Button newGameButton = new Button(
+					Button newGameButton = new Button(
 							size: new Vector2(0, .15f),
 							text: "New Game")
-						{
-							Padding = Vector2.Zero
-						};
-						storyPanel.AddChild(newGameButton);
+					{
+						Padding = Vector2.Zero
+					};
+					storyPanel.AddChild(newGameButton);
 
-						Panel raceParPanel = new Panel(
+					Panel raceParPanel = new Panel(
 							size: new Vector2(mainPanel.Size.X / 4, GraphicsDevice.Viewport.Bounds.Height),
 							anchor: Anchor.TopLeft,
 							offset: new Vector2(mainPanel.Size.X / 4, 0),
 							skin: PanelSkin.None)
-						{
-							Padding = Vector2.Zero
-						};
+					{
+						Padding = Vector2.Zero
+					};
 
-						Panel racePanel = new Panel(
+					Panel racePanel = new Panel(
 							size: new Vector2(mainPanel.Size.X / 4, GraphicsDevice.Viewport.Bounds.Height - (GraphicsDevice.Viewport.Bounds.Height * .175f)),
 							anchor: Anchor.TopLeft,
 							offset: new Vector2(0, (GraphicsDevice.Viewport.Bounds.Height * .175f)),
 							skin: PanelSkin.None)
-						{
-							Padding = Vector2.Zero,
-							Visible = false
-						};
-						racePanel.OnMouseLeave = (e) => { racePanel.Visible = false; };
-						raceParPanel.AddChild(racePanel);
+					{
+						Padding = Vector2.Zero,
+						Visible = false
+					};
+					racePanel.OnMouseLeave = (e) => { racePanel.Visible = false; };
+					raceParPanel.AddChild(racePanel);
 
-						raceParPanel.OnMouseLeave = (e) => { racePanel.Visible = false; };
-						mainPanel.AddChild(raceParPanel);
+					raceParPanel.OnMouseLeave = (e) => { racePanel.Visible = false; };
+					mainPanel.AddChild(raceParPanel);
 
-						Button raceButton = new Button(
+					Button raceButton = new Button(
 							size: new Vector2(mainPanel.Size.X / 4, (GraphicsDevice.Viewport.Bounds.Height * .175f)),
 							anchor: Anchor.TopLeft,
 							offset: Vector2.Zero,
 							text: "Race")
-						{
-							Padding = Vector2.Zero,
-							OnMouseEnter = (e) => { racePanel.Visible = true; }
-						};
-						raceParPanel.AddChild(raceButton);
+					{
+						Padding = Vector2.Zero,
+						OnMouseEnter = (e) => { racePanel.Visible = true; }
+					};
+					raceParPanel.AddChild(raceButton);
 
-						Button speedrunButton = new Button(
+					Button speedrunButton = new Button(
 							size: new Vector2(0, .15f),
 							text: "Speedrun")
-						{
-							Padding = Vector2.Zero
-						};
-						racePanel.AddChild(speedrunButton);
+					{
+						Padding = Vector2.Zero
+					};
+					racePanel.AddChild(speedrunButton);
 
-						//Panel racePanel = new Panel(
-						//	size: new Vector2(mainPanel.Size.X / 4, GraphicsDevice.Viewport.Bounds.Height - (GraphicsDevice.Viewport.Bounds.Height * .175f)),
-						//	anchor: Anchor.TopLeft,
-						//	offset: new Vector2(mainPanel.Size.X / 4, (GraphicsDevice.Viewport.Bounds.Height * .175f)),
-						//	skin: PanelSkin.Simple);
-						//racePanel.Padding = Vector2.Zero;
-						//racePanel.Visible = false;
-						//racePanel.OnMouseLeave = (e) => { racePanel.Visible = false; };
-						//mainPanel.AddChild(racePanel);
+					//Panel racePanel = new Panel(
+					//	size: new Vector2(mainPanel.Size.X / 4, GraphicsDevice.Viewport.Bounds.Height - (GraphicsDevice.Viewport.Bounds.Height * .175f)),
+					//	anchor: Anchor.TopLeft,
+					//	offset: new Vector2(mainPanel.Size.X / 4, (GraphicsDevice.Viewport.Bounds.Height * .175f)),
+					//	skin: PanelSkin.Simple);
+					//racePanel.Padding = Vector2.Zero;
+					//racePanel.Visible = false;
+					//racePanel.OnMouseLeave = (e) => { racePanel.Visible = false; };
+					//mainPanel.AddChild(racePanel);
 
-						//Button raceButton = new Button(
-						//	size: new Vector2(mainPanel.Size.X / 4, (GraphicsDevice.Viewport.Bounds.Height * .175f)),
-						//	anchor: Anchor.TopLeft,
-						//	offset: new Vector2(mainPanel.Size.X / 4, 0),
-						//	text: "Race");
-						//raceButton.Padding = Vector2.Zero;
-						////Action<Entity> action = (e) => { racePanel.; };
-						//raceButton.OnMouseEnter = (e) => { racePanel.Visible = true; };
-						//mainPanel.AddChild(raceButton);
+					//Button raceButton = new Button(
+					//	size: new Vector2(mainPanel.Size.X / 4, (GraphicsDevice.Viewport.Bounds.Height * .175f)),
+					//	anchor: Anchor.TopLeft,
+					//	offset: new Vector2(mainPanel.Size.X / 4, 0),
+					//	text: "Race");
+					//raceButton.Padding = Vector2.Zero;
+					////Action<Entity> action = (e) => { racePanel.; };
+					//raceButton.OnMouseEnter = (e) => { racePanel.Visible = true; };
+					//mainPanel.AddChild(raceButton);
 
-						//Button speedrunButton = new Button(
-						//	size: new Vector2(0, .15f),
-						//	text: "Speedrun");
-						//speedrunButton.Padding = Vector2.Zero;
-						//racePanel.AddChild(speedrunButton);
+					//Button speedrunButton = new Button(
+					//	size: new Vector2(0, .15f),
+					//	text: "Speedrun");
+					//speedrunButton.Padding = Vector2.Zero;
+					//racePanel.AddChild(speedrunButton);
 
-						/*raceButton.AttachedData = */
-						new UI.UIEntityExtraData(
+					/*raceButton.AttachedData = */
+					new UI.UIEntityExtraData(
 attachedEntity: raceButton,
 ToLeft: storyButton,
 Below: speedrunButton);
 
-						/*storyButton.AttachedData = */
-						new UI.UIEntityExtraData(
+					/*storyButton.AttachedData = */
+					new UI.UIEntityExtraData(
 attachedEntity: storyButton,
 ToRight: raceButton,
 Below: newGameButton);
 
-						/*newGameButton.AttachedData = */
-						new UI.UIEntityExtraData(
+					/*newGameButton.AttachedData = */
+					new UI.UIEntityExtraData(
 attachedEntity: newGameButton,
 Above: storyButton,
 ToRight: raceButton);
 
-						/*speedrunButton.AttachedData = */
-						new UI.UIEntityExtraData(
+					/*speedrunButton.AttachedData = */
+					new UI.UIEntityExtraData(
 attachedEntity: speedrunButton,
 Above: raceButton,
 ToLeft: storyButton);
 
-						Button quitButton = new Button(
+					Button quitButton = new Button(
 							text: "Quit Game",
 							anchor: Anchor.BottomRight,
 							size: new Vector2(.15f, .1f))
-						{
-							OnClick = (button) => { Exit(); },
-							Padding = Vector2.Zero
-						};
-						UserInterface.Active.AddEntity(quitButton);
-						break;
-					}
+					{
+						OnClick = (button) => { Exit(); },
+						Padding = Vector2.Zero
+					};
+					UserInterface.Active.AddEntity(quitButton);
+					break;
+				}
 
 				case "ME 2":
-					{
-						Panel rootPanel = new Panel(
+				{
+					Panel rootPanel = new Panel(
 							size: ViewportDimensionsV2,
 							skin: PanelSkin.Default)
-						{
-							Identifier = "RootPanel",
-							Padding = Vector2.Zero
-						};
-						UserInterface.Active.AddEntity(rootPanel);
+					{
+						Identifier = "RootPanel",
+						Padding = Vector2.Zero
+					};
+					UserInterface.Active.AddEntity(rootPanel);
 
-						// PANELS
-						Vector2 subPanelSize = new Vector2(rootPanel.Size.X / 6, rootPanel.Size.Y);
+					// PANELS
+					Vector2 subPanelSize = new Vector2(rootPanel.Size.X / 6, rootPanel.Size.Y);
 
-						Panel storyPanel = new Panel(
+					Panel storyPanel = new Panel(
 							size: subPanelSize,
 							anchor: Anchor.TopLeft,
 							offset: new Vector2(subPanelSize.X, 0),
 							skin: PanelSkin.Default)
-						{
-							Identifier = "StoryPanel",
-							Padding = Vector2.Zero
-						};
-						rootPanel.AddChild(storyPanel);
+					{
+						Identifier = "StoryPanel",
+						Padding = Vector2.Zero
+					};
+					rootPanel.AddChild(storyPanel);
 
-						Panel racePanel = new Panel(
+					Panel racePanel = new Panel(
 							size: subPanelSize,
 							anchor: Anchor.TopLeft,
 							offset: new Vector2(subPanelSize.X * 2, 0),
 							skin: PanelSkin.Default)
-						{
-							Identifier = "RacePanel",
-							Padding = Vector2.Zero
-						};
-						rootPanel.AddChild(racePanel);
+					{
+						Identifier = "RacePanel",
+						Padding = Vector2.Zero
+					};
+					rootPanel.AddChild(racePanel);
 
-						// TOP LEVEL BUTTONS
-						Vector2 buttonSize = new Vector2(subPanelSize.X, 100);
+					// TOP LEVEL BUTTONS
+					Vector2 buttonSize = new Vector2(subPanelSize.X, 100);
 
-						Button storyButton = new Button(
+					Button storyButton = new Button(
 							size: buttonSize,
 							text: "Story",
 							anchor: storyPanel.Anchor,
 							offset: storyPanel.Offset)
+					{
+						Identifier = "StoryButton"
+					};
+					storyButton.OnMouseEnter = (e) =>
+					{
+						storyPanel.Visible = true;
+						storyPanel.OnMouseLeave = (arg) =>
 						{
-							Identifier = "StoryButton"
+							storyPanel.Visible = false;
+							storyPanel.OnMouseLeave = null;
 						};
-						storyButton.OnMouseEnter = (e) =>
-						{
-							storyPanel.Visible = true;
-							storyPanel.OnMouseLeave = (arg) =>
-							{
-								storyPanel.Visible = false;
-								storyPanel.OnMouseLeave = null;
-							};
-					//ServiceLocator.GetInputService().OnMouseMove += (arg) =>
-					//{
-					//	if (!storyPanel.IsMouseOver)
-					//		storyPanel.Visible = false;
-					//};
-				};
-						storyButton.OnMouseLeave = (e) =>
-						{
-							if (!storyPanel.CalcDestRect().Contains(/*ServiceLocator.GetInputService().CurrMouseState.Position*/UserInterface.Active.MouseInputProvider.MousePosition))
-								storyPanel.OnMouseLeave(storyPanel);
-						};
-						rootPanel.AddChild(storyButton);
+						//ServiceLocator.GetInputService().OnMouseMove += (arg) =>
+						//{
+						//	if (!storyPanel.IsMouseOver)
+						//		storyPanel.Visible = false;
+						//};
+					};
+					storyButton.OnMouseLeave = (e) =>
+					{
+						if (!storyPanel.CalcDestRect().Contains(/*ServiceLocator.GetInputService().CurrMouseState.Position*/UserInterface.Active.MouseInputProvider.MousePosition))
+							storyPanel.OnMouseLeave(storyPanel);
+					};
+					rootPanel.AddChild(storyButton);
 
-						Button raceButton = new Button(
+					Button raceButton = new Button(
 							 size: buttonSize,
 							 text: "Race",
 							 anchor: racePanel.Anchor,
 							 offset: racePanel.Offset)
+					{
+						Identifier = "RaceButton"
+					};
+					raceButton.OnMouseEnter = (e) =>
+					{
+						racePanel.Visible = true;
+						racePanel.OnMouseLeave = (arg) =>
 						{
-							Identifier = "RaceButton"
+							racePanel.Visible = false;
+							racePanel.OnMouseLeave = null;
 						};
-						raceButton.OnMouseEnter = (e) =>
-						{
-							racePanel.Visible = true;
-							racePanel.OnMouseLeave = (arg) =>
-							{
-								racePanel.Visible = false;
-								racePanel.OnMouseLeave = null;
-							};
-					//ServiceLocator.GetInputService().OnMouseMove += (arg) =>
-					//{
-					//	if (!racePanel.IsMouseOver)
-					//		racePanel.Visible = false;
-					//};
-				};
-						raceButton.OnMouseLeave = (e) =>
-						{
-							if (!racePanel.CalcDestRect().Contains(/*ServiceLocator.GetInputService().CurrMouseState.Position*/UserInterface.Active.MouseInputProvider.MousePosition))
-								racePanel.OnMouseLeave(racePanel);
-						};
-						rootPanel.AddChild(raceButton);
+						//ServiceLocator.GetInputService().OnMouseMove += (arg) =>
+						//{
+						//	if (!racePanel.IsMouseOver)
+						//		racePanel.Visible = false;
+						//};
+					};
+					raceButton.OnMouseLeave = (e) =>
+					{
+						if (!racePanel.CalcDestRect().Contains(/*ServiceLocator.GetInputService().CurrMouseState.Position*/UserInterface.Active.MouseInputProvider.MousePosition))
+							racePanel.OnMouseLeave(racePanel);
+					};
+					rootPanel.AddChild(raceButton);
 
-						// NESTLED BUTTONS
-						Button newGameButton = new Button(
+					// NESTLED BUTTONS
+					Button newGameButton = new Button(
 							text: "New Game",
 							skin: ButtonSkin.Alternative,
 							anchor: Anchor.TopLeft,
 							offset: new Vector2(0, buttonSize.Y),
 							size: buttonSize)
-						{
-							Identifier = "NewGameButton"
-						};
-						storyPanel.AddChild(newGameButton);
-						break;
-					}
+					{
+						Identifier = "NewGameButton"
+					};
+					storyPanel.AddChild(newGameButton);
+					break;
+				}
 
 				case "Hotline Miami":
-					{
-						// X: Options take center 3rd of screen, title takes center 3/5s
-						// Y: Options take up lower 2/3s
-						var rootPanel = new Panel(
+				{
+					// X: Options take center 3rd of screen, title takes center 3/5s
+					// Y: Options take up lower 2/3s
+					var rootPanel = new Panel(
 							size: ViewportDimensionsV2,
 							skin: PanelSkin.None,
 							anchor: Anchor.TopLeft)
-						{
-							Identifier = "Root Panel",
-							Padding = Vector2.Zero
-						};
-						UserInterface.Active.AddEntity(rootPanel);
+					{
+						Identifier = "Root Panel",
+						Padding = Vector2.Zero
+					};
+					UserInterface.Active.AddEntity(rootPanel);
 
-						// Title
-						var title = new RichParagraph(
+					// Title
+					var title = new RichParagraph(
 							text: @"{{GOLD}}HOTLINE MIAMI",
 							anchor: Anchor.TopCenter,
 							size: new Vector2(3f / 5f, 1f / 3f)/*,
 					offset: new Vector2(1f / 5f, 0)*/)
-						{
-							Identifier = "Title"/*,
+					{
+						Identifier = "Title"/*,
 					MaxSize = new Vector2(3f / 5f, 1f / 3f)*/
-						};
-						rootPanel.AddChild(title);
+					};
+					rootPanel.AddChild(title);
 
-						// OPTIONS
-						// Options Panel
-						var optionsPanel = new Panel(
+					// OPTIONS
+					// Options Panel
+					var optionsPanel = new Panel(
 							size: new Vector2(1f / 3f, 2f / 3f),
 							skin: PanelSkin.None,
 							anchor: Anchor.BottomCenter,
 							offset: Vector2.Zero)
-						{
-							Identifier = "Options Panel"/*,
+					{
+						Identifier = "Options Panel"/*,
 					Padding = Vector2.Zero*/
-						};
-						rootPanel.AddChild(optionsPanel);
+					};
+					rootPanel.AddChild(optionsPanel);
 
-						// Options
-						var newGameHeader = new Header(
+					// Options
+					var newGameHeader = new Header(
 							text: "New Game",
 							anchor: Anchor.AutoCenter)
-						{
-							Identifier = "New Game Option"
-							/*Padding = Vector2.Zero*//*,
-							SpaceAfter = Vector2.Zero,
-							SpaceBefore = Vector2.Zero*/
-						};
-						optionsPanel.AddChild(newGameHeader);
+					{
+						Identifier = "New Game Option"
+						/*Padding = Vector2.Zero*//*,
+						SpaceAfter = Vector2.Zero,
+						SpaceBefore = Vector2.Zero*/
+					};
+					optionsPanel.AddChild(newGameHeader);
 
-						var chaptersHeader = new Header(
+					var chaptersHeader = new Header(
 							text: "Chapters",
 							anchor: Anchor.AutoCenter)
-						{
-							Identifier = "Chapters Option"
-							/*Padding = Vector2.Zero*//*,
-							SpaceAfter = Vector2.Zero,
-							SpaceBefore = Vector2.Zero*/
-						};
-						optionsPanel.AddChild(chaptersHeader);
+					{
+						Identifier = "Chapters Option"
+						/*Padding = Vector2.Zero*//*,
+						SpaceAfter = Vector2.Zero,
+						SpaceBefore = Vector2.Zero*/
+					};
+					optionsPanel.AddChild(chaptersHeader);
 
-						var optionsHeader = new Header(
+					var optionsHeader = new Header(
 							text: "Options",
 							anchor: Anchor.AutoCenter)
-						{
-							Identifier = "Options Options"
-							/*Padding = Vector2.Zero*//*,
-							SpaceAfter = Vector2.Zero,
-							SpaceBefore = Vector2.Zero*/
-						};
-						optionsPanel.AddChild(optionsHeader);
-						break;
-					}
+					{
+						Identifier = "Options Options"
+						/*Padding = Vector2.Zero*//*,
+						SpaceAfter = Vector2.Zero,
+						SpaceBefore = Vector2.Zero*/
+					};
+					optionsPanel.AddChild(optionsHeader);
+					break;
+				}
 			}
 		}
 
@@ -600,50 +599,50 @@ ToLeft: storyButton);
 		{
 			this.ConstructMenu("Hotline Miami");
 		}
-        #endregion
+		#endregion
 
-        string keyDebug = "";
+		private string keyDebug = "";
 
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Update(GameTime gameTime)
-        {
-            // Update Components First
-            base.Update(gameTime);
-			
+		/// <summary>
+		/// Allows the game to run logic such as updating the world,
+		/// checking for collisions, gathering input, and playing audio.
+		/// </summary>
+		/// <param name="gameTime">Provides a snapshot of timing values.</param>
+		protected override void Update(GameTime gameTime)
+		{
+			// Update Components First
+			base.Update(gameTime);
+
 			// Check if exit button is pushed.
-            if (InputComp.IsActionActive(GameAction.ExitGame))
-                Exit();
-			
-            keyDebug = "";
-            foreach (var key in InputComp.CurrKeyboardState.GetPressedKeys())
-            {
-                keyDebug += key.ToString() + "; ";
-            }
+			if (InputComp.IsActionActive(GameAction.ExitGame))
+				Exit();
 
-            var gPS = InputComp.CurrPadState;
-            if (gPS.IsButtonDown(Buttons.A))
-            {
-                keyDebug += "A Button; ";
-            }
+			keyDebug = "";
+			foreach (var key in InputComp.CurrKeyboardState.GetPressedKeys())
+			{
+				keyDebug += key.ToString() + "; ";
+			}
 
-            if (InputComp.AreActionsActive())
-            {
-                for (int i = 0; i < InputComponent.NumGameActions; i++)
-                {
-                    if (InputComp.IsActionActive((GameAction)i))
-                        keyDebug += Enum.GetName(typeof(GameAction), i).ToUpper() + "; ";
-                }
-            }
+			var gPS = InputComp.CurrPadState;
+			if (gPS.IsButtonDown(Buttons.A))
+			{
+				keyDebug += "A Button; ";
+			}
+
+			if (InputComp.AreActionsActive())
+			{
+				for (int i = 0; i < InputComponent.NumGameActions; i++)
+				{
+					if (InputComp.IsActionActive((GameAction)i))
+						keyDebug += Enum.GetName(typeof(GameAction), i).ToUpper() + "; ";
+				}
+			}
 
 			// MIDI
 			//if (InputComp.GetInputDown(Keys.Home))
 			//	MidiPlayground.Test1();
 
-            iDbg.Update(gameTime);
+			iDbg.Update(gameTime);
 
 			// Update the UI
 			UserInterface.Active.Update(gameTime);
@@ -660,10 +659,10 @@ ToLeft: storyButton);
 			//base.Update(gameTime);
 		}
 
-        float maxRightTriggerVal = 0;
-        float avgRightTriggerVal = 0;
-        float totalRightTriggerVal = 0;
-        float numUpdates = 0;
+		private float maxRightTriggerVal = 0;
+		private float avgRightTriggerVal = 0;
+		private float totalRightTriggerVal = 0;
+		private float numUpdates = 0;
 
 		/// <summary>
 		/// This is called when the game should draw itself.
@@ -684,12 +683,12 @@ ToLeft: storyButton);
 			UserInterface.Active.Draw(spriteBatch);
 
 			spriteBatch.Begin();
-			
-            spriteBatch.DrawString(testFont1, /*keyDebug*/$"{1 / gameTime.ElapsedGameTime.TotalSeconds} FPS", new Vector2(), Color.Black);
-            //spriteBatch.DrawString(testFont1, /*keyDebug*/$"{/*1 / */gameTime.ElapsedGameTime.Ticks} FPS", new Vector2(0, 25), Color.Black);
-            //spriteBatch.DrawString(testFont1, mappingDebug, new Vector2(0, 25), Color.Black);
-            spriteBatch.DrawString(testFont1, bttnTestStr, new Vector2(0, 100), Color.Black);
-            iDbg.Draw(gameTime, spriteBatch, testFont1, InputDebug.DebugPrints.CurrAction);
+
+			spriteBatch.DrawString(testFont1, /*keyDebug*/$"{1 / gameTime.ElapsedGameTime.TotalSeconds} FPS", new Vector2(), Color.Black);
+			//spriteBatch.DrawString(testFont1, /*keyDebug*/$"{/*1 / */gameTime.ElapsedGameTime.Ticks} FPS", new Vector2(0, 25), Color.Black);
+			//spriteBatch.DrawString(testFont1, mappingDebug, new Vector2(0, 25), Color.Black);
+			spriteBatch.DrawString(testFont1, bttnTestStr, new Vector2(0, 100), Color.Black);
+			iDbg.Draw(gameTime, spriteBatch, testFont1, InputDebug.DebugPrints.CurrAction);
 			//totalRightTriggerVal += InputComp.CurrPadState.Triggers.Right;
 			//avgRightTriggerVal = totalRightTriggerVal / numUpdates;
 			//maxRightTriggerVal = (InputComp.CurrPadState.Triggers.Right > maxRightTriggerVal) ? InputComp.CurrPadState.Triggers.Right : maxRightTriggerVal;
@@ -703,8 +702,8 @@ ToLeft: storyButton);
 			spriteBatch.DrawString(testFont1, GetBoundingFRectangle(_playerBody).Rectangle.ToString(), new Vector2(0, 75), Color.Black);
 			spriteBatch.DrawString(testFont1, _playerBody.LinearVelocity.ToString(), new Vector2(0, 100), Color.Black);
 			spriteBatch.End();
-            base.Draw(gameTime);
-        }
+			base.Draw(gameTime);
+		}
 
 		public static FRectangle GetBoundingFRectangle(Body body)
 		{
@@ -718,9 +717,7 @@ ToLeft: storyButton);
 			}
 			FRectangle final = rects[0];
 			for (int i = 1; i < rects.Count; i++)
-			{
 				final = FRectangle.Intersect(final, rects[i]);
-			}
 			return final;
 		}
 

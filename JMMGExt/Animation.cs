@@ -1,17 +1,7 @@
-﻿using Microsoft.Xna.Framework;
-using JMMGExt;
-
-namespace JMMGExt.Graphics
+﻿namespace JMMGExt.Graphics
 {
-	public enum AnimationState
-	{
-		Active = 0,
-		Inactive = 1,
-		ToRemove = 2
-	}
 	/// <summary>
 	/// TODO: Finish Docs
-	/// TODO: Change to state pattern
 	/// </summary>
 	public class Animation
 	{

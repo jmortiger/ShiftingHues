@@ -1,16 +1,5 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using JMMGExt;
-using JMMGExt.Graphics;
-
-namespace ShiftingHues.Library.Graphics
+﻿namespace ShiftingHues.Library.Graphics
 {
-	public enum AnimationState
-	{
-		Active = 0,
-		Inactive = 1,
-		ToRemove = 2
-	}
 	/// <summary>
 	/// TODO: Finish Docs
 	/// TODO: Change to state pattern

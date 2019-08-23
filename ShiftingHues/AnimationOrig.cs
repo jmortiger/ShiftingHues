@@ -1,13 +1,17 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-//using ShiftingHues.Graphics;
-using JMMGExt.Graphics;
 
 namespace ShiftingHues.Obsolete.Graphics
 {
+	public enum AnimationState
+	{
+		Active = 0,
+		Inactive = 1,
+		ToRemove = 2
+	}
+
 	/// <summary>
 	/// TODO: Finish Docs
-	/// TODO: Change to state pattern
 	/// </summary>
 	public class AnimationOrig
 	{
@@ -54,11 +58,11 @@ namespace ShiftingHues.Obsolete.Graphics
 		//	this.currentScreenBox = currentScreenBox;
 		//}
 		public AnimationOrig(
-			Texture2D spriteSheet, 
-			int rows, int columns, 
-			int spriteWidth, int spriteHeight, 
-			int spritesInSheet, 
-			Point locationOnScreen, 
+			Texture2D spriteSheet,
+			int rows, int columns,
+			int spriteWidth, int spriteHeight,
+			int spritesInSheet,
+			Point locationOnScreen,
 			int projectedWidth, int projectedHeight)
 		{
 			//this.CurrImgSourceRectangle = new Rectangle(0, 0, spriteWidth, spriteHeight);
@@ -83,12 +87,12 @@ namespace ShiftingHues.Obsolete.Graphics
 		/// <param name="projectedHeight"></param>
 		/// <param name="animFPS">The frames per second of this animation.</param>
 		public AnimationOrig(
-			Texture2D spriteSheet, 
-			int rows, int columns, 
-			int spriteWidth, int spriteHeight, 
-			int spritesInSheet, 
-			Point locationOnScreen, 
-			int projectedWidth, int projectedHeight, 
+			Texture2D spriteSheet,
+			int rows, int columns,
+			int spriteWidth, int spriteHeight,
+			int spritesInSheet,
+			Point locationOnScreen,
+			int projectedWidth, int projectedHeight,
 			float animFPS)
 			: this(
 				  new SpriteSheetOrig(spriteSheet, rows, columns, spriteWidth, spriteHeight, spritesInSheet),
@@ -140,8 +144,10 @@ namespace ShiftingHues.Obsolete.Graphics
 
 		public void Update(GameTime gameTime)
 		{
-			if (State == AnimationState.Inactive) State = AnimationState.Active;
-			if (State == AnimationState.ToRemove) return; // If the animation is set to be removed, then end the update. - J Mor
+			if (State == AnimationState.Inactive)
+				State = AnimationState.Active;
+			if (State == AnimationState.ToRemove)
+				return; // If the animation is set to be removed, then end the update. - J Mor
 
 			// Add to the time counter. - J Mor
 			timeSinceLastFrameChange += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -174,9 +180,12 @@ namespace ShiftingHues.Obsolete.Graphics
 
 		public void Draw(SpriteBatch sb)
 		{
-			if (State == AnimationState.ToRemove) return; // If the animation is set to be removed, then leave. - J Mor
-			if (SpriteSheet.Scale == Vector2.One) sb.Draw(SpriteSheet.Sheet, CurrentScreenBox, SpriteSheet.CurrImgSourceRectangle, SpriteSheet.ColorMask, SpriteSheet.Rotation, SpriteSheet.OriginOfRotation, SpriteSheet.SpriteEffect, SpriteSheet.LayerDepth);
-			else sb.Draw(SpriteSheet.Sheet, new Vector2(CurrentScreenBox.X, CurrentScreenBox.Y), SpriteSheet.CurrImgSourceRectangle, SpriteSheet.ColorMask, SpriteSheet.Rotation, SpriteSheet.OriginOfRotation, SpriteSheet.Scale, SpriteSheet.SpriteEffect, SpriteSheet.LayerDepth);
+			if (State == AnimationState.ToRemove)
+				return; // If the animation is set to be removed, then leave. - J Mor
+			if (SpriteSheet.Scale == Vector2.One)
+				sb.Draw(SpriteSheet.Sheet, CurrentScreenBox, SpriteSheet.CurrImgSourceRectangle, SpriteSheet.ColorMask, SpriteSheet.Rotation, SpriteSheet.OriginOfRotation, SpriteSheet.SpriteEffect, SpriteSheet.LayerDepth);
+			else
+				sb.Draw(SpriteSheet.Sheet, new Vector2(CurrentScreenBox.X, CurrentScreenBox.Y), SpriteSheet.CurrImgSourceRectangle, SpriteSheet.ColorMask, SpriteSheet.Rotation, SpriteSheet.OriginOfRotation, SpriteSheet.Scale, SpriteSheet.SpriteEffect, SpriteSheet.LayerDepth);
 			// sb.Draw(spriteSheet, new Vector2(currentScreenBox.X, currentScreenBox.Y), currentScreenBox, currentFrameSpriteBox, originOfRotation, Rotation, Scale, Color.White, SpriteEffects.None, 0);
 		}
 		#endregion
