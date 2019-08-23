@@ -173,9 +173,7 @@ namespace JMMGExt.Input
 		//public event EventHandler<MouseEventArgs> OnClick;
 		#endregion
 
-		#region Constructors
-		public InputComponent(Game game,
-							  List<BindInfo> binds = null)
+		public InputComponent(Game game, List<BindInfo> binds = null)
 			: base(game)
 		{
 			this.Binds = binds ?? new List<BindInfo>(NumGameActions);
@@ -187,7 +185,6 @@ namespace JMMGExt.Input
 
 			ConstructDefaultConfig();
 		}
-		#endregion
 
 		#region Methods
 		public override void Update(GameTime gameTime)

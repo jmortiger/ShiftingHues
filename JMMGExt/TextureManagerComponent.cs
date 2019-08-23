@@ -24,6 +24,8 @@ namespace JMMGExt
 		SpriteInstance GetSpriteInstance(string resourceID, FPoint position, DrawEffects2D? drawEffects = null);
 
 		AnimationInstance GetAnimationInstance(string resourceID, float fps, bool isLooped = false);
+
+		AnimationInstance GetAnimationInstance(string resourceID, bool isLooped = false);
 		#endregion
 	}
 
@@ -65,7 +67,10 @@ namespace JMMGExt
 				throw new ArgumentException("The provided key (" + resourceID + ") is in use already.", "resourceID");
 			}
 			else
+			{
 				sprites.Add(resourceID, spriteSheet[index]);
+				ServiceLocator.GetLogService().LogMessage("TextureService", "Sprite " + resourceID + " registered.", LogLevel.Verbose, LogType.Log);
+			}
 		}
 
 		public void RegisterSpritesFromSheet(string[] resourceIDs, SpriteSheet spriteSheet)
@@ -102,6 +107,7 @@ namespace JMMGExt
 			for (int i = 0; i < spriteIds.Length; i++)
 				animFrames[i] = GetSprite(spriteIds[i]);
 			animations.Add(resourceID, new Animation(animFrames, suggestedDrawEffects, fps));
+			ServiceLocator.GetLogService().LogMessage("TextureService", "Animation " + resourceID + " registered.", LogLevel.Verbose, LogType.Log);
 		}
 
 		public void RegisterAnimation(string resourceID, string[] spriteIds, DrawEffects2D suggestedDrawEffect, float fps)
@@ -112,6 +118,7 @@ namespace JMMGExt
 			for (int i = 0; i < spriteIds.Length; i++)
 				animFrames[i] = GetSprite(spriteIds[i]);
 			animations.Add(resourceID, new Animation(animFrames, suggestedDrawEffect, fps));
+			ServiceLocator.GetLogService().LogMessage("TextureService", "Animation " + resourceID + " registered.", LogLevel.Verbose, LogType.Log);
 		}
 
 		public SpriteInstance GetSpriteInstance(string resourceID, DrawEffects2D? drawEffects = null, Rectangle? destinationRectangle = null)
@@ -143,6 +150,18 @@ namespace JMMGExt
 			try
 			{
 				return new AnimationInstance(animations[resourceID], fps, isLooped);
+			}
+			catch (KeyNotFoundException e)
+			{
+				throw new KeyNotFoundException("The provided key (" + resourceID + ") was not found in the dictionary.", e);
+			}
+		}
+
+		public AnimationInstance GetAnimationInstance(string resourceID, bool isLooped = false)
+		{
+			try
+			{
+				return new AnimationInstance(animations[resourceID], isLooped);
 			}
 			catch (KeyNotFoundException e)
 			{

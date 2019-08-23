@@ -61,8 +61,8 @@
     <Compile Include="AnimationInstance.cs" />
     <Compile Include="BindInfo.cs" />
     <Compile Include="Circle.cs" />
-    <Compile Include="Class1.cs" />
-    <Compile Include="DebugLog.cs" />
+    <Compile Include="FileLogger.cs" />
+    <Compile Include="ILogService.cs" />
     <Compile Include="DrawEffects2D.cs" />
     <Compile Include="FPoint.cs" />
     <Compile Include="FRectangle.cs" />
@@ -76,6 +76,7 @@
     <Compile Include="InputDebug.cs" />
     <Compile Include="InputTypes.cs" />
     <Compile Include="IntegratedPhysicsComponent.cs" />
+    <Compile Include="LogMessage.cs" />
     <Compile Include="MouseStatePlus.cs" />
     <Compile Include="ParticleSystem.cs" />
     <Compile Include="PhysicsObjComponent.cs" />

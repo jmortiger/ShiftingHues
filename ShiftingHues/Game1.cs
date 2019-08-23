@@ -46,23 +46,28 @@ namespace ShiftingHues
 		public SimpleLoggerService SimpleLogger { get; private set; }
 		//public UIManager UI { get; private set; }
 
+		#region Helpers
+
+		public string AppExecutionPath => System.Reflection.Assembly.GetExecutingAssembly().Location;
+
+		public string AppStoragePath => System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
+
+		public string AppStorageDirectory => System.IO.Path.GetDirectoryName(AppStoragePath);
+
 		public Point ViewportCenter { get => GraphicsDevice.Viewport.Bounds.Center; }
 		public Vector2 ViewportCenterV2 { get => ViewportCenter.ToVector2(); }
 
 		public Point ViewportDimensions { get => GraphicsDevice.Viewport.Bounds.Size; }
 		public Vector2 ViewportDimensionsV2 { get => ViewportDimensions.ToVector2(); }
+		#endregion
 
 		private InputDebug iDbg;
-
-		//private UI.UIObject testBttn;
 
 		private string bttnTestStr = "";
 
 		public GameState CurrentGameState { get; private set; } = GameState.Menu;
 
 		private GameObject playerTest;
-
-		//private SimplePlayerPhysicsComponent simplePlayer;
 
 		private World _world;
 		private Body _playerBody;
@@ -73,6 +78,8 @@ namespace ShiftingHues
 		//private Vector3 _cameraPosition = new Vector3(0, 1.70f, 0); // camera is 1.7 meters above the ground
 		//float cameraViewWidth = 12.5f; // camera is 12.5 meters wide.
 		//private BasicEffect spriteBatchEffect;
+		//private UI.UIObject testBttn;
+		//private SimplePlayerPhysicsComponent simplePlayer;
 		private Texture2D tex_start_up;
 
 		private TextInput debugConsole;
@@ -81,8 +88,7 @@ namespace ShiftingHues
 		public Game1()
 		{
 			// Before ANYTHING ELSE, get the logger up and running.
-			//SimpleLogger = new SimpleLoggerService();
-
+			SimpleLogger = new FileLogger(this, LogLevel.Verbose, LogType.All, System.IO.Path.GetDirectoryName(AppExecutionPath));
 
 			graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
@@ -111,6 +117,7 @@ namespace ShiftingHues
 		{
 			// Init the GeonBit.UI UI Manager.
 			UserInterface.Initialize(Content, BuiltinThemes.editor);
+			SimpleLogger.LogMessage("UI", $"Initialized UserInterface w/ BuiltinThemes.editor.", LogLevel.TopLevel);
 
 			//// Init the debugConsole
 			//debugConsole = new TextInput(
@@ -199,8 +206,15 @@ namespace ShiftingHues
 
 			playerTest = new GameObject(new FRectangle(ViewportCenterV2, 256), ViewportCenterV2, Vector2.UnitX);
 			var spriteSheet = new SpriteSheet(tex_player_idle, idleSheetInfo.GetSourceRectangles()/*2, 4, 256, 256, 8*/);
-			var playerIdleAnim = new Animation(spriteSheet.Sprites, new DrawEffects2D(new Vector2(.5f, .5f), new Vector2(256/2)), 12);
-			var idleAnimInst = new AnimationInstance(playerIdleAnim, true);
+			string[] ids = new string[spriteSheet.SpritesInSheet];
+			for (int i = 0; i < spriteSheet.SpritesInSheet; i++)
+			{
+				ids[i] = "tex_player_idle" + i;
+			}
+			TextureComp.RegisterSpritesFromSheet(ids, spriteSheet);
+			TextureComp.RegisterAnimation("playerIdleAnim", ids, new DrawEffects2D(new Vector2(.5f, .5f), new Vector2(256 / 2)), 12);
+			//var playerIdleAnim = new Animation(spriteSheet.Sprites, new DrawEffects2D(new Vector2(.5f, .5f), new Vector2(256/2)), 12);
+			var idleAnimInst = /*new AnimationInstance(playerIdleAnim, true)*/TextureComp.GetAnimationInstance("playerIdleAnim", 12, true);
 			var graphics2D = new Graphics2DComponent(playerTest, null, new AnimationInstance[1] { idleAnimInst });
 			//simplePlayer = new SimplePlayerPhysicsComponent(playerTest);
 			var playerPhysics = new IntegratedPlayerPhysicsComponent(playerTest, _playerBody);
