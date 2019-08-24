@@ -1,4 +1,6 @@
-﻿namespace JMMGExt
+﻿using System;
+
+namespace JMMGExt
 {
 	public class LogMessage
 	{
@@ -18,8 +20,20 @@
 		/// The type of message this is.
 		/// </summary>
 		public readonly LogType Type;
+		///// <summary>
+		///// The <see cref="Type"/> of what sent this message.
+		///// </summary>
+		//public readonly Type senderType;
 
 		public LogMessage(LogLevel logLevel, LogType logType, string system, string message)
+		{
+			Level = logLevel;
+			Type = logType;
+			System = system;
+			Message = message;
+		}
+
+		public LogMessage(string system, string message, LogLevel logLevel = LogLevel.Verbose, LogType logType = LogType.Log)
 		{
 			Level = logLevel;
 			Type = logType;

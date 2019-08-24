@@ -55,6 +55,14 @@ namespace JMMGExt
 
 		public static ITextureService GetTextureService() => TextureService;
 		#endregion
+
+		public static void LogMessage(LogMessage message) => LogService?.LogMessage(message);
+
+		public static void LogMessage(
+			string system, 
+			string message, 
+			LogLevel logLevel = LogLevel.Verbose, 
+			LogType logType = LogType.Log) => LogService?.LogMessage(new LogMessage(system, message, logLevel, logType));
 		#endregion
 	}
 }

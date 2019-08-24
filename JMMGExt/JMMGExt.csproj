@@ -87,6 +87,7 @@
     <Compile Include="Sprite.cs" />
     <Compile Include="SpriteInstance.cs" />
     <Compile Include="SpriteSheet.cs" />
+    <Compile Include="TextInputs.cs" />
     <Compile Include="TextureManagerComponent.cs" />
     <Compile Include="TransformComponent.cs" />
     <Compile Include="Utils.cs" />
@@ -681,6 +682,12 @@
     <Content Include="Content\GeonBit.UI\themes\lowres\textures\slider_fancy_md.xml" />
     <Content Include="Content\GeonBit.UI\themes\lowres\textures\white_texture.png" />
     <Content Include="Content\GeonBit.UI\themes\lowres\ThemeData.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PipelineClasses\PipelineClasses.csproj">
+      <Project>{604880d2-0e3d-41f4-aa7a-dc58cedd1277}</Project>
+      <Name>PipelineClasses</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MonoGame.Framework.DesktopGL.3.7.1.189\build\MonoGame.Framework.DesktopGL.targets" Condition="Exists('..\packages\MonoGame.Framework.DesktopGL.3.7.1.189\build\MonoGame.Framework.DesktopGL.targets')" />

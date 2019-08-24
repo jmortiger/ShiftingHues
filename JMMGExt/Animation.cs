@@ -10,7 +10,13 @@
 		public DrawEffects2D[] SuggestedDrawEffects { get; private set; }
 		public int NumFrames { get => Frames.Length; }
 		public bool UseEachFramesDrawEffects { get; set; } = false;
+		/// <summary>
+		/// The <see cref=" DrawEffects2D"/> for the animation as a whole.
+		/// </summary>
 		public DrawEffects2D DrawEffects { get; set; }
+		/// <summary>
+		/// The suggested framerate for this <see cref="Animation"/>.
+		/// </summary>
 		public float SuggestedFPS { get; }
 		#endregion
 

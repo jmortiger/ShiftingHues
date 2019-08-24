@@ -13,12 +13,13 @@ namespace JMMGExt
 		/// No logging at all.
 		/// </summary>
 		None = 0,
+		Minimal = 1,
+		Median = 2,
+		Verbose = 3,
 		/// <summary>
 		/// Only top level game components are logging.
 		/// </summary>
-		TopLevel = 1,
-		Minimal = 2,
-		Verbose = 3
+		TopLevel
 	}
 
 	[Flags]
@@ -32,7 +33,7 @@ namespace JMMGExt
 		CriticalError	= 0b10000,
 
 		All				= 0b11111,
-		Errors			= 0b10100
+		AllErrors		= 0b10100
 	}
 
 	public interface ILogService
@@ -50,10 +51,10 @@ namespace JMMGExt
 
 	public class SimpleLoggerService : GameComponent, ILogService
 	{
-		private LogLevel currentLogLevel;
+		private readonly LogLevel currentLogLevel;
 		public LogLevel CurrentLogLevel => currentLogLevel;
 
-		private LogType currentLogTypes;
+		private readonly LogType currentLogTypes;
 		public LogType CurrentLogTypes => currentLogTypes;
 
 		public SimpleLoggerService(Game game, LogLevel logLevel, LogType logTypes) : base(game)

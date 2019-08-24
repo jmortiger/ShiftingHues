@@ -25,94 +25,6 @@ namespace JMMGExt.Input
 		ToggleConsole,
 		ToggleDebugMenu
 	}
-	public enum TextInputs
-	{
-		A,
-		B,
-		C,
-		D,
-		E,
-		F,
-		G,
-		H,
-		I,
-		J,
-		K,
-		L,
-		M,
-		N,
-		O,
-		P,
-		Q,
-		R,
-		S,
-		T,
-		U,
-		V,
-		W,
-		X,
-		Y,
-		Z,
-		a,
-		b,
-		c,
-		d,
-		e,
-		f,
-		g,
-		h,
-		i,
-		j,
-		k,
-		l,
-		m,
-		n,
-		o,
-		p,
-		q,
-		r,
-		s,
-		t,
-		u,
-		v,
-		w,
-		x,
-		y,
-		z,
-		One,
-		Two,
-		Three,
-		Four,
-		Five,
-		Six,
-		Seven,
-		Eight,
-		Nine,
-		Zero,
-		Space,
-		Comma,
-		Period,
-		ForwardSlash,
-		BackSlash,
-		LessThan,
-		GreaterThan,
-		QuestionMark,
-		DoubleQuote,
-		SingleQuote,
-		ParentheseLeft,
-		ParentheseRight,
-		Plus,
-		Minus,
-		Equals,
-
-		Backspace,
-		Enter,
-		LeftArrow,
-		RightArrow,
-		UpArrow,
-		DownArrow,
-		Tab
-	}
 	public class InputComponent : GameComponent, IInputService
 	{
 		#region Fields and Properties
@@ -142,8 +54,6 @@ namespace JMMGExt.Input
 
 		private List<Tuple<Func<bool>, Action>> ObjsToFire = new List<Tuple<Func<bool>, Action>>(3);
 
-		//public delegate void MouseClick(MouseEventArgs e);
-
 		#region MouseEvents
 
 		public event MouseEvent OnMouseMove;
@@ -169,8 +79,6 @@ namespace JMMGExt.Input
 
 		public event MenuEvent AnyMenuInput;
 		#endregion
-
-		//public event EventHandler<MouseEventArgs> OnClick;
 		#endregion
 
 		public InputComponent(Game game, List<BindInfo> binds = null)
@@ -189,6 +97,7 @@ namespace JMMGExt.Input
 		#region Methods
 		public override void Update(GameTime gameTime)
 		{
+			ServiceLocator.LogMessage("Input", "Update started", LogLevel.Verbose, LogType.Log);
 			// Store old states & actions
 			var tPrev = PrevActions; // Reuse PrevActions to prevent unneed mem alloc
 			PrevKeyboardState = CurrKeyboardState;
@@ -264,6 +173,7 @@ namespace JMMGExt.Input
 			}
 
 			base.Update(gameTime);
+			ServiceLocator.LogMessage("Input", "Update finished", LogLevel.Verbose, LogType.Log);
 		}
 
 		#region GetInput Methods
@@ -489,6 +399,7 @@ namespace JMMGExt.Input
 		public void SetNextMousePosition(Vector2 newPos)
 		{
 			NextMousePosit = newPos;
+			ServiceLocator.LogMessage("Input", $"Mouse position to be set to {{{newPos.ToString()}}} next frame.");
 		}
 
 		//public void SetNextMousePosition(Point newPos) => SetNextMousePosition(newPos.ToVector2());
