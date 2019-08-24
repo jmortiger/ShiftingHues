@@ -73,12 +73,22 @@ namespace JMMGExt
 			}
 		}
 
+		/// <summary>
+		/// Registers all <see cref="Sprite"/>s on the given <see cref="SpriteSheet"/>.
+		/// </summary>
+		/// <param name="resourceIDs">A list of the respective ID's for each <see cref="Sprite"/> in the given <see cref="SpriteSheet"/>.</param>
+		/// <param name="spriteSheet">The sheet to register sprites from.</param>
+		/// <remarks>
+		/// Is routed through <see cref="RegisterSprite(string, SpriteSheet, int)"/> 
+		/// to guarantee error checking and debug logging is processed correctly.
+		/// </remarks>
 		public void RegisterSpritesFromSheet(string[] resourceIDs, SpriteSheet spriteSheet)
 		{
 			if (resourceIDs.Length != spriteSheet.Sprites.Length)
 				throw new ArgumentException("The list of keys (resourceIDs) must be the same length as the number of sprites in the sheet.", "resourceID");
 			for (int i = 0; i < resourceIDs.Length || i < spriteSheet.Sprites.Length; i++)
-				sprites.Add(resourceIDs[i], spriteSheet.Sprites[i]);
+				RegisterSprite(resourceIDs[i], spriteSheet/*.Sprites[i]*/, i);
+				//sprites.Add(resourceIDs[i], spriteSheet.Sprites[i]);
 		}
 
 		private Sprite GetSprite(string resourceID)

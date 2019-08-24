@@ -35,7 +35,7 @@
 			this.SuggestedDrawEffects = new DrawEffects2D[frames.Length];
 			for (int i = 0; i < frames.Length; i++)
 			{
-				this.SuggestedDrawEffects[i] = new DrawEffects2D(0);
+				this.SuggestedDrawEffects[i] = DrawEffects2D.DefaultEffects;
 			}
 		}
 

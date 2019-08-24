@@ -33,15 +33,15 @@ namespace JMMGExt.Graphics
 		public SpriteInstance(Sprite sprite, DrawEffects2D? drawEffects = null, Rectangle? destinationRectangle = null)
 		{
 			this.Sprite = sprite;
-			this.DrawEffects = drawEffects ?? new DrawEffects2D(0);
+			this.DrawEffects = drawEffects ?? DrawEffects2D.DefaultEffects;
 			this.DestinationRectangle = destinationRectangle ?? /*drawEffects.DestinationRectangle*/sprite.SourceRect;
 		}
 
 		public SpriteInstance(Sprite sprite, DrawEffects2D? drawEffects, FPoint position)
 		{
 			this.Sprite = sprite;
-			this.DrawEffects = drawEffects ?? new DrawEffects2D(0);
-			this.Position = Position;
+			this.DrawEffects = drawEffects ?? DrawEffects2D.DefaultEffects;
+			this.Position = position;
 		}
 
 		/// <summary>

@@ -208,9 +208,7 @@ namespace ShiftingHues
 			var spriteSheet = new SpriteSheet(tex_player_idle, idleSheetInfo.GetSourceRectangles()/*2, 4, 256, 256, 8*/);
 			string[] ids = new string[spriteSheet.SpritesInSheet];
 			for (int i = 0; i < spriteSheet.SpritesInSheet; i++)
-			{
-				ids[i] = "tex_player_idle" + i;
-			}
+				ids[i] = idleSheetInfo.sprites[i].resourceID;
 			TextureComp.RegisterSpritesFromSheet(ids, spriteSheet);
 			TextureComp.RegisterAnimation("playerIdleAnim", ids, new DrawEffects2D(new Vector2(.5f, .5f), new Vector2(256 / 2)), 12);
 			//var playerIdleAnim = new Animation(spriteSheet.Sprites, new DrawEffects2D(new Vector2(.5f, .5f), new Vector2(256/2)), 12);

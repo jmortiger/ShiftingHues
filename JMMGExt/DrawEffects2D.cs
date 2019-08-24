@@ -11,6 +11,8 @@ namespace JMMGExt.Graphics
 	{
 		#region Fields and Properties
 
+		public static readonly DrawEffects2D DefaultEffects = new DrawEffects2D(Vector2.One, Color.White, Vector2.Zero, 0f, SpriteEffects.None, 0f);
+
 		public Vector2 Scale/* { get; set; }*/;
 
 		public Color Tint /*{ get; private set; }*/;
@@ -106,12 +108,12 @@ namespace JMMGExt.Graphics
 			float LayerDepth = 0f)
 			: this(Vector2.One, Tint, Vector2.Zero, Rotation, SpriteEffectOrientation, LayerDepth) { }
 
-		/// <summary>
-		/// Sets parameters to their preffered defaults (instead of setting Scale to {0, 0}, etc.).
-		/// </summary>
-		/// <param name="setDefaults">Does nothing, is just here to differentiate from the default constructor.</param>
-		public DrawEffects2D(int setDefaults)
-			: this(Vector2.One, Color.White, Vector2.Zero, 0f, SpriteEffects.None, 0f) { }
+		///// <summary>
+		///// Sets parameters to their preferred defaults (instead of setting Scale to {0, 0}, etc.).
+		///// </summary>
+		///// <param name="setDefaults">Does nothing, is just here to differentiate from the default constructor.</param>
+		//public DrawEffects2D(int setDefaults)
+		//	: this(Vector2.One, Color.White, Vector2.Zero, 0f, SpriteEffects.None, 0f) { }
 		#endregion
 		#endregion
 

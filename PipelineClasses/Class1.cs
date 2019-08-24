@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using System.IO;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
@@ -9,8 +6,7 @@ using Newtonsoft.Json.Linq;
 
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
-
-//using ShiftingHues;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace PipelineClasses
 {
@@ -247,5 +243,126 @@ namespace PipelineClasses
 
 		//public FRectangle GetFRectangle() => new FRectangle(X, Y, Width, Height);
 		public Rectangle GetRectangle() => new Rectangle(X, Y, Width, Height);
+	}
+
+	[JsonObject]
+	[Serializable]
+	public class AnimationJSON/* : ISerializable*/
+	{
+		public string resourceID;
+		public string[] spriteIDs;
+		public DrawEffects2DJSON[] suggestedDrawEffects;
+		public bool useEachFramesDrawEffects;
+		public DrawEffects2DJSON drawEffects;
+		public float suggestedFPS;
+
+		public AnimationJSON()
+		{
+
+		}
+
+		[JsonConstructor]
+		public AnimationJSON(
+			string resourceID, 
+			string[] spriteIDs,
+			DrawEffects2DJSON[] suggestedDrawEffects,
+			bool useEachFramesDrawEffects,
+			DrawEffects2DJSON drawEffects,
+			float suggestedFPS)
+		{
+			this.resourceID = resourceID;
+			this.spriteIDs = spriteIDs;
+			this.suggestedDrawEffects = suggestedDrawEffects;
+			this.useEachFramesDrawEffects = useEachFramesDrawEffects;
+			this.drawEffects = drawEffects;
+			this.suggestedFPS = suggestedFPS;
+		}
+
+		//public SpriteSheetJSON(SerializationInfo info, StreamingContext context)
+		//{
+		//	resourceID = info.GetString("resourceID");
+		//	textureFilePath = info.GetString("textureFilePath");
+		//	sprites = (SpriteJSON[])info.GetValue("sprites", typeof(SpriteJSON[]));
+		//}
+
+		//public void GetObjectData(SerializationInfo info, StreamingContext context)
+		//{
+		//	info.AddValue("resourceID", resourceID);
+		//	info.AddValue("textureFilePath", textureFilePath);
+		//	info.AddValue("sprites", sprites);
+		//	//throw new NotImplementedException();
+		//}
+
+		//public Rectangle[] GetSourceRectangles()
+		//{
+		//	Rectangle[] rectangles = new Rectangle[sprites.Length];
+		//	for (int i = 0; i < sprites.Length; i++)
+		//	{
+		//		rectangles[i] = sprites[i].sourceRect.GetRectangle();
+		//	}
+		//	return rectangles;
+		//}
+
+		//public SpriteSheet GetSpriteSheet() => new SpriteSheet()
+	}
+
+	[JsonObject]
+	public class DrawEffects2DJSON
+	{
+		public Vector2 Scale;
+		public Color Tint;
+		public float Rotation;
+		public Vector2 Origin;
+		public SpriteEffects SpriteEffectOrientation;
+		public float LayerDepth;
+
+		[JsonConstructor]
+		public DrawEffects2DJSON(
+			Vector2 Scale,
+			Color Tint,
+			Vector2 Origin,
+			float Rotation = 0f,
+			SpriteEffects SpriteEffectOrientation = SpriteEffects.None,
+			float LayerDepth = 0f)
+		{
+			this.Scale = Scale;
+			this.Tint = Tint;
+			this.Rotation = Rotation;
+			this.Origin = Origin;
+			this.SpriteEffectOrientation = SpriteEffectOrientation;
+			this.LayerDepth = LayerDepth;
+		}
+	}
+
+	[JsonObject]
+	public class Vector2JSON
+	{
+		public float X;
+		public float Y;
+
+		[JsonConstructor]
+		public Vector2JSON(float X, float Y)
+		{
+			this.X = X;
+			this.Y = Y;
+		}
+	}
+
+	[JsonObject]
+	public class ColorJSON
+	{
+		public float R;
+		public float G;
+		public float B;
+		public float A;
+
+		[JsonConstructor]
+		public ColorJSON(float R, float G, float B, float A)
+		{
+			this.R = R;
+			this.G = G;
+			this.B = B;
+			this.A = A;
+		}
 	}
 }
