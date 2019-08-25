@@ -12,15 +12,19 @@ namespace JMMGExt.Graphics
 		/// </summary>
 		public int SpriteIndex { get; private set; }
 
+		public readonly DrawEffects2D SuggestedDrawEffects;
+
 		public Rectangle SourceRect { get => Sheet.SpriteSourceRects[SpriteIndex]; }
 		#endregion
 
-		#region Constructors
-		public Sprite(SpriteSheet sheet, int spriteIndex)
+		public Sprite(
+			SpriteSheet sheet, 
+			int spriteIndex, 
+			DrawEffects2D? suggestedEffect = null)
 		{
 			this.Sheet = sheet;
 			this.SpriteIndex = spriteIndex;
+			this.SuggestedDrawEffects = suggestedEffect ?? DrawEffects2D.DefaultEffects;
 		}
-		#endregion
 	}
 }

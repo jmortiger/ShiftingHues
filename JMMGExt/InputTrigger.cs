@@ -3,7 +3,7 @@
 	/// <summary>
 	/// The different ways an input (i.e. a button press) can trigger an action.
 	/// </summary>
-	public enum InputTypes
+	public enum InputTrigger
 	{
 		/// <summary>
 		/// A continued press of a button (e.g firing an automatic gun, moving forward, ...).
@@ -18,7 +18,7 @@
 		/// </summary>
 		OnPress,
 		/// <summary>
-		/// Fires only when button is released (e.g firing a bow (Minecraft), ...)
+		/// Fires only when button is released (e.g firing a bow (Minecraft), clicking a button (UIs)...)
 		/// </summary>
 		OnRelease
 	}

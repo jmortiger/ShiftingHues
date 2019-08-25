@@ -61,6 +61,7 @@
     <Compile Include="AnimationInstance.cs" />
     <Compile Include="BindInfo.cs" />
     <Compile Include="Circle.cs" />
+    <Compile Include="DrawEffects2DOld.cs" />
     <Compile Include="FileLogger.cs" />
     <Compile Include="ILogService.cs" />
     <Compile Include="DrawEffects2D.cs" />
@@ -74,7 +75,7 @@
     <Compile Include="InputButton.cs" />
     <Compile Include="InputComponent.cs" />
     <Compile Include="InputDebug.cs" />
-    <Compile Include="InputTypes.cs" />
+    <Compile Include="InputTrigger.cs" />
     <Compile Include="IntegratedPhysicsComponent.cs" />
     <Compile Include="LogMessage.cs" />
     <Compile Include="MouseStatePlus.cs" />

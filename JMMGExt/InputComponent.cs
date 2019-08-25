@@ -425,78 +425,78 @@ namespace JMMGExt.Input
 		public void ConstructDefaultConfig()
 		{
 			// ExitGame: Escape Key (Held)
-			Dictionary<InputButton, InputTypes> bB = new Dictionary<InputButton, InputTypes>(2)
+			Dictionary<InputButton, InputTrigger> bB = new Dictionary<InputButton, InputTrigger>(2)
 			{
-				{ new InputButton(Buttons.Back), InputTypes.PushAndHold },
-				{ new InputButton(Keys.Escape), InputTypes.PushAndHold }
+				{ new InputButton(Buttons.Back), InputTrigger.PushAndHold },
+				{ new InputButton(Keys.Escape), InputTrigger.PushAndHold }
 			};
 			Binds.Add(new BindInfo(this, GameAction.ExitGame, bB));
 
 			// MoveLeft/MenuLeft: A Key, Left Key, NumPad4
-			bB = new Dictionary<InputButton, InputTypes>(5)
+			bB = new Dictionary<InputButton, InputTrigger>(5)
 			{
-				{ new InputButton(Buttons.DPadLeft), InputTypes.PushAndHold },
-				{ new InputButton(Buttons.LeftThumbstickLeft), InputTypes.PushAndHold },
-				{ new InputButton(Keys.A), InputTypes.PushAndHold },
-				{ new InputButton(Keys.Left), InputTypes.PushAndHold },
-				{ new InputButton(Keys.NumPad4), InputTypes.PushAndHold }
+				{ new InputButton(Buttons.DPadLeft), InputTrigger.PushAndHold },
+				{ new InputButton(Buttons.LeftThumbstickLeft), InputTrigger.PushAndHold },
+				{ new InputButton(Keys.A), InputTrigger.PushAndHold },
+				{ new InputButton(Keys.Left), InputTrigger.PushAndHold },
+				{ new InputButton(Keys.NumPad4), InputTrigger.PushAndHold }
 			};
 			Binds.Add(new BindInfo(this, GameAction.MenuLeft, bB));
 			Binds.Add(new BindInfo(this, GameAction.MoveLeft, bB));
 
-			bB = new Dictionary<InputButton, InputTypes>(5)
+			bB = new Dictionary<InputButton, InputTrigger>(5)
 			{
-				{ new InputButton(Buttons.DPadRight), InputTypes.PushAndHold },
-				{ new InputButton(Buttons.LeftThumbstickRight), InputTypes.PushAndHold },
-				{ new InputButton(Keys.D), InputTypes.PushAndHold },
-				{ new InputButton(Keys.Right), InputTypes.PushAndHold },
-				{ new InputButton(Keys.NumPad6), InputTypes.PushAndHold }
+				{ new InputButton(Buttons.DPadRight), InputTrigger.PushAndHold },
+				{ new InputButton(Buttons.LeftThumbstickRight), InputTrigger.PushAndHold },
+				{ new InputButton(Keys.D), InputTrigger.PushAndHold },
+				{ new InputButton(Keys.Right), InputTrigger.PushAndHold },
+				{ new InputButton(Keys.NumPad6), InputTrigger.PushAndHold }
 			};
 			Binds.Add(new BindInfo(this, GameAction.MenuRight, bB));
 			Binds.Add(new BindInfo(this, GameAction.MoveRight, bB));
 
-			bB = new Dictionary<InputButton, InputTypes>(5)
+			bB = new Dictionary<InputButton, InputTrigger>(5)
 			{
-				{ new InputButton(Buttons.DPadUp), InputTypes.PushAndHold },
-				{ new InputButton(Buttons.LeftThumbstickUp), InputTypes.PushAndHold },
-				{ new InputButton(Keys.W), InputTypes.PushAndHold },
-				{ new InputButton(Keys.Up), InputTypes.PushAndHold },
-				{ new InputButton(Keys.NumPad8), InputTypes.PushAndHold }
+				{ new InputButton(Buttons.DPadUp), InputTrigger.PushAndHold },
+				{ new InputButton(Buttons.LeftThumbstickUp), InputTrigger.PushAndHold },
+				{ new InputButton(Keys.W), InputTrigger.PushAndHold },
+				{ new InputButton(Keys.Up), InputTrigger.PushAndHold },
+				{ new InputButton(Keys.NumPad8), InputTrigger.PushAndHold }
 			};
 			Binds.Add(new BindInfo(this, GameAction.MenuUp, bB));
 			Binds.Add(new BindInfo(this, GameAction.Jump, bB));
 
-			bB = new Dictionary<InputButton, InputTypes>(3)
+			bB = new Dictionary<InputButton, InputTrigger>(3)
 			{
-				{ new InputButton(Buttons.A), InputTypes.PushAndHold },
-				{ new InputButton(Keys.Space), InputTypes.PushAndHold },
-				{ new InputButton(MouseButtons.ScrollUp), InputTypes.PushAndHold }
+				{ new InputButton(Buttons.A), InputTrigger.PushAndHold },
+				{ new InputButton(Keys.Space), InputTrigger.PushAndHold },
+				{ new InputButton(MouseButtons.ScrollUp), InputTrigger.PushAndHold }
 			};
 			Binds.Add(new BindInfo(this, GameAction.Jump, bB));
 
-			bB = new Dictionary<InputButton, InputTypes>(5)
+			bB = new Dictionary<InputButton, InputTrigger>(5)
 			{
-				{ new InputButton(Buttons.DPadDown), InputTypes.PushAndHold },
-				{ new InputButton(Buttons.LeftThumbstickDown), InputTypes.PushAndHold },
-				{ new InputButton(Keys.S), InputTypes.PushAndHold },
-				{ new InputButton(Keys.Down), InputTypes.PushAndHold },
-				{ new InputButton(Keys.NumPad2), InputTypes.PushAndHold }
+				{ new InputButton(Buttons.DPadDown), InputTrigger.PushAndHold },
+				{ new InputButton(Buttons.LeftThumbstickDown), InputTrigger.PushAndHold },
+				{ new InputButton(Keys.S), InputTrigger.PushAndHold },
+				{ new InputButton(Keys.Down), InputTrigger.PushAndHold },
+				{ new InputButton(Keys.NumPad2), InputTrigger.PushAndHold }
 			};
 			Binds.Add(new BindInfo(this, GameAction.MenuDown, bB));
 
-			bB = new Dictionary<InputButton, InputTypes>(3)
+			bB = new Dictionary<InputButton, InputTrigger>(3)
 			{
                 //{ new InputButton(Buttons.RightTrigger), InputTypes.PushAndHold },
-                { new InputButton(Buttons.X), InputTypes.PushAndHold },
-				{ new InputButton(Keys.LeftShift), InputTypes.PushAndHold },
-				{ new InputButton(Keys.RightShift), InputTypes.PushAndHold }
+                { new InputButton(Buttons.X), InputTrigger.PushAndHold },
+				{ new InputButton(Keys.LeftShift), InputTrigger.PushAndHold },
+				{ new InputButton(Keys.RightShift), InputTrigger.PushAndHold }
 			};
 			Binds.Add(new BindInfo(this, GameAction.Sprint, bB));
 
 			// Console
-			bB = new Dictionary<InputButton, InputTypes>(1)
+			bB = new Dictionary<InputButton, InputTrigger>(1)
 			{
-				{new InputButton(Keys.OemTilde), InputTypes.OnPress }
+				{new InputButton(Keys.OemTilde), InputTrigger.OnPress }
 			};
 			Binds.Add(new BindInfo(this, GameAction.ToggleConsole, bB));
 

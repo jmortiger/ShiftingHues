@@ -135,6 +135,16 @@ namespace ShiftingHues.Library
 			return new FPoint(value1.X - value2.X, value1.Y - value2.Y);
 		}
 		/// <summary>
+		/// Subtracts a <see cref="FPoint"/> from a <see cref="Vector2"/>.
+		/// </summary>
+		/// <param name="value1">Source <see cref="Vector2"/> on the left of the sub sign.</param>
+		/// <param name="value2">Source <see cref="FPoint"/> on the right of the sub sign.</param>
+		/// <returns>Result of the subtraction.</returns>
+		public static Vector2 operator -(Vector2 value1, FPoint value2)
+		{
+			return new Vector2(value1.X - value2.X, value1.Y - value2.Y);
+		}
+		/// <summary>
 		/// Multiplies the components of two points by each other.
 		/// </summary>
 		/// <param name="value1">Source <see cref="FPoint"/> on the left of the mul sign.</param>
@@ -194,6 +204,11 @@ namespace ShiftingHues.Library
 		/// </summary>
 		/// <param name="p">The <see cref="FPoint"/> to cast.</param>
 		public static explicit operator Point(FPoint p) { return new Point((int)Math.Round(p.X), (int)Math.Round(p.Y)); }
+		/// <summary>
+		/// Cast the <see cref="Point"/> as a <see cref="FPoint"/>.
+		/// </summary>
+		/// <param name="p">The <see cref="Point"/> to cast.</param>
+		public static explicit operator FPoint(Point p) => new FPoint(p.X, p.Y);
 		#endregion
 		#endregion
 		#region Public methods

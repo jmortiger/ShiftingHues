@@ -11,7 +11,6 @@ namespace JMMGExt.Graphics
 		public Sprite Sprite { get; }
 
 		public DrawEffects2D DrawEffects;
-		//public DrawEffects2D DrawEffects { get => drawEffects; private set => drawEffects = value; }
 
 		public Rectangle SourceRect { get => Sprite.SourceRect; }
 
@@ -27,20 +26,32 @@ namespace JMMGExt.Graphics
 
 		public FPoint Position { get; set; }
 
-		public Point PositionAsPoint { get => Position.ToPoint(); set => Position = new FPoint(value.X, value.Y); }
+		public Point PositionAsPoint { get => Position.ToPoint(); set => Position = (FPoint)value; }
 		#endregion
 
-		public SpriteInstance(Sprite sprite, DrawEffects2D? drawEffects = null, Rectangle? destinationRectangle = null)
+		#region Constructors
+
+		private SpriteInstance(Sprite sprite, DrawEffects2D? drawEffects = null)
 		{
 			this.Sprite = sprite;
 			this.DrawEffects = drawEffects ?? DrawEffects2D.DefaultEffects;
-			this.DestinationRectangle = destinationRectangle ?? /*drawEffects.DestinationRectangle*/sprite.SourceRect;
 		}
 
-		public SpriteInstance(Sprite sprite, DrawEffects2D? drawEffects, FPoint position)
+		public SpriteInstance(
+			Sprite sprite,
+			DrawEffects2D? drawEffects = null,
+			Rectangle? destinationRectangle = null)
+			: this(sprite, drawEffects)
 		{
-			this.Sprite = sprite;
-			this.DrawEffects = drawEffects ?? DrawEffects2D.DefaultEffects;
+			this.DestinationRectangle = destinationRectangle ?? sprite.SourceRect;
+		}
+
+		public SpriteInstance(
+			Sprite sprite,
+			DrawEffects2D? drawEffects,
+			FPoint position)
+			: this(sprite, drawEffects)
+		{
 			this.Position = position;
 		}
 
@@ -51,6 +62,7 @@ namespace JMMGExt.Graphics
 		/// <remarks>I want the <see cref="Sprite"/> to be a reference, and since <see cref="DrawEffects2D"/> and <see cref="Rectangle"/> are structs, it will copy the values.</remarks>
 		public SpriteInstance(SpriteInstance orig)
 			: this(orig.Sprite, orig.DrawEffects, orig.DestinationRectangle) { }
+		#endregion
 
 		#region Methods
 		#region DrawSprite

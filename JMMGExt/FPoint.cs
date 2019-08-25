@@ -204,6 +204,11 @@ namespace JMMGExt
 		/// </summary>
 		/// <param name="p">The <see cref="FPoint"/> to cast.</param>
 		public static explicit operator Point(FPoint p) { return new Point((int)Math.Round(p.X), (int)Math.Round(p.Y)); }
+		/// <summary>
+		/// Cast the <see cref="Point"/> as a <see cref="FPoint"/>.
+		/// </summary>
+		/// <param name="p">The <see cref="Point"/> to cast.</param>
+		public static explicit operator FPoint(Point p) => new FPoint(p.X, p.Y);
 		#endregion
 		#endregion
 		#region Public methods
