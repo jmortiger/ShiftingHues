@@ -38,7 +38,7 @@ namespace JMMGExt.Graphics
 				Update = (GameTime time) =>
 				{
 					if (animation.IsPlaying)
-						return new ActiveState(animation);
+						return new ActiveState(animation)?.Update(time);
 					return this;
 				};
 				Draw = null;
@@ -71,7 +71,7 @@ namespace JMMGExt.Graphics
 				Update = (GameTime time) =>
 				{
 					if (animation.IsPlaying)
-						return new ActiveState(animation);
+						return new ActiveState(animation)?.Update(time);
 					return this;
 				};
 				Draw = (SpriteBatch batch) =>
@@ -124,7 +124,7 @@ namespace JMMGExt.Graphics
 				Update = (GameTime time) =>
 				{
 					if (animation.IsPlaying)
-						return new ActiveState(animation);
+						return new ActiveState(animation)?.Update(time);
 					return this;
 				};
 				Draw = null;
@@ -299,6 +299,12 @@ namespace JMMGExt.Graphics
 		}
 		#endregion
 
+		public event EventHandler Completed;
+		public event EventHandler Paused;
+		public event EventHandler Played;
+		public event EventHandler Stopped;
+		public event EventHandler AfterReset;
+
 		#region Fields and Properties
 		// TODO: Consider a IsReversed thing
 
@@ -309,8 +315,6 @@ namespace JMMGExt.Graphics
 		public float SecondsPerFrame { get; set; }
 
 		public float FPS { get => 1f / SecondsPerFrame; set => SecondsPerFrame = 1f / value; }
-
-		public bool IsLooped { get; set; } = false;
 		public int TimesLooped { get; private set; }
 
 		/// <summary>
@@ -324,6 +328,13 @@ namespace JMMGExt.Graphics
 
 		public Point? Posit = null;
 
+		#region Advanced Control
+
+		/// <summary>
+		/// Controls whether to loop the animation or not.
+		/// </summary>
+		public bool IsLooped { get; set; } = false;
+
 		/// <summary>
 		/// Controls whether the anim can skip frames of animation to 
 		/// "catch up" to the frame it should be at if its running slow.
@@ -335,6 +346,7 @@ namespace JMMGExt.Graphics
 		///// Controls whether to crossfade animation frames.
 		///// </summary>
 		//public bool CrossfadeFrames { get; set; } = false;
+		#endregion
 
 		private IAnimationState CurrState { get; set; }/* = new InactiveState(this);*/
 		#endregion
@@ -375,14 +387,25 @@ namespace JMMGExt.Graphics
 			CurrState = new InactiveState(this);
 		}
 
-		public void Play() => IsPlaying = true;
+		public void Play()
+		{
+			IsPlaying = true;
+			CurrState = new ActiveState(this);
+			Played?.Invoke(this, new EventArgs());
+		}
 
-		public void Pause() => IsPlaying = false;
+		public void Pause()
+		{
+			IsPlaying = false;
+			CurrState = new PausedState(this);
+			Paused?.Invoke(this, new EventArgs());
+		}
 
 		public void Stop()
 		{
 			IsPlaying = false;
 			CurrState = new StoppedState(this);
+			Stopped?.Invoke(this, new EventArgs());
 		}
 
 		public void Reset()
@@ -392,6 +415,7 @@ namespace JMMGExt.Graphics
 			timeSinceLastFrameChange = 0;
 			CurrentFrame = 0;
 			CurrState = new InactiveState(this);
+			AfterReset?.Invoke(this, new EventArgs());
 		}
 
 		public void Update(GameTime time) => CurrState = CurrState.Update?.Invoke(time);//CurrState = CurrState.Update(time);
