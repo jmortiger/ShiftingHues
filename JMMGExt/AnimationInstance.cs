@@ -76,11 +76,20 @@ namespace JMMGExt.Graphics
 				};
 				Draw = (SpriteBatch batch) =>
 				{
-					if (animation.Animation.UseEachFramesDrawEffects)
-						animation.AnimationFrames[animation.CurrentFrame].DrawSprite(batch);
+					if (animation.Posit == null)
+					{
+						if (animation.Animation.UseEachFramesDrawEffects)
+							animation.AnimationFrames[animation.CurrentFrame].DrawSprite(batch);
+						else
+							animation.AnimationFrames[animation.CurrentFrame].DrawSprite(batch, animation.Animation.DrawEffects);
+					}
 					else
-						animation.AnimationFrames[animation.CurrentFrame].DrawSprite(batch, animation.Animation.DrawEffects);
-					//throw new NotImplementedException();
+					{
+						if (animation.Animation.UseEachFramesDrawEffects)
+							animation.AnimationFrames[animation.CurrentFrame].DrawSprite(batch, null, animation.Posit.Value);
+						else
+							animation.AnimationFrames[animation.CurrentFrame].DrawSprite(batch, animation.Animation.DrawEffects, animation.Posit.Value);
+					}
 				};
 			}
 
@@ -99,6 +108,36 @@ namespace JMMGExt.Graphics
 			//		animation.AnimationFrames[animation.CurrentFrame].DrawSprite(batch, animation.Animation.DrawEffects);
 			//	//throw new NotImplementedException();
 			//}
+		}
+
+		private class StoppedState : IAnimationState
+		{
+			//private AnimationInstance animation;
+
+			public Func<GameTime, IAnimationState> Update { get; }
+
+			public Action<SpriteBatch> Draw { get; }
+
+			internal StoppedState(AnimationInstance animation)
+			{
+				//this.animation = animation;
+				Update = (GameTime time) =>
+				{
+					if (animation.IsPlaying)
+						return new ActiveState(animation);
+					return this;
+				};
+				Draw = null;
+			}
+
+			//public IAnimationState Update(GameTime time)
+			//{
+			//	if (animation.IsPlaying)
+			//		return new ActiveState(animation);
+			//	return this;
+			//}
+
+			//public void Draw(SpriteBatch batch) { }
 		}
 
 		private class ActiveState : IAnimationState
@@ -120,29 +159,32 @@ namespace JMMGExt.Graphics
 						// Add to the time counter. - J Mor
 						animation.timeSinceLastFrameChange += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-						// If enough time has gone by to actually flip frames... - J Mor
-						if (animation.timeSinceLastFrameChange >= animation.SecondsPerFrame)
+						// If enough time has gone by to actually change frames...
+						while (animation.timeSinceLastFrameChange >= animation.SecondsPerFrame)
 						{
-							// ...then update the frame, and... - J Mor
+							// ...then update the frame, and...
 							animation.CurrentFrame++;
-							// ...if the current frame is the last, ... - J Mor
+							// ...if the current frame is the last, ...
 							if (animation.CurrentFrame >= animation.Animation.NumFrames)
 							{
-								if (animation.IsLooped) // ...and the animation is set to wrap... - J Mor
+								if (animation.IsLooped) // ...and the animation is set to wrap...
 								{
-									// ...then update the frame # & the times looped. - J Mor
+									// ...then update the frame # & the times looped.
 									animation.CurrentFrame = 0;
 									animation.TimesLooped++;
 								}
-								else // if not, the animation is done, and should be removed soon. - J Mor
+								else // if not, the animation is done, and should be removed soon.
 								{
 									toReturn = new CompletedState(animation);
-									animation.CurrentFrame--; // To avoid IndexOutOfBounds error. - J Mor
+									animation.CurrentFrame--; // To avoid IndexOutOfBounds error in draw func.
 								}
 							}
-							//SpriteSheet.UpdateImgSourceRectangle();
 							// Remove one "frame" worth of time
 							animation.timeSinceLastFrameChange -= animation.SecondsPerFrame;
+
+							// If the animation isn't allowed to skip animation frames, then break out of the loop.
+							if (!animation.CanSkipFrames)
+								break;
 						}
 					}
 					else
@@ -276,11 +318,23 @@ namespace JMMGExt.Graphics
 		/// </summary>
 		private float timeSinceLastFrameChange;
 
-		public int CurrentFrame { get; set; } = 0;
+		public int CurrentFrame { get; private set; } = 0;
 
 		public bool IsPlaying { get; private set; } = false;
 
 		public Point? Posit = null;
+
+		/// <summary>
+		/// Controls whether the anim can skip frames of animation to 
+		/// "catch up" to the frame it should be at if its running slow.
+		/// </summary>
+		public bool CanSkipFrames { get; set; } = false;
+
+		// TODO: Figure out crossfade
+		///// <summary>
+		///// Controls whether to crossfade animation frames.
+		///// </summary>
+		//public bool CrossfadeFrames { get; set; } = false;
 
 		private IAnimationState CurrState { get; set; }/* = new InactiveState(this);*/
 		#endregion
@@ -324,6 +378,12 @@ namespace JMMGExt.Graphics
 		public void Play() => IsPlaying = true;
 
 		public void Pause() => IsPlaying = false;
+
+		public void Stop()
+		{
+			IsPlaying = false;
+			CurrState = new StoppedState(this);
+		}
 
 		public void Reset()
 		{
