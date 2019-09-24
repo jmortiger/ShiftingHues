@@ -1,5 +1,8 @@
 # ShiftingHues
 MonoGame Development 1
+
+Personal library extension of MonoGame (specifically in input handling, sprites/animations, and debug logging).
+
 # Points of Interest
 * JMMGExt/InputComponent.cs
   - Provides a more complete extension of MonoGame's input handling system and allows for user remapping
